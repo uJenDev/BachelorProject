@@ -5,8 +5,6 @@ import MaterialView from './MaterialView'
 const MaterialKnown = () => {
     const [selectedMaterial, setSelectedMaterial] = useState(null)
 
-
-
   return (
     <div className='flex flex-row pt-2'>
         {/* <button onClick={() => setSelectedMaterial(null)}>CLICK</button> */}

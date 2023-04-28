@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MaterialKnown from '../features/MaterialKnown';
 import MaterialUnknown from '../features/MaterialUnknown';
 
+import { db } from '../firebase';
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 
 const Home = () => {
     
     const [materialKnown, setMaterialKnown] = useState(true);
+
+
+
+
 
   return (
     <div className='flex flex-col pb-10'>
@@ -24,7 +30,6 @@ const Home = () => {
                 Unknown?
             </button>
         </div> */}
-
         <div className='flex flex-col px-2 items-start'>
             {materialKnown ? (
                 <MaterialKnown />

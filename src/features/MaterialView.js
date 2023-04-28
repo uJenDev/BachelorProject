@@ -45,6 +45,9 @@ const MaterialView = ({ material }) => {
                     </div>
                 ))}
             </div>
+            <div>
+                <p className='text-sm text-gray-400 max-w-2xl'>{material.data.info?.description}</p>
+            </div>
         </div>
 
         <div className='flex flex-row'>
@@ -76,7 +79,7 @@ const MaterialView = ({ material }) => {
                         )}
                     </div>
                 </div>
-                <p className='text-lg text-gray-400'>moving water drives the reaction toward polymerization through the formation of amide bonds from the acid and amine functions. Alternatively, the polymerization is conducted on a concentrated aqueous mixture formed of hexamethylenediamine and adipic acid</p>
+                <p className='text-lg text-gray-400'></p>
             </div>
         )}
     </div>
