@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.tag-text {
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: opacity 300ms ease-in-out, max-width 300ms ease-in-out;
+}
+  
+.tag-text-active {
+    opacity: 1;
+    max-width: 10rem; /* Adjust this value according to the maximum width you expect for the text */
+}
+
+.material-view {
+  overflow: hidden;
+  width: 0;
+  transition: width 350ms ease-in-out;
+}
+
+.material-view.display-active {
+  width: 100%;
+}
