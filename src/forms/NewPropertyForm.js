@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { db } from '../firebase';
-import { arrayUnion, collection, doc, getDoc, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import { MdKeyboardBackspace, MdOutlineDeleteForever } from 'react-icons/md';
 
@@ -37,7 +37,8 @@ const NewPropertyForm = ({
 
         const newProperty = {
             name: name,
-            value: value,
+            // make sure value is a number
+            value: Number(value),
             unit: unit,
         }
 
@@ -113,6 +114,13 @@ const NewPropertyForm = ({
         })()
     }
 
+    const nameRef = useRef();
+    const valueRef = useRef();
+    const unitRef = useRef();
+
+    useEffect(() => {
+        nameRef.current.focus();
+    }, [])
 
   return (
     <div className='flex flex-row items-center space-x-2 pb-2'>
@@ -128,9 +136,10 @@ const NewPropertyForm = ({
             <div className='flex flex-row items-center space-x-2'>
                 <div className='flex flex-row'>
                     <input
-                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 text-orange-500 font-bold text-xl placeholder-orange-500'
+                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 text-orange-500 font-bold text-xl placeholder-orange-500 placeholder-opacity-70'
                         type='text'
                         placeholder='Name'
+                        ref={nameRef}
                         value={name}
                         onChange={(e) => {setName(e.target.value)}}
                         onKeyDown={(e) => {
@@ -143,8 +152,9 @@ const NewPropertyForm = ({
                 <p className='font-bold text-orange-300'>|</p>
                 <div className='flex flex-row'>
                     <input
-                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 max-w-fit text-orange-500 text-lg placeholder-orange-500'
-                        type='text'
+                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 max-w-fit text-orange-500 text-lg placeholder-orange-500 placeholder-opacity-70'
+                        type='number'
+                        ref={valueRef}
                         placeholder='Value'
                         value={value}
                         onChange={(e) => {setValue(e.target.value)}}
@@ -158,8 +168,9 @@ const NewPropertyForm = ({
                 <p className='font-bold text-orange-300'>|</p>
                 <div className='flex flex-row'>
                     <input
-                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-20 max-w-fit text-orange-500 font-bold text-sm placeholder-orange-500'
+                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-20 max-w-fit text-orange-500 font-bold text-sm placeholder-orange-500 placeholder-opacity-70'
                         type='text'
+                        ref={unitRef}
                         placeholder='Unit'
                         value={unit}
                         onChange={(e) => {setUnit(e.target.value)}}

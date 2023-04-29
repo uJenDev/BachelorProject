@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import NewPropertyForm from '../forms/NewPropertyForm';
 
+import { MdAddCircle } from 'react-icons/md';
+
 const PropertyList = ({
     material,
 }) => {
@@ -51,7 +53,7 @@ const PropertyList = ({
                 >
                     <p className={`text-xl font-bold ease-out duration-150`}>Add new</p>
                     <p className='font-bold text-blue-300'>|</p>
-                    <p className={`text-lg ease-out duration-150`}>+</p>
+                    <MdAddCircle className='text-xl' />
                 </button>
             )}
         </div>
