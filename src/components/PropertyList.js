@@ -13,8 +13,8 @@ const PropertyList = ({
     const [updatingProperty, setUpdatingProperty] = useState(null);
 
   return (
-    <div className='pt-5'>
-        <p className='text-2xl border-b-2 border-gray-400 text-gray-400'>Properties</p>
+    <div className='pt-5 w-full'>
+        <p className='text-2xl border-b-2 border-white text-white'>Properties</p>
         <div className=' pt-1'>
             {material.properties.map((property, index) => {
 

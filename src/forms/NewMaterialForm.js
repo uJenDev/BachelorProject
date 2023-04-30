@@ -1,5 +1,6 @@
-import { deleteDoc, doc, runTransaction, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, runTransaction, setDoc } from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react'
+import { MdWarning } from 'react-icons/md';
 import { db } from '../firebase';
 import { capitalize, slugFromTitle } from '../utility/HelperFunctions';
 
@@ -67,21 +68,27 @@ const NewMaterialForm = ({
     }, [])
 
   return (
-    <div className='flex flex-row bg-blue-200 rounded-lg px-2 mx-2 py-1'>
-        <input
-            className='bg-transparent rounded-sm focus:outline-none ease-out duration-150 h-5 w-fit text-blue-500 font-bold text-lg placeholder-blue-500'
-            type='text'
-            placeholder='Name..'
-            value={material}
-            ref={inputRef}
-            onChange={(e) => {setMaterial(e.target.value)}}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                    handleSubmit()
-                }
-            }}
-            onBlur={() => {setToggleCreateForm(false)}}
-        />
+    <div className='flex flex-col'>
+        <div className='flex flex-row bg-blue-200 rounded-lg px-2 mx-2 py-1'>
+            <input
+                className={`bg-transparent rounded-sm focus:outline-none w-fit text-blue-500 font-bold placeholder-blue-500 ${isUpdating ? 'text-4xl h-10' : 'text-lg h-5 ease-out duration-150 '} placeholder-opacity-50`}
+                type='text'
+                placeholder='Material name'
+                value={material}
+                ref={inputRef}
+                onChange={(e) => {setMaterial(e.target.value)}}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        handleSubmit()
+                    }
+                }}
+                onBlur={() => {setToggleCreateForm(false)}}
+            />
+        </div>
+        <div className='mt-1 flex flex-row items-center justify-center text-sm text-red-500 space-x-1'>
+            <MdWarning />
+            <p className=''>This cannot be changed</p>
+        </div>
     </div>
   )
 }

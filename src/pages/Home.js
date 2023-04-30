@@ -1,25 +1,35 @@
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import MaterialKnown from '../features/MaterialKnown';
 
 import SideTab from '../features/SideTab';
+import { db } from '../firebase';
 
 const Home = () => {
 
-    // const [data, setData] = useState(null);
+  //   const [data, setData] = useState(null);
 
-    // const getData = async () => {
-    //     const docRef = doc(db, 'category', 'ECdxVSEm1bH8Qc3okTQZ');
-    //     const docSnap = await getDoc(docRef);
-    //     if (docSnap.exists()) {
-    //       setData(docSnap.data());
-    //     } else {
-    //       console.log('No such document!');
-    //     }
-    // }
+  //   useEffect(() => {
 
-    // useEffect(() => {
-    //     getData();
-    // }, [])
+  //     const getCategory = onSnapshot(
+  //         collection(db, 'material'),
+  //         (snapshot) => {
+  //           setData(snapshot.docs.map(doc => ({
+  //                 id: doc.id,
+  //                 ...doc.data()
+  //             })))
+  //     },
+  //     (error) => {
+  //         console.log(error)
+  //     })
+  //     return () => {
+  //         getCategory()
+  //     }
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log('DATA: ', data)
+  // }, [data])
 
   return (
     <div className='flex flex-col pb-10'>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { db } from '../firebase';
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 import SideTabCategoryButton from '../components/SideTabCategoryButton';
 import MaterialView from './MaterialView';
 
@@ -41,39 +41,12 @@ const SideTab = () => {
     
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [settings, setSettings] = useState([]);
-
-    useEffect(() => {
-        if (!selectedMaterial) return;
-
-        const getSettings = onSnapshot(
-            query( 
-                collection(db, 'setting'), 
-                where('materialRef', '==', doc(db, 'material', selectedMaterial.id))
-            ), 
-            (snapshot) => {
-                setSettings(snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })))
-            setLoading(false)
-            console.log(settings)
-        },
-        (error) => {
-            console.log(error)
-            setLoading(false)
-        })
-
-        return () => {
-            getSettings()
-        }
-    }, [selectedMaterial])
 
     const [editMode, setEditMode] = useState(false);
 
 
     return (
-        <div className='flex flex-row space-x-2'>
+        <div className='flex flex-row space-x-2 w-full'>
             <div className='flex flex-col min-w-fit'>
                 <div className='pb-2 rounded-xl bg-transparent'>
                     <div className='bg-gray-700 py-2 rounded-t-xl flex flex-row items-top px-5 space-x-1'>
