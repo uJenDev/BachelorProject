@@ -126,7 +126,7 @@ const NewPropertyForm = ({
     <div className='flex flex-row items-center space-x-2 pb-2 '>
         <div className='flex flex-row'>
             <button
-                className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 text-red-500 text-md placeholder-red-500 hover:scale-110'
+                className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-7 text-red-500 text-md placeholder-red-500 hover:scale-110'
                 onClick={() => {setToggleCreateForm(false)}}
             >
                 <MdKeyboardBackspace className='text-red-500 text-xl' />
@@ -136,7 +136,7 @@ const NewPropertyForm = ({
             <div className='flex flex-row items-center space-x-2'>
                 <div className='flex flex-row '>
                     <input
-                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 w-40 h-9 text-blue-500 font-bold text-xl placeholder-blue-500 placeholder-opacity-70'
+                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 w-40 h-7 text-blue-500 font-bold text-lg placeholder-blue-500 placeholder-opacity-70'
                         type='text'
                         placeholder='Name'
                         ref={nameRef}
@@ -152,7 +152,7 @@ const NewPropertyForm = ({
                 <p className='font-bold text-blue-300'>|</p>
                 <div className='flex flex-row'>
                     <input
-                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 text-blue-500 text-lg placeholder-blue-500 placeholder-opacity-70'
+                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-7 w-40 text-blue-500 text-lg placeholder-blue-500 placeholder-opacity-70'
                         type='number'
                         ref={valueRef}
                         placeholder='Value'
@@ -168,7 +168,7 @@ const NewPropertyForm = ({
                 <p className='font-bold text-blue-300'>|</p>
                 <div className='flex flex-row'>
                     <input
-                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-20 max-w-fit text-blue-500 font-bold text-sm placeholder-blue-500 placeholder-opacity-70'
+                        className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-7 w-20 max-w-fit text-blue-500 font-bold text-sm placeholder-blue-500 placeholder-opacity-70'
                         type='text'
                         ref={unitRef}
                         placeholder='Unit'
@@ -187,7 +187,7 @@ const NewPropertyForm = ({
         (
         <div className='flex flex-row text-red-500 hover:text-white'>
             <button
-                className='bg-red-200 rounded-lg focus:outline-none ease-out duration-150 h-9 text-md placeholder-red-500 hover:scale-110 hover:bg-red-500 focus:scale-110'
+                className='bg-red-200 rounded-lg focus:outline-none ease-out duration-150 h-7 text-md placeholder-red-500 hover:scale-110 hover:bg-red-500 focus:scale-110'
                 onClick={() => {handleDelete()}}
             >
                 <MdOutlineDeleteForever className=' text-xl' />

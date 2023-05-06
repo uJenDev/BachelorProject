@@ -99,8 +99,8 @@ const MaterialSettingsView = ({
         if (selectedTool && !setting.value) {
             return (
                 <div key={setting.id} className='flex flex-col duration-300 ease-in-out'>
-                    <div  className='bg-red-200 px-2 py-1 mt-2 rounded-lg max-w-fit flex flex-row items-center space-x-2'>
-                        <p className='text-xl font-bold text-red-700'>{setting.name}</p>
+                    <div  className='bg-red-200 px-2 mt-2 rounded-lg max-w-fit flex flex-row items-center space-x-2'>
+                        <p className='text-lg font-bold text-red-700'>{setting.name}</p>
                         <p className='text-red-300 font-bold'>|</p>
                         <p className='text-lg font-bold text-red-700'>No specified setting</p>
                     </div>
@@ -109,16 +109,16 @@ const MaterialSettingsView = ({
         }
         return (
             <div key={setting.id} className={`flex flex-col duration-300 transfrom ease-in-out ${selectedTool ? ' translate-x-2' : ''}`}>
-                <div  className={`px-2 py-1 mt-2 rounded-lg max-w-fit flex flex-row items-center space-x-2 ${selectedTool ? 'bg-green-200' : 'bg-orange-200'}`}>
-                    <p className={`text-xl font-bold ${selectedTool ? 'text-green-600' : 'text-orange-700'}`}>{setting.name}</p>
-                    <p className={`font-bold ${selectedTool ? 'text-green-300' : 'text-orange-300'}`}>|</p>
-                    <p className={`text-lg font-bold ${selectedTool ? 'text-green-600' : 'text-orange-700'}`}>
+                <div  className={`px-2 mt-2 rounded-lg max-w-fit flex flex-row items-center space-x-2 ${selectedTool ? 'bg-green-200' : 'bg-gray-200'}`}>
+                    <p className={`text-lg font-bold ${selectedTool ? 'text-green-600' : 'text-gray-700'}`}>{setting.name}</p>
+                    <p className={`font-bold ${selectedTool ? 'text-green-300' : 'text-gray-300'}`}>|</p>
+                    <p className={`text-lg font-bold ${selectedTool ? 'text-green-600' : 'text-gray-700'}`}>
                         {setting.value ? setting.value : (setting.min === setting.max) ? setting.min : `${setting.min} - ${setting.max}`}
                     </p>
                     {setting.unit && (
                         <>
-                            <p className={`font-bold ${selectedTool ? 'text-green-300' : 'text-orange-300'}`}>|</p>
-                            <p className={`font-bold ${selectedTool ? 'text-green-600' : 'text-orange-700'}`}>{setting.unit}</p>
+                            <p className={`font-bold ${selectedTool ? 'text-green-300' : 'text-gray-300'}`}>|</p>
+                            <p className={`font-bold ${selectedTool ? 'text-green-600' : 'text-gray-700'}`}>{setting.unit}</p>
                         </>
                     )}
                 </div>
@@ -138,9 +138,9 @@ const MaterialSettingsView = ({
             : (
                 <button 
                     onClick={() => {setToggleSettingForm(true)}}
-                    className={`mt-2 flex flex-row space-x-2 bg-blue-200 max-w-fit px-2 py-1 rounded-lg items-center text-blue-500 ease-out duration-150 hover:scale-105 hover:text-white hover:bg-blue-500`}
+                    className={`mt-2 flex flex-row space-x-2 bg-blue-200 max-w-fit px-2 rounded-lg items-center text-blue-500 ease-out duration-150 hover:scale-105 hover:text-white hover:bg-blue-500`}
                 >
-                    <p className={`text-xl font-bold ease-out duration-150`}>Add new</p>
+                    <p className={`text-lg font-bold ease-out duration-150`}>Add new</p>
                     <p className='font-bold text-blue-300'>|</p>
                     <MdAddCircle className='text-xl' />
                 </button>
