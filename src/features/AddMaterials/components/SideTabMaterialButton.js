@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { db } from '../firebase';
+import { db } from '../../../firebase';
 import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { MdAddCircle } from 'react-icons/md';
 import NewMaterialForm from '../forms/NewMaterialForm';

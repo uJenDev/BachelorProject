@@ -1,7 +1,7 @@
 import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { MdAddCircle } from 'react-icons/md';
-import { db } from '../firebase';
+import { db } from '../../../firebase';
 import NewSettingForm from '../forms/NewSettingForm';
 
 function groupBySlug(arr) {

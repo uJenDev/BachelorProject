@@ -1,6 +1,6 @@
 
 import React from 'react'
-import SideTab from '../features/SideTab';
+import SideTab from '../features/AddMaterials/SideTab';
 
 const Home = () => {
 

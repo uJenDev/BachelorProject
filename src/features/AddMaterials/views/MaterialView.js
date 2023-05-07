@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MdLink, MdLinkOff } from 'react-icons/md';
 import PropertyList from '../components/PropertyList';
-import { capitalize } from '../utility/HelperFunctions';
+import { capitalize } from '../../../utility/HelperFunctions';
 import MaterialSettingsView from './MaterialSettingsView';
 import MaterialToolsView from './MaterialToolsView';
 

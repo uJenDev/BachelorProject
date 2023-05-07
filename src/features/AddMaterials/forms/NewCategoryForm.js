@@ -1,8 +1,8 @@
 import { doc, setDoc } from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react'
 import { MdWarning } from 'react-icons/md';
-import { db } from '../firebase';
-import { capitalize, slugFromTitle } from '../utility/HelperFunctions';
+import { db } from '../../../firebase';
+import { capitalize, slugFromTitle } from '../../../utility/HelperFunctions';
 
 const NewCategoryForm = ({
     setToggleCreateForm,

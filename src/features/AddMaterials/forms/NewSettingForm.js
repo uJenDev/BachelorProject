@@ -1,25 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { db } from '../firebase';
-import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
+import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 import { MdKeyboardBackspace, MdOutlineDeleteForever } from 'react-icons/md';
+import { slugFromTitle } from '../../../utility/HelperFunctions';
 
-const NewPropertyForm = ({
+const NewSettingForm = ({
     setToggleCreateForm,
-    oldProperty,
+    oldSetting,
     material,
+    tool
 }) => {
 
     const [isUpdating, setIsUpdating] = useState(false);
 
     useEffect(() => {
-        if (!oldProperty) return;
+        if (!oldSetting) return;
         setIsUpdating(true);
-        setName(oldProperty.name);
-        setValue(oldProperty.value);
-        setUnit(oldProperty.unit);
-    }, [oldProperty])
+        setName(oldSetting.name);
+        setValue(oldSetting.value);
+        setUnit(oldSetting.unit);
+    }, [oldSetting])
 
     const [name, setName] = useState('');
     const [value, setValue] = useState('');
@@ -35,83 +37,39 @@ const NewPropertyForm = ({
 
         if (!validate()) return;
 
-        const newProperty = {
-            name: name,
-            // make sure value is a number
-            value: Number(value),
-            unit: unit,
+        if (isUpdating) {
+            const updateSetting = async () => {
+                const settingRef = doc(db, 'setting', oldSetting.id);
+                await updateDoc(settingRef, {
+                    name: name,
+                    slug: slugFromTitle(name),
+                    value: Number(value),
+                    unit: unit,
+                })
+            }
+            updateSetting();
+        } else {
+            const createSetting = async () => {
+                const materialRef = doc(db, 'material', material.id);
+                const toolRef = doc(db, 'tool', tool.id);
+
+                await addDoc(collection(db, 'setting'), {
+                    name: name,
+                    slug: slugFromTitle(name),
+                    value: Number(value),
+                    unit: unit,
+                    materialRef: materialRef,
+                    toolRef: toolRef,
+                })
+            }
+            createSetting();
         }
 
-        const docRef = doc(db, 'material', material.id);
-
-        isUpdating ?
-            
-        (async () => {
-            try {
-              const docSnapshot = await getDoc(docRef);
-              if (docSnapshot.exists()) {
-                const arrayField = docSnapshot.get('properties');
-                const indexToUpdate = arrayField.findIndex(map => map.name === oldProperty.name);
-          
-                if (indexToUpdate !== -1) {
-                  // Update the map at the index found with the new data
-                  arrayField[indexToUpdate] = newProperty;
-          
-                  // Update the document with the modified array
-                  await updateDoc(docRef, { 'properties': arrayField });
-                  console.log('Map updated successfully.');
-                } else {
-                  console.error('Map not found in the array field.');
-                }
-              } else {
-                console.error('Document does not exist.');
-              }
-            } catch (error) {
-              console.error('Error updating map:', error);
-            }
-          })()
-        :
-            (async () => {
-                try {
-                await updateDoc(docRef, {
-                    'properties': arrayUnion(newProperty)
-                });
-                console.log('New map added successfully.');
-                } catch (error) {
-                console.error('Error updating document:', error);
-                }
-            })();
-        
-        setToggleCreateForm(null);
+        setToggleCreateForm(false);
     }
 
     const handleDelete = () => {
-        const docRef = doc(db, 'material', material.id);
-
-        (async () => {
-            try {
-                const docSnapshot = await getDoc(docRef);
-                if (docSnapshot.exists()) {
-                    const arrayField = docSnapshot.get('properties');
-                    const indexToDelete = arrayField.findIndex(map => map.name === oldProperty.name);
-                
-                    if (indexToDelete !== -1) {
-                        // Update the map at the index found with the new data
-                        arrayField.splice(indexToDelete, 1);
-
-                        // Update the document with the modified array
-                        await updateDoc(docRef, { 'properties': arrayField });
-                        console.log('Map deleted successfully.');
-                    } else {
-                        console.error('Map not found in the array field.');
-                    }
-                } else {
-                    console.error('Document does not exist.');
-                }
-            } catch (error) {
-                console.error('Error updating map:', error);
-            }
-        })()
+        
     }
 
     const nameRef = useRef();
@@ -198,4 +156,4 @@ const NewPropertyForm = ({
   )
 }
 
-export default NewPropertyForm
+export default NewSettingForm
