@@ -19,16 +19,19 @@ const FocusPost = ({
     }, [])
 
   return (
-    <div className={`flex ${width < breakpoint ? 'flex-col' : 'flex-row'} w-full`}>
-        <div className='flex w-full ml-10 mx-5'>
+    <div className={`flex ${width < breakpoint ? 'flex-col' : 'flex-row'} w-full border-l-2 border-black ml-2`}>
+        <div className='flex flex-col w-full ml-10 border-r-2 pr-2 border-black'>
             <div className={`flex justify-between ${width < breakpoint ? 'flex-col' : 'flex-row w-full'}`}>
                 <div>
                     <h1 className='text-2xl font-bold'>{post.title}</h1>
-                    <p>by {post.author.displayName}</p>
+                    <p>by {post.author.email}</p>
                 </div>
                 <div>
                     <p className='font-bold text-blue-500 px-2 py-1 bg-blue-200 rounded-xl mt-2 text-xl max-w-fit'>{post.material?.title}</p>
                 </div>
+            </div>
+            <div>
+                <p className='text-lg font-light'>{post.body}</p>
             </div>
         </div>
        <div className={`${width < breakpoint ? 'w-full px-10' : 'w-2/3 px-5'}`}>

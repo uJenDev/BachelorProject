@@ -42,14 +42,19 @@ const CommentFeed = ({
             className='flex flex-col-reverse overflow-y-auto max-h-[400px] w-full'
         >
             <div className='flex flex-col space-y-2 mb-2 mx-1'>
-                {comments[0] ? comments.map(comment => (
-                    <CommentCard
-                        key={comment.id}
-                        comment={comment}
-                        user={user}
-                        postAuthor={post.author}
-                    />
-                ))
+                {comments[0] ? comments.map((comment, index) => {
+
+                    const isSameAuthor = index > 0 && comment.author.uid === comments[index - 1].author.uid;
+                    return (
+                        <CommentCard
+                            key={comment.id}
+                            comment={comment}
+                            user={user}
+                            postAuthor={post.author}
+                            isSameAuthor={isSameAuthor}
+                        />
+                    )
+                })
                 : (
                     <div className='text-gray-500'>
                         No comments yet
