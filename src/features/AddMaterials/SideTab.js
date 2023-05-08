@@ -5,7 +5,7 @@ import { collection, onSnapshot, query } from 'firebase/firestore';
 import SideTabCategoryButton from './components/SideTabCategoryButton';
 import MaterialView from './views/MaterialView';
 
-import { MdAddCircle, MdViewHeadline, MdSaveAlt } from 'react-icons/md';
+import { MdAddCircle } from 'react-icons/md';
 import NewCategoryForm from './forms/NewCategoryForm';
 
 const SideTab = () => {
@@ -37,8 +37,6 @@ const SideTab = () => {
         }
     }, [])
 
-
-    
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
 

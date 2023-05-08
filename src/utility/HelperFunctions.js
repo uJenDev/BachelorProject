@@ -8,4 +8,14 @@ const slugFromTitle = (title) => {
     return title.toLowerCase().replace(/ /g, '-');
 }
 
-export {capitalize, slugFromTitle};
+const valdiateEmail = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+const validatePassword = (password) => {
+    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    return re.test(password);
+}
+
+export {capitalize, slugFromTitle, valdiateEmail, validatePassword};

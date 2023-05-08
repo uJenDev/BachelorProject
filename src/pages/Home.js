@@ -1,6 +1,7 @@
 
 import React from 'react'
 import SideTab from '../features/AddMaterials/SideTab';
+import Posts from '../features/Posts/Posts';
 
 const Home = () => {
 
@@ -29,10 +30,8 @@ const Home = () => {
   // }, [data])
 
   return (
-    <div className='flex flex-col pb-10'>
-        <div className='flex flex-col px-2 items-start pt-2'>
-            <SideTab />
-        </div>
+    <div className='flex w-full'>
+      <Posts />
     </div>
   )
 }
