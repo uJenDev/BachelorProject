@@ -12,7 +12,8 @@ import NoPage from './pages/NoPage';
 import { listenToAuthChanges } from './authListener';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from './slices/userSlice';
-import Materials from './features/AddMaterials/Materials';
+import Materials from './features/Materials/Materials';
+import ManageGroups from './features/Groups/pages/ManageGroups';
 
 const AppRoutes = () => {
     const dispatch = useDispatch()
@@ -34,6 +35,7 @@ const AppRoutes = () => {
                 <Route path='/' element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path='/materials' element={<Materials />} />
+                    <Route path='/groups' element={<ManageGroups />} />
                     <Route path='*' element={<NoPage />} />
                 </Route>
             ) : (

@@ -6,7 +6,10 @@ import CommentForm from '../forms/CommentForm';
 
 const CommentFeed = ({ 
     post,
-    user
+    user,
+    breakpoint,
+    width,
+    height
 }) => {
 
     const [comments, setComments] = useState([]);
@@ -32,16 +35,13 @@ const CommentFeed = ({
       }
   }, [post])
 
-  useEffect(() => {
-    console.log('COMMENTS: ', comments)
-  }, [comments])
-
   return (
     <div className=''>
         <div
-            className='flex flex-col-reverse overflow-y-auto max-h-[400px] w-full'
+            className={`flex flex-col-reverse overflow-y-auto w-full`}
+            style={{height: width > breakpoint ? height - 230 : height - 350}}
         >
-            <div className='flex flex-col space-y-2 mb-2 mx-1'>
+            <div className='flex flex-col space-y-2 mb-2 mx-1 mr-3'>
                 {comments[0] ? comments.map((comment, index) => {
 
                     const isSameAuthor = index > 0 && comment.author.uid === comments[index - 1].author.uid;

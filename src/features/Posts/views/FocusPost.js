@@ -9,18 +9,21 @@ const FocusPost = ({
     // get window width
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(window.innerHeight)
-    const breakpoint = 1200;
+    const breakpoint = 1400;
 
     useEffect(() => {
-        const handleWindowResize = () => setWidth(window.innerWidth)
+        const handleWindowResize = () => {
+            setWidth(window.innerWidth)
+            setHeight(window.innerHeight)
+        }
         window.addEventListener('resize', handleWindowResize)
         
         return () => window.removeEventListener('resize', handleWindowResize)
     }, [])
 
   return (
-    <div className={`flex ${width < breakpoint ? 'flex-col' : 'flex-row'} w-full border-l-2 border-black ml-2`}>
-        <div className='flex flex-col w-full ml-10 border-r-2 pr-2 border-black'>
+    <div className={`flex overflow-y-scroll ${width < breakpoint ? 'flex-col' : 'flex-row'} w-full border-l-2 border-black ml-2`}>
+        <div className={`flex flex-col w-full ml-10 ${width < breakpoint ? null : 'border-r-2 pr-2 border-black'}`}>
             <div className={`flex justify-between ${width < breakpoint ? 'flex-col' : 'flex-row w-full'}`}>
                 <div>
                     <h1 className='text-2xl font-bold'>{post.title}</h1>
@@ -31,7 +34,6 @@ const FocusPost = ({
                 </div>
             </div>
             <div>
-                <p className='text-lg font-light'>{post.body}</p>
             </div>
         </div>
        <div className={`${width < breakpoint ? 'w-full px-10' : 'w-2/3 px-5'}`}>
@@ -39,6 +41,9 @@ const FocusPost = ({
             <CommentFeed
                 post={post}
                 user={user}
+                breakpoint={breakpoint}
+                width={width}
+                height={height}
             />
        </div>
     </div>

@@ -11,8 +11,7 @@ export const listenToAuthChanges = (dispatch, setLoading) => {
           const userRef = doc(db, 'users', user.uid);
           const userSnapshot = await getDoc(userRef);
           const userData = userSnapshot.data();
-
-          const lastSeen = userData.lastSeen?.toMillis();
+          const lastSeen = userData.lastSeen.toMillis();
 
           dispatch(login({
               uid: user.uid,
@@ -20,8 +19,7 @@ export const listenToAuthChanges = (dispatch, setLoading) => {
               displayName: user.displayName,
               photoUrl: user.photoURL,
               ...userData,
-              lastSeen: lastSeen,
-
+              lastSeen: lastSeen
           }));
       } else {
           dispatch(logout());

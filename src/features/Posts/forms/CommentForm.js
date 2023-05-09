@@ -27,7 +27,6 @@ const CommentForm = ({ user, postId }) => {
 
     setComment('');
     ref.current.value = '';
-    ref.current.blur();
   };
 
   const ref = useRef(null);

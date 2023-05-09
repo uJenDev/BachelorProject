@@ -3,7 +3,8 @@ import React from 'react'
 const PostCard = ({ 
     post,
     selectedPost,
-    setSelectedPost
+    setSelectedPost,
+    groupIsSelected
 }) => {
   return (
     <div className={`
@@ -15,6 +16,9 @@ const PostCard = ({
                 onClick={() => setSelectedPost(post)}
                 className='flex flex-col text-white duration-200 ease-out hover:animate-pulse text-left'
             >
+                {groupIsSelected && (
+                    <p className='text-xs text-gray-400'>{post.group.name}</p>
+                )}
                 <h1 className='font-semibold text-lg'>{post.title}</h1>
                 <p className='text-xs text-gray-400'>by {post.author.email}</p>
             </button>

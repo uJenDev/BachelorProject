@@ -1,7 +1,6 @@
 
-import React from 'react'
-import SideTab from '../features/AddMaterials/SideTab';
-import Posts from '../features/Posts/Posts';
+import React, { useEffect, useState } from 'react'
+import Groups from '../features/Groups/Groups';
 
 const Home = () => {
 
@@ -29,9 +28,20 @@ const Home = () => {
   //   console.log('DATA: ', data)
   // }, [data])
 
+  const [height, setHeight] = useState(window.innerHeight)
+  useEffect(() => {
+    const handleWindowResize = () => setHeight(window.innerHeight)
+    window.addEventListener('resize', handleWindowResize)
+    
+    return () => window.removeEventListener('resize', handleWindowResize)
+}, [])
+
   return (
-    <div className='flex w-full'>
-      <Posts />
+    <div 
+      className='flex w-full'
+      style={{height: height - 80}}
+    >
+      <Groups />
     </div>
   )
 }

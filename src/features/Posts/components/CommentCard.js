@@ -33,7 +33,7 @@ const CommentCard = ({
                     <>
                         <div className='flex flex-row space-x-1 items-center'>
                             {comment.author.uid === postAuthor.uid ? (<MdPerson />) : null}
-                            <div className='font-semibold text-sm'>{comment.author.email}</div>
+                            <div className='font-semibold text-sm'>{isAuthor ? 'You' : comment.author.email}</div>
                         </div>
                         {date && <p className='text-xs'>{date}</p>}
                     </>

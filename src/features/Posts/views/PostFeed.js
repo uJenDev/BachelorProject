@@ -1,22 +1,30 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PostCard from '../components/PostCard'
 
 const PostFeed = ({
     posts,
     selectedPost,
-    setSelectedPost
+    setSelectedPost,
+    groupIsSelected
 }) => {
 
   return (
     <div className='space-y-2 w-80'>
-      {posts && posts.map(post => (
+      {posts[0] ? posts.map(post => (
             <PostCard
                 key={post.id}
                 post={post}
+                groupIsSelected={groupIsSelected}
                 selectedPost={selectedPost}
                 setSelectedPost={setSelectedPost}
             />
-        ))}
+        ))
+        :
+        (<div className='opacity-60'>
+            No posts here yet..
+        </div>
+        )
+  }
     </div>
   )
 }
