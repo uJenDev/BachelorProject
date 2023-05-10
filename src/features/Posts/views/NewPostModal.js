@@ -12,14 +12,15 @@ const style = {
     background: '#fff',
     border: '2px solid #fff',
     boxShadow: 24,
-    borderRadius: '10px',
-    p: 4,
+    paddingY: 4,
+    paddingX: 1,
 };
 
 const NewPostModal = ({ 
     open, 
     setOpen, 
-    user, 
+    user,
+    groups,
     group 
 }) => {
     const handleClose = () => setOpen(false);
@@ -46,14 +47,14 @@ const NewPostModal = ({
       >
         <Box sx={[
                 style,
-                width < breakpoint ? {width: '100%'} : {width: '75%'},
-                width < breakpoint ? {height: '100%'} : {height: '90%'}
+                width < breakpoint ? {width: '100%', height: '100%'} : {width: '75%', height: '90%', borderRadius: '10px',},
             ]}
         >
             <NewPostForm 
                 handleClose={handleClose}
                 user={user}
                 group={group}
+                groups={groups}
             />
         </Box>
       </Modal>

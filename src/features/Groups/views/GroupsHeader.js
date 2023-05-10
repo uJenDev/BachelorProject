@@ -35,9 +35,9 @@ const GroupsHeader = ({
                 }
                 <button 
                     onClick={() => navigate('/groups')}
-                    className='text-white text-sm rounded-md py-1 duration-300 ease-out hover:bg-gray-500 '
+                    className='text-white text-sm rounded-md py-1 duration-300 ease-out hover:bg-gray-500 text-start w-fit px-2'
                 >
-                    View all groups
+                    <p>View all groups</p>
                 </button>
             </div>
         </div>

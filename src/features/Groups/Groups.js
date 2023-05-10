@@ -10,9 +10,10 @@ const Groups = () => {
 
     const user = useSelector(selectUser)
     const [groups, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-
+      setLoading(true)
       const getGroups = onSnapshot(
           query(
             collection(db, 'groups'),
@@ -22,10 +23,12 @@ const Groups = () => {
             setData(snapshot.docs.map(doc => ({
                   id: doc.id,
                   ...doc.data()
-              })))
+            })))
+            setLoading(false)
       },
       (error) => {
           console.log(error)
+          setLoading(false)
       })
       return () => {
           getGroups()
@@ -49,10 +52,11 @@ const Groups = () => {
             selectedGroup={selectedGroup}
             setSelectedGroup={setSelectedGroup}
         />
-        {groupIds && (
+        {(groupIds && !loading) && (
             <Posts 
                 selectedGroup={selectedGroup}
                 groupIds={groupIds}
+                groups={groups}
             />
         )}
     </div>

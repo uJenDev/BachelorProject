@@ -1,15 +1,16 @@
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { db } from '../../../firebase';
 import CommentCard from '../components/CommentCard';
 import CommentForm from '../forms/CommentForm';
+import { MdQuestionAnswer } from 'react-icons/md';
 
 const CommentFeed = ({ 
     post,
     user,
     breakpoint,
     width,
-    height
+    height,
 }) => {
 
     const [comments, setComments] = useState([]);
@@ -35,13 +36,25 @@ const CommentFeed = ({
       }
   }, [post])
 
+  useEffect(() => {
+    console.log(comments?.length)
+    }, [comments])
+
   return (
-    <div className=''>
+    <div className={`w-full px-5 mt-20 `}>
+        <div className='flex items-center mb-2 justify-center'>
+            <div className='w-full border-b-2 border-black'/>
+            <div className='flex items-center px-2'>
+                <MdQuestionAnswer className='mr-2 text-2xl' />
+                <h1 className='text-2xl font-semibold'>Discussion</h1>
+            </div>
+            <div className='w-full border-b-2 border-black'/>
+        </div>
         <div
-            className={`flex flex-col-reverse overflow-y-auto w-full`}
-            style={{height: width > breakpoint ? height - 230 : height - 350}}
+            className={`flex flex-col-reverse overflow-y-auto w-full scrollbar-hide`}
+            style={{height: comments?.length < 5 ? 200 : 400}}
         >
-            <div className='flex flex-col space-y-2 mb-2 mx-1 mr-3'>
+            <div className='flex flex-col mb-2 mx-1 mr-3'>
                 {comments[0] ? comments.map((comment, index) => {
 
                     const isSameAuthor = index > 0 && comment.author.uid === comments[index - 1].author.uid;

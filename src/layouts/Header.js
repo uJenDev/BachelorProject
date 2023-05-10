@@ -42,7 +42,7 @@ const Header = () => {
               ${currentPath === '/about' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
             `}
           >
-            About
+            Tools
           </Link>
           <Link 
             to='/contact'
@@ -52,7 +52,7 @@ const Header = () => {
               ${currentPath === '/contact' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
             `}
           >
-            Contact us
+            Parts
           </Link>
         </div>
         <div className='flex flex-row items-center space-x-2'>

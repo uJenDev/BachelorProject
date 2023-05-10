@@ -9,7 +9,7 @@ const PostFeed = ({
 }) => {
 
   return (
-    <div className='space-y-2 w-80'>
+    <div className='space-y-2 w-80 px-5 overflow-y-scroll scroll scroll-smooth overflow-x-hidden pb-10 scrollbar-hide'>
       {posts[0] ? posts.map(post => (
             <PostCard
                 key={post.id}

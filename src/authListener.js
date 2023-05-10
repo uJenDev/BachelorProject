@@ -1,7 +1,7 @@
 import { login, logout } from './slices/userSlice';
 import { auth, db } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 
 export const listenToAuthChanges = (dispatch, setLoading) => {
 
@@ -11,7 +11,8 @@ export const listenToAuthChanges = (dispatch, setLoading) => {
           const userRef = doc(db, 'users', user.uid);
           const userSnapshot = await getDoc(userRef);
           const userData = userSnapshot.data();
-          const lastSeen = userData.lastSeen.toMillis();
+          if (!userData) setDoc(userRef, {lastSeen: serverTimestamp()});
+          const lastSeen = userData?.lastSeen?.toMillis();
 
           dispatch(login({
               uid: user.uid,

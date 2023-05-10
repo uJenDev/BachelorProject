@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <div 
       className='flex w-full'
-      style={{height: height - 80}}
+      style={{height: height - 82}}
     >
       <Groups />
     </div>

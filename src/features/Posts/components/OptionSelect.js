@@ -33,7 +33,7 @@ const OptionSelect = ({
     const [optionNames, setOptionName] = useState([])
     useEffect(() => {
         if (!allOptions[0]) return;
-        setOptionName(allOptions.map(option => ({label: option.name})))
+        setOptionName(allOptions.map(option => ({label: option.name, option: option})))
     }, [allOptions])
 
 
@@ -43,7 +43,7 @@ const OptionSelect = ({
             disablePortal
             options={optionNames}
             onChange={(event, newValue) => {
-                setOption(newValue?.label)
+                setOption(newValue?.option)
             }}
             className='w-full pt-10'
             renderInput={(params) => <TextField {...params} label={optionLabel} />}

@@ -29,7 +29,7 @@ const MaterialSelect = ({ setMaterial }) => {
     const [materialTitles, setMaterialTitles] = useState([])
     useEffect(() => {
         if (!allMaterials[0]) return;
-        setMaterialTitles(allMaterials.map(material => ({label: material.title})))
+        setMaterialTitles(allMaterials.map(material => ({label: material.title, option: material})))
     }, [allMaterials])
 
 
@@ -39,7 +39,7 @@ const MaterialSelect = ({ setMaterial }) => {
             disablePortal
             options={materialTitles}
             onChange={(event, newValue) => {
-                setMaterial(newValue?.label)
+                setMaterial(newValue?.option)
             }}
             className='w-full pt-10'
             renderInput={(params) => <TextField {...params} label="Material" />}

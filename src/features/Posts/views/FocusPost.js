@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import CommentFeed from './CommentFeed';
+import { HiOutlineCubeTransparent } from 'react-icons/hi';
+import { BiCylinder } from 'react-icons/bi';
+import { GiAncientScrew } from 'react-icons/gi';
+import SettingsList from './SettingsList';
+import { MdTimer } from 'react-icons/md';
+import { secondsToHMS } from '../../../utility/HelperFunctions';
 
 const FocusPost = ({
     post,
@@ -9,7 +15,7 @@ const FocusPost = ({
     // get window width
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(window.innerHeight)
-    const breakpoint = 1400;
+    const breakpoint = 1600;
 
     useEffect(() => {
         const handleWindowResize = () => {
@@ -21,31 +27,56 @@ const FocusPost = ({
         return () => window.removeEventListener('resize', handleWindowResize)
     }, [])
 
+    const focusPostScrollRef = useRef(null);
+
+
   return (
-    <div className={`flex overflow-y-scroll ${width < breakpoint ? 'flex-col' : 'flex-row'} w-full border-l-2 border-black ml-2`}>
-        <div className={`flex flex-col w-full ml-10 ${width < breakpoint ? null : 'border-r-2 pr-2 border-black'}`}>
-            <div className={`flex justify-between ${width < breakpoint ? 'flex-col' : 'flex-row w-full'}`}>
+    <div 
+        className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black ml-2 scrollbar-hide`}
+        ref={focusPostScrollRef}
+    >
+        <div className={`flex flex-col w-full px-5`}>
+            <div className={`flex justify-between flex-col`}>
                 <div>
-                    <h1 className='text-2xl font-bold'>{post.title}</h1>
+                    <h1 className='text-4xl font-bold'>{post.title}</h1>
                     <p>by {post.author.email}</p>
                 </div>
-                <div>
-                    <p className='font-bold text-blue-500 px-2 py-1 bg-blue-200 rounded-xl mt-2 text-xl max-w-fit'>{post.material?.title}</p>
+                <div className='flex flex-col items-start space-y-2 mt-3'>
+                    <div className='flex items-center space-x-1'>
+                        <HiOutlineCubeTransparent className='text-xl' />
+                        <p className='font-bold text-xl max-w-fit'>{post.setting?.material ? post.setting.material.title : 'Not listed'}</p>
+                    </div>
+                    <div className='flex items-center space-x-1'>
+                        <BiCylinder className='text-xl' />
+                        <p className='font-bold text-xl max-w-fit'>{post.setting?.part ? post.setting.part.name : 'Not listed'}</p>
+                    </div>
+                    <div className='flex items-center space-x-1'>
+                        <GiAncientScrew className='text-xl' />
+                        <p className='font-bold text-xl max-w-fit'>{post.setting?.tool ? post.setting.tool.name : 'Not listed'}</p>
+                    </div>
+                    <div className='flex items-center space-x-1'>
+                        <MdTimer className='text-xl' />
+                        <p className='font-bold text-xl max-w-fit'>{post.setting?.cycleTime ? secondsToHMS(post.setting?.cycleTime) : 'Not listed'}</p>
+                    </div>
                 </div>
             </div>
-            <div>
+            <div className='mt-5'>
+                <p className='text-lg'>{post.body}</p>
             </div>
-        </div>
-       <div className={`${width < breakpoint ? 'w-full px-10' : 'w-2/3 px-5'}`}>
-            <h1 className='text-lg border-b-2 border-black mb-1'>Comments</h1>
-            <CommentFeed
-                post={post}
-                user={user}
-                breakpoint={breakpoint}
+            <SettingsList
+                settings={post.setting?.settings}
                 width={width}
-                height={height}
+                breakpoint={breakpoint}
             />
-       </div>
+        </div>
+
+        <CommentFeed
+            post={post}
+            user={user}
+            breakpoint={breakpoint}
+            width={width}
+            height={height}
+        />
     </div>
   )
 }

@@ -18,4 +18,11 @@ const validatePassword = (password) => {
     return re.test(password);
 }
 
-export {capitalize, slugFromTitle, valdiateEmail, validatePassword};
+const secondsToHMS = (seconds) => {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds - (hours * 3600)) / 60)
+    const secondsLeft = seconds - (hours * 3600) - (minutes * 60)
+    return `${hours}h ${minutes}m ${secondsLeft}s`
+}
+
+export {capitalize, slugFromTitle, valdiateEmail, validatePassword, secondsToHMS};
