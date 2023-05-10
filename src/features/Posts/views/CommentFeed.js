@@ -69,7 +69,7 @@ const CommentFeed = ({
                     )
                 })
                 : (
-                    <div className='text-gray-500'>
+                    <div className='text-gray-500 text-center text-xl'>
                         No comments yet
                     </div>
                 )

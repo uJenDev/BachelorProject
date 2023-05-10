@@ -102,9 +102,9 @@ const Posts = ({
 
   return (
     <>
-      <div className='flex w-full'>
+      <div className='flex w-full '>
           {groupIds && (
-            <div className='flex flex-col px-5 w-96'>
+            <div className='flex flex-col w-96 pr-6'>
               <div className='flex justify-end'>
                 <button
                   onClick={() => setOpen(true)}

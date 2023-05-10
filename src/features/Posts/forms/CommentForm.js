@@ -40,6 +40,7 @@ const CommentForm = ({ user, postId }) => {
 
   const handleSubmit = async () => {
     const comment = commentRef.current.innerHTML;
+    commentRef.current.innerHTML = '';
 
     if (comment.trim() === '') return;
 
@@ -59,8 +60,6 @@ const CommentForm = ({ user, postId }) => {
     } catch (error) {
       console.error('Error adding comment: ', error);
     }
-
-    commentRef.current.innerHTML = '';
   };
 
   return (

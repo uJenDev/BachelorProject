@@ -32,7 +32,7 @@ const FocusPost = ({
 
   return (
     <div 
-        className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black ml-2 scrollbar-hide`}
+        className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black scrollbar-hide`}
         ref={focusPostScrollRef}
     >
         <div className={`flex flex-col w-full px-5`}>

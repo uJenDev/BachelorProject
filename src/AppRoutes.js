@@ -34,7 +34,7 @@ const AppRoutes = () => {
             {user ? (
                 <Route path='/' element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path='/materials' element={<Materials />} />
+                    <Route path='/materials/:material' element={<Materials />} />
                     <Route path='/groups' element={<ManageGroups />} />
                     <Route path='*' element={<NoPage />} />
                 </Route>

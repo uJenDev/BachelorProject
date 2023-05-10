@@ -8,6 +8,8 @@ import MaterialView from './views/MaterialView';
 import { MdAddCircle } from 'react-icons/md';
 import NewCategoryForm from './forms/NewCategoryForm';
 
+import { useParams } from 'react-router-dom';
+
 const SideTab = () => {
 
     const [loading, setLoading] = useState(false)
@@ -40,7 +42,15 @@ const SideTab = () => {
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-    const [editMode, setEditMode] = useState(false);
+    const { material } = useParams();
+    useEffect(() => {
+        if (material) {
+            const materialId = material.split(':')[1];
+            const categoryId = material.split(':')[0];
+            setSelectedCategory({id: categoryId});
+            // setSelectedMaterial({id: materialId});
+        }
+    }, [material])
 
 
     return (
@@ -64,7 +74,6 @@ const SideTab = () => {
                             selectedMaterial={selectedMaterial}
                             setSelectedMaterial={setSelectedMaterial}
                             selectedCategory={selectedCategory}
-                            setSelectedCategory={setSelectedCategory}
                         />
                     )
                     })}
@@ -88,6 +97,7 @@ const SideTab = () => {
             {selectedMaterial && (
                 <MaterialView
                     material={selectedMaterial}
+                    category={selectedCategory}
                 />
             )}
         </div>

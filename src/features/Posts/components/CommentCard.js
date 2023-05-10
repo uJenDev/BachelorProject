@@ -12,8 +12,7 @@ const CommentCard = ({
         hour: 'numeric',
         minute: 'numeric'
     })
-
-    //calculate time since comment was posted, today if less than 24 hours, days if more than 24 hours but less than 30 days, date if more than 30 days
+    
     const timeSince = () => {
         const commentDate = new Date(comment.createdAt?.seconds * 1000);
         const now = new Date();
