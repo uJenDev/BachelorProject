@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BiCylinder } from 'react-icons/bi'
 import { GiAncientScrew } from 'react-icons/gi'
 import { HiOutlineCubeTransparent } from 'react-icons/hi'
 import { MdTimer } from 'react-icons/md'
 import { secondsToHMS } from '../../../utility/HelperFunctions'
 import { BsArrowReturnRight } from 'react-icons/bs'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const PostCard = ({ 
     post,
@@ -37,11 +38,17 @@ const PostCard = ({
           });
         }
       }
+      const groupId = useParams().group;
+      const navigate = useNavigate();
+
+        const handlePostClick = () => {
+            navigate(`/posts/${groupId}/${post.id}`)
+        }
 
   return (
     <div className={`${selectedPost?.id === post?.id ? 'pb-10' : null}`}>
         <div 
-            onClick={() => setSelectedPost(post)}
+            onClick={handlePostClick}
             className={`
                 py-2 px-3 rounded-xl shadow-md duration-300 ease-out cursor-pointer
                 ${selectedPost?.id === post.id ? 'bg-black' : 'bg-gray-700 '}

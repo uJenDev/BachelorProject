@@ -5,9 +5,6 @@ import { MdSettingsInputComponent } from 'react-icons/md'
 const SettingsList = ({
     settings
 }) => {
-    useEffect(() => {
-        console.log(settings)
-    }, [settings])
   return (
     <div className='w-full mt-20'>
         <div className='mb-2 flex items-center justify-center'>
@@ -22,7 +19,7 @@ const SettingsList = ({
         <div>
             {settings?.map(setting => (
                 <SettingsListCard
-                    key={setting.id}
+                    key={setting.slug}
                     setting={setting}
                 />
             ))}

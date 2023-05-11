@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from './slices/userSlice';
 import Materials from './features/Materials/Materials';
 import ManageGroups from './features/Groups/pages/ManageGroups';
+import Groups from './features/Groups/Groups';
 
 const AppRoutes = () => {
     const dispatch = useDispatch()
@@ -34,7 +35,12 @@ const AppRoutes = () => {
             {user ? (
                 <Route path='/' element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path='/materials/:material' element={<Materials />} />
+                    <Route path='/posts' element={<Groups />} />
+                    <Route path='/posts/:group' element={<Groups />} />
+                    <Route path='/posts/:group/:post' element={<Groups />} />
+                    <Route path='/materials/' element={<Materials />} />
+                    <Route path='/materials/:category' element={<Materials />} />
+                    <Route path='/materials/:category/:material' element={<Materials />} />
                     <Route path='/groups' element={<ManageGroups />} />
                     <Route path='*' element={<NoPage />} />
                 </Route>

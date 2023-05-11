@@ -17,7 +17,10 @@ const ManageGroups = () => {
         const getGroups = onSnapshot(
             query(
                 collection(db, 'groups'),
-                where('members', 'array-contains-any', [{uid: user.uid, isAdmin: true}, {uid: user.uid, isAdmin: false}])
+                where('members', 'array-contains-any', [
+                    {uid: user.uid, isAdmin: true, email: user.email, displayName: user.displayName}, 
+                    {uid: user.uid, isAdmin: false, email: user.email, displayName: user.displayName}
+                ])
             ),
             async (snapshot) => {
                 const groupsWithDates = await Promise.all(

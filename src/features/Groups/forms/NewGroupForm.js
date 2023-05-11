@@ -1,13 +1,49 @@
-import { addDoc, serverTimestamp, collection } from 'firebase/firestore';
-import React, { useState } from 'react'
+import { addDoc, serverTimestamp, collection, onSnapshot } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react'
 import { db } from '../../../firebase';
 import { slugFromTitle } from '../../../utility/HelperFunctions';
+import AddMembers from './AddMembers';
 
 
 const NewGroupForm = ({ handleClose, user }) => {
 
     const [isPrivate, setIsPrivate] = useState(false)
     const [groupName, setGroupName] = useState('')
+
+    const [names, setNames] = useState(['None']);
+
+    useEffect(() => {
+
+      const getNames = onSnapshot(
+          collection(db, 'users'),
+          (snapshot) => {
+            const otherNames = snapshot.docs.map((doc) => {
+                const docData = doc.data()
+              if (doc.id !== user.uid) {
+                return ({
+                    uid: doc.id,
+                    displayName: docData.displayName,
+                    email: docData.email,
+                    isAdmin: false,
+                })
+              } else {
+                return null
+              }
+            })
+            setNames(otherNames.filter((name) => name !== null))
+        },
+        (error) => {
+            console.log(error)
+        })
+        return () => {
+            getNames()
+        }
+    }, [user])
+
+    useEffect(() => {
+        console.log('Names: ', names)
+    }, [names])
+
 
     const handleCreate = async () => {
         if (!groupName) return;
@@ -23,9 +59,12 @@ const NewGroupForm = ({ handleClose, user }) => {
           },
           members: [
             {
-              isAdmin: true,
-              uid: user.uid,
+                displayName: user.displayName,
+                uid: user.uid,
+                email: user.email,
+                isAdmin: true,
             },
+            ...names,
           ],
           private: isPrivate,
           slug: groupSlug,
@@ -65,6 +104,7 @@ const NewGroupForm = ({ handleClose, user }) => {
                 <h1 className='text-md font-semibold'>Private</h1>
             </button>
         </div>
+        {isPrivate && <AddMembers names={names} />}
         <footer
             className='flex flex-row justify-end space-x-5 mt-2'
         >

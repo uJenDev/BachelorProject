@@ -24,12 +24,22 @@ const Header = () => {
           INTEGMA
         </Link>
         <div className='flex flex-row items-center space-x-10'>
+        <Link 
+            to='/posts'
+            className={`
+              text-lg font-bold border-2 px-2 py-1 rounded-xl 
+              duration-300 ease-out hover:scale-105 cursor-pointer
+              ${currentPath.split('/')[1] === 'posts' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
+            `}
+          >
+            Posts
+          </Link>
           <Link 
             to='/materials'
             className={`
               text-lg font-bold border-2 px-2 py-1 rounded-xl 
               duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath === '/materials' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
+              ${currentPath.split('/')[1] === 'materials' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
             `}
           >
             Materials
@@ -39,7 +49,7 @@ const Header = () => {
             className={`
               text-lg font-bold border-2 px-2 py-1 rounded-xl 
               duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath === '/about' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
+              ${currentPath.split('/')[1] === 'about' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
             `}
           >
             Tools
@@ -49,7 +59,7 @@ const Header = () => {
             className={`
               text-lg font-bold border-2 px-2 py-1 rounded-xl 
               duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath === '/contact' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
+              ${currentPath.split('/')[1] === 'contact' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
             `}
           >
             Parts

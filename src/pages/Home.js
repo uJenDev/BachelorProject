@@ -30,18 +30,18 @@ const Home = () => {
 
   const [height, setHeight] = useState(window.innerHeight)
   useEffect(() => {
-    const handleWindowResize = () => setHeight(window.innerHeight)
-    window.addEventListener('resize', handleWindowResize)
-    
-    return () => window.removeEventListener('resize', handleWindowResize)
-}, [])
+      const handleWindowResize = () => setHeight(window.innerHeight)
+      window.addEventListener('resize', handleWindowResize)
+      
+      return () => window.removeEventListener('resize', handleWindowResize)
+  }, [])
 
   return (
     <div 
       className='flex w-full'
       style={{height: height - 82}}
     >
-      <Groups />
+      <h1>Home</h1>
     </div>
   )
 }

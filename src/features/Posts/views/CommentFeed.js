@@ -36,10 +36,6 @@ const CommentFeed = ({
       }
   }, [post])
 
-  useEffect(() => {
-    console.log(comments?.length)
-    }, [comments])
-
   return (
     <div className={`w-full px-5 mt-20 `}>
         <div className='flex items-center mb-2 justify-center'>

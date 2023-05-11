@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdLock, MdLockOpen } from 'react-icons/md'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const GroupCard = ({
     group,
     selectedGroup,
-    setSelectedGroup
 }) => {
+
+    const navigate = useNavigate()
+    const groupId = useParams().group
+    const handleSelectGroup = () => {
+      (groupId === group.id) ? navigate('/posts') : navigate(`/posts/${group.id}`)
+    }
+
+
   return (
     <div className='flex items-center w-60'>
       <button 
-          onClick={() => setSelectedGroup(group === selectedGroup ? null : group)}
+          onClick={() => handleSelectGroup()}
           className={`
               text-lg font-semibold w-full rounded-md text-white duration-300 ease-out 
               ${selectedGroup && selectedGroup.id === group.id ? 'bg-blue-500 scale-105 ' : 'bg-gray-500 hover:bg-gray-400'}

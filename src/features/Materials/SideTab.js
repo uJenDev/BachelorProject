@@ -42,62 +42,53 @@ const SideTab = () => {
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-    const { material } = useParams();
+    const { category } = useParams();
     useEffect(() => {
-        if (material) {
-            const materialId = material.split(':')[1];
-            const categoryId = material.split(':')[0];
+        if (category) {
+            const categoryId = category;
             setSelectedCategory({id: categoryId});
-            // setSelectedMaterial({id: materialId});
+        } else {
+            setSelectedCategory(null);
         }
-    }, [material])
+    }, [category])
 
 
     return (
-        <div className='flex flex-row space-x-2 w-full'>
-            <div className='flex flex-col min-w-fit'>
-                <div className='pb-2 rounded-xl bg-transparent'>
-                    <div className='bg-gray-700 py-2 rounded-t-xl flex flex-row items-top px-5 space-x-1'>
-                        <p className='font-bold text-4xl flex items-center justify-center text-white ease-in duration-300'>Categories</p>
-                    </div>
-                    {categories?.map((category) => {
-                        // check if is last category
-                        var isLast = false;
-                        if (category.id === categories[categories.length - 1].id) {
-                            isLast = true;
-                        }
-                    return (
-                        <SideTabCategoryButton
-                            key={category.id}
-                            category={category}
-                            isLast={isLast}
-                            selectedMaterial={selectedMaterial}
-                            setSelectedMaterial={setSelectedMaterial}
-                            selectedCategory={selectedCategory}
-                        />
-                    )
-                    })}
+        <div className='flex flex-col min-w-fit'>
+            <div className='pb-2 rounded-xl bg-gray-200'>
+                <div className='bg-gray-200 py-2 flex flex-row items-top px-5 space-x-1'>
+                    <p className='font-semibold text-4xl flex items-center justify-center text-black ease-in duration-300'>Categories</p>
                 </div>
-                {!toggleCreateForm && (
-                    <button 
-                        className='flex flex-row items-center w-fit mx-3 px-2 text-gray-700 ease-out duration-150 hover:text-white hover:scale-105 hover:shadow-md hover:bg-gray-700 rounded-lg'
-                        onClick={() => {setToggleCreateForm(true)}}
-                    >
-                        <h1 className={`font-bold text-xl `}>New category</h1>
-                        <MdAddCircle className='text-xl' />
-                    </button>
-                )}
-                {toggleCreateForm && (
-                    <NewCategoryForm 
-                        setToggleCreateForm={setToggleCreateForm}
+                {categories?.map((category) => {
+                    // check if is last category
+                    var isLast = false;
+                    if (category.id === categories[categories.length - 1].id) {
+                        isLast = true;
+                    }
+                return (
+                    <SideTabCategoryButton
+                        key={category.id}
+                        category={category}
+                        isLast={isLast}
+                        selectedMaterial={selectedMaterial}
+                        setSelectedMaterial={setSelectedMaterial}
+                        selectedCategory={selectedCategory}
                     />
-                )}
+                )
+                })}
             </div>
-
-            {selectedMaterial && (
-                <MaterialView
-                    material={selectedMaterial}
-                    category={selectedCategory}
+            {!toggleCreateForm && (
+                <button 
+                    className='flex flex-row items-center w-fit mx-3 px-2 text-black font-semibold ease-out duration-150 hover:text-white hover:scale-105 hover:shadow-md hover:bg-black rounded-lg'
+                    onClick={() => {setToggleCreateForm(true)}}
+                >
+                    <h1 className={`text-lg `}>New category</h1>
+                    <MdAddCircle className='text-lg' />
+                </button>
+            )}
+            {toggleCreateForm && (
+                <NewCategoryForm 
+                    setToggleCreateForm={setToggleCreateForm}
                 />
             )}
         </div>

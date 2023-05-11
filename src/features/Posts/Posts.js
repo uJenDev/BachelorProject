@@ -3,6 +3,7 @@ import { collection, getDoc, onSnapshot, orderBy, query, where } from 'firebase/
 import React, { useEffect, useState } from 'react'
 import { MdAdd } from 'react-icons/md'
 import { useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../../firebase'
 import { selectUser } from '../../slices/userSlice'
 import FocusPost from './views/FocusPost'
@@ -76,16 +77,15 @@ const Posts = ({
 
     const [selectedPost, setSelectedPost] = useState(null);
 
-    // set selected post to first post in groupPosts
-    useEffect(() => {
-      if (posts) {
-        setSelectedPost(posts[0])
-      } else {
-        setSelectedPost([])
-      }
-    }, [posts])
-
     const [open, setOpen] = useState(false);
+
+    const postId = useParams().post;
+    useEffect(() => {
+      if (postId) {
+        const post = posts.find((post) => post.id === postId);
+        setSelectedPost(post);
+      }
+    }, [postId, posts]);
 
     if (loading) return (
       <div 

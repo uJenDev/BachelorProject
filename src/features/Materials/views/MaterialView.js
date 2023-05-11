@@ -1,90 +1,63 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import PropertyList from '../components/PropertyList';
 import MaterialHeader from '../components/MaterialHeader';
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 import { db } from '../../../firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
+const MaterialView = () => {
+  const { material } = useParams();
+  const [thisMaterial, setMaterial] = useState(null);
 
-const MaterialView = ({ 
-    material,
-    category,
-}) => {
+  useEffect(() => {
+    if (!material) return;
 
-    const [thisMaterial, setThisMaterial] = useState(null);
-    const categoryRef = doc(db, 'category', category.id); 
+    const materialRef = doc(db, 'material', material);
 
-    // fetch the single material from the database
-    useEffect(() => {
-        const getMaterial = onSnapshot(
-            query(
-                collection(db, 'material'),
-                where('categoryRef', '==', categoryRef),
-                where('title', '==', material.title),
-            ),
-            (snapshot) => {
-                setThisMaterial(snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    categoryTitle: 'Test',
-                    ...doc.data()
-                }))[0])
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
-        
-        return () => {
-            console.log('Detaching listener')
-            getMaterial()
+    const getMaterial = onSnapshot(
+      materialRef,
+      (doc) => {
+        if (!doc.exists()) {
+            console.log('No such document!');
+            return null;
+        } else {
+            setMaterial({ 
+                id: doc.id,
+                categoryTitle: doc.data().categoryRef.id,
+                ...doc.data() 
+            });
         }
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+  
+      return () => {
+        getMaterial();
+      };
+    }, [material]);
+
+    useEffect(() => {
+        if (!material) setMaterial(null);
     }, [material])
-    
-    console.log(thisMaterial)
 
-  return (
-    <div className='flex flex-col w-full'>
-        <div className='flex flex-col px-2 bg-gray-700 py-2 rounded-xl max-w-fit'>
-            <MaterialHeader 
-                material={thisMaterial}
-            />
-
+    return (
+      <div className='flex flex-col w-full items-center'>
+        {thisMaterial && (
+          <div className='flex flex-col px-2 bg-gray-200 py-2 rounded-xl w-full h-full my-2 mr-2'>
+            <MaterialHeader material={thisMaterial} />
+  
             <div className='flex flex-row'>
-                {thisMaterial.properties && (
-                    <PropertyList 
-                        material={thisMaterial} 
-                    />
-                )}
+              {/* {thisMaterial.properties && (
+                <PropertyList material={thisMaterial} />
+              )} */}
             </div>
-        </div>
-    </div>
-  )
-}
-
-export default MaterialView
-
-
-{/* <div className='flex flex-row space-x-2 w-full'>
-            <MaterialSettingsView
-                material={material}
-                selectedTool={selectedTool}
-            />
-            <div className="flex pt-2">
-                <div className="icon-wrapper w-9">
-                    <MdLink
-                        className={`text-4xl items-center text-green-500 icon ${
-                            selectedTool ? "" : "icon-hidden"
-                        }`}
-                    />
-                    <MdLinkOff
-                        className={`text-4xl items-center text-red-500 icon ${
-                            selectedTool ? "icon-hidden" : ""
-                        }`}
-                    />
-                </div>
-            </div>
-            <MaterialToolsView
-                material={material}
-                selectedTool={selectedTool}
-                setSelectedTool={setSelectedTool}
-            />
-        </div> */}
+          </div>
+        )}
+      </div>
+    );
+  };
+  
+  export default MaterialView;
+  

@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { MdChevronLeft, MdChevronRight, MdExpandMore } from 'react-icons/md'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import GroupCard from '../components/GroupCard'
 
-const GroupsHeader = ({
+const GroupsTab = ({
     groups,
     selectedGroup,
     setSelectedGroup
 }) => {
-
-    const [isExpanded, setIsExpanded] = useState(false)
     const navigate = useNavigate()
+
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search);
+    const isExpanded = queryParams.get('groups') === 'true';
+
 
   return (
     <div className='flex flex-row'>
@@ -43,7 +46,7 @@ const GroupsHeader = ({
         </div>
         <div className='items-start flex'>
             <button
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={() => navigate(`${location.pathname}?groups=${!isExpanded}`)}
                 className=' duration-300 ease-out hover:text-blue-500 hover:scale-110'
             >
                 {isExpanded ? <MdChevronLeft className='text-3xl'/> : <MdChevronRight className='text-3xl'/>}
@@ -53,4 +56,4 @@ const GroupsHeader = ({
   )
 }
 
-export default GroupsHeader
+export default GroupsTab

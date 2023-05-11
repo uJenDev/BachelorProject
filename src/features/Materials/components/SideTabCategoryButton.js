@@ -17,12 +17,12 @@ const SideTabCategoryButton = ({
     const navigate = useNavigate();
 
   return (
-    <div key={category.id} className={`bg-gray-700 py-2 my-1 ${isLast ? 'rounded-b-xl' : ''} ease-out duration-150 ${selectedCategory?.id === category.id ? 'rounded-xl text-2xl' : 'text-xl hover:scale-95'}`}>
+    <div key={category.id} className={`bg-gray-200 py-2 ${isLast ? 'rounded-br-xl' : ''} ease-out duration-150 ${selectedCategory?.id === category.id ? ' my-2 text-2xl' : 'text-xl hover:scale-95'}`}>
         <button 
             className='flex flex-col space-y-2 w-full'
             onClick={() => {navigate(`/materials/${category.id}`)}}
         >
-            <h1 className={`flex items-center px-3 font-bold mx-3 text-white`}>{category.title}</h1>
+            <h1 className={`flex items-center px-3 font-regular mx-3 text-black`}>{category.title}</h1>
         </button>
         {(selectedCategory?.id === category.id) && (
             <SideTabMaterialButton
