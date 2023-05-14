@@ -16,7 +16,7 @@ const PropertyList = ({
     <div className='pt-5 w-full'>
         <p className='text-2xl border-b-2 border-white text-white'>Properties</p>
         <div className=' pt-1'>
-            {material.properties.map((property, index) => {
+            {material.properties.map((property) => {
 
             if (!property.name || !property.value) return null;
             return (

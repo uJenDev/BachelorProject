@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import PropertyList from '../components/PropertyList';
 import MaterialHeader from '../components/MaterialHeader';
 import { useParams } from 'react-router-dom';
 import { db } from '../../../firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
+import SettingsList from './SettingsList';
 
 const MaterialView = () => {
-  const { material } = useParams();
-  const [thisMaterial, setMaterial] = useState(null);
+  const materialId = useParams().material;
+  const [material, setMaterial] = useState(null);
 
   useEffect(() => {
-    if (!material) return;
+    if (!materialId) return;
 
-    const materialRef = doc(db, 'material', material);
+    const materialRef = doc(db, 'material', materialId);
 
     const getMaterial = onSnapshot(
       materialRef,
@@ -36,22 +36,19 @@ const MaterialView = () => {
       return () => {
         getMaterial();
       };
-    }, [material]);
+    }, [materialId]);
 
     useEffect(() => {
-        if (!material) setMaterial(null);
-    }, [material])
+        if (!materialId) setMaterial(null);
+    }, [materialId])
 
     return (
       <div className='flex flex-col w-full items-center'>
-        {thisMaterial && (
-          <div className='flex flex-col px-2 bg-gray-200 py-2 rounded-xl w-full h-full my-2 mr-2'>
-            <MaterialHeader material={thisMaterial} />
-  
+        {material && (
+          <div className='flex flex-col px-2 bg-gray-200 py-2 w-full h-full'>
+            <MaterialHeader material={material} />
             <div className='flex flex-row'>
-              {/* {thisMaterial.properties && (
-                <PropertyList material={thisMaterial} />
-              )} */}
+              <SettingsList />
             </div>
           </div>
         )}

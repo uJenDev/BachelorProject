@@ -8,7 +8,7 @@ import AddMembers from './AddMembers';
 const NewGroupForm = ({ handleClose, user }) => {
 
     const [isPrivate, setIsPrivate] = useState(false)
-    const [groupName, setGroupName] = useState('')
+    const [projectName, setProjectName] = useState('')
 
     const [names, setNames] = useState(['None']);
 
@@ -46,12 +46,12 @@ const NewGroupForm = ({ handleClose, user }) => {
 
 
     const handleCreate = async () => {
-        if (!groupName) return;
-        const groupSlug = slugFromTitle(groupName);
+        if (!projectName) return;
+        const projectSlug = slugFromTitle(projectName);
       
-        await addDoc(collection(db, 'groups'), {
+        await addDoc(collection(db, 'projects'), {
           createdAt: serverTimestamp(),
-          name: groupName,
+          name: projectName,
           createdBy: {
             displayName: user.displayName,
             uid: user.uid,
@@ -67,7 +67,7 @@ const NewGroupForm = ({ handleClose, user }) => {
             ...names,
           ],
           private: isPrivate,
-          slug: groupSlug,
+          slug: projectSlug,
         });
       
         handleClose();
@@ -79,9 +79,9 @@ const NewGroupForm = ({ handleClose, user }) => {
     <div>
         <input
             type='text'
-            placeholder='Group Name'
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
+            placeholder='Project Name'
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
             className='w-full p-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-xl placeholder:text-xl'
         />
         <div className='flex flex-row space-x-2'>
@@ -116,10 +116,10 @@ const NewGroupForm = ({ handleClose, user }) => {
             </button>
             <button
                 onClick={handleCreate}
-                disabled={!groupName}
+                disabled={!projectName}
                 className={`
                     flex flex-row items-center bg-blue-200 text-blue-500 px-2 rounded-lg duration-300 ease-out 
-                    ${!groupName ? 'opacity-40' : 'hover:bg-blue-500 hover:text-white hover:scale-105'}
+                    ${!projectName ? 'opacity-40' : 'hover:bg-blue-500 hover:text-white hover:scale-105'}
                 `}
             >
                 <h1 className='text-md font-semibold'>Create</h1>

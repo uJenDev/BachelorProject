@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NewPostSettingsListCard from '../components/NewPostSettingsListCard';
 
-const NewPostSettingsList = ({ settingsList, setSettingsList }) => {
+const NewPostSettingsList = ({ settingsList, setSettingsList, defaultSettingsListLength }) => {
   const [newSetting, setNewSetting] = useState({ name: '', value: '', unit: '' });
 
   const updateSetting = (updatedSetting) => {
@@ -30,7 +30,7 @@ const NewPostSettingsList = ({ settingsList, setSettingsList }) => {
           setting={setting}
           onChange={updateSetting}
           onDelete={deleteSetting}
-          isDefault={index < 5}
+          isDefault={index < defaultSettingsListLength}
         />
       ))}
       <h1 className="text-md font-semibold mt-4">Custom Settings</h1>

@@ -3,7 +3,7 @@ import { collection, getDoc, onSnapshot, orderBy, query, where } from 'firebase/
 import React, { useEffect, useState } from 'react'
 import { MdAdd } from 'react-icons/md'
 import { useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { db } from '../../firebase'
 import { selectUser } from '../../slices/userSlice'
 import FocusPost from './views/FocusPost'
@@ -11,9 +11,9 @@ import NewPostModal from './views/NewPostModal'
 import PostFeed from './views/PostFeed'
 
 const Posts = ({
-  selectedGroup,
-  groupIds,
-  groups
+  selectedProject,
+  projectIds,
+  projects
 }) => {
 
     const user = useSelector(selectUser)
@@ -21,12 +21,12 @@ const Posts = ({
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-      if (!groupIds[0]) return;
+      if (!projectIds[0]) return;
       setLoading(true);
       const getPosts = onSnapshot(
         query(
           collection(db, 'posts'),
-          selectedGroup ? where('group', '==', selectedGroup?.id) : where('group', 'in', groupIds),
+          selectedProject ? where('project', '==', selectedProject?.id) : where('project', 'in', projectIds),
           orderBy('createdAt', 'desc'),
         ),
         async (snapshot) => {
@@ -73,11 +73,14 @@ const Posts = ({
       return () => {
         getPosts();
       };
-    }, [selectedGroup, groupIds]);
+    }, [selectedProject, projectIds]);
 
     const [selectedPost, setSelectedPost] = useState(null);
 
-    const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const newPost = queryParams.get('newPost');
 
     const postId = useParams().post;
     useEffect(() => {
@@ -103,23 +106,25 @@ const Posts = ({
   return (
     <>
       <div className='flex w-full '>
-          {groupIds && (
+          {projectIds && (
             <div className='flex flex-col w-96 pr-6'>
               <div className='flex justify-end'>
                 <button
-                  onClick={() => setOpen(true)}
+                  onClick={() => {
+                    queryParams.set('newPost', 'true');
+                    navigate({
+                      search: queryParams.toString(),
+                    })
+                  }}
                   className='flex flex-row items-center bg-gray-300 font-semibold px-2 py-1 rounded-lg mt-2 duration-300 ease-out hover:bg-blue-500 hover:text-white hover:scale-105'
                 >
                   <MdAdd />
                   <h1>New Post</h1>
                 </button>
               </div>
-              <h1 className='flex mt-2 text-xl border-b-2 border-black mb-2 pr-5'>{selectedGroup ? `${selectedGroup.name} posts` : 'Your Feed'}</h1>
+              <h1 className='flex mt-2 text-xl border-b-2 border-black mb-2 pr-5'>{selectedProject ? `${selectedProject.name} posts` : 'Your Feed'}</h1>
               <PostFeed
                   posts={posts}
-                  groupIsSelected={selectedGroup ? true : false}
-                  selectedPost={selectedPost}
-                  setSelectedPost={setSelectedPost}
               />
             </div>
           )}
@@ -132,11 +137,9 @@ const Posts = ({
           )}
       </div>
       <NewPostModal
-          open={open}
-          setOpen={setOpen}
           user={user}
-          group={selectedGroup}
-          groups={groups}
+          project={selectedProject}
+          projects={projects}
       />
     </>
   )

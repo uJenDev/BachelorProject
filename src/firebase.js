@@ -1,6 +1,14 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from 'firebase/auth';
+import { 
+    initializeApp
+} from "firebase/app";
+import { 
+    getFirestore,
+    connectFirestoreEmulator,
+} from "firebase/firestore";
+import { 
+    getAuth,
+    connectAuthEmulator,
+} from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,8 +19,15 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 const auth = getAuth();
+
+if (window.location.hostname === "localhost") {
+    connectFirestoreEmulator(db, "localhost", 8080);
+    connectAuthEmulator(auth, "http://localhost:9099");
+}
+
 
 export { db, app, auth };

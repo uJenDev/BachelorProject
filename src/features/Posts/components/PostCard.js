@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { BiCylinder } from 'react-icons/bi'
 import { GiAncientScrew } from 'react-icons/gi'
 import { HiOutlineCubeTransparent } from 'react-icons/hi'
@@ -9,15 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const PostCard = ({ 
     post,
-    selectedPost,
-    setSelectedPost,
-    groupIsSelected
 }) => {
-
-    const time = new Date(post.createdAt?.seconds * 1000).toLocaleString('no-NO', {
-        hour: 'numeric',
-        minute: 'numeric'
-    })
     
     const timeSince = () => {
         const postDate = new Date(post.createdAt?.seconds * 1000);
@@ -38,29 +30,30 @@ const PostCard = ({
           });
         }
       }
-      const groupId = useParams().group;
+
+      const postId = useParams().post;
+      const projectId = useParams().project;
       const navigate = useNavigate();
 
         const handlePostClick = () => {
-            navigate(`/posts/${groupId}/${post.id}`)
+            navigate(`/posts/${projectId}/${post.id}`)
         }
 
+        const selectedPost = postId;
+
   return (
-    <div className={`${selectedPost?.id === post?.id ? 'pb-10' : null}`}>
+    <div className={`${selectedPost === post?.id ? 'pb-10' : null}`}>
         <div 
             onClick={handlePostClick}
             className={`
                 py-2 px-3 rounded-xl shadow-md duration-300 ease-out cursor-pointer
-                ${selectedPost?.id === post.id ? 'bg-black' : 'bg-gray-700 '}
+                ${selectedPost === post.id ? 'bg-black' : 'bg-gray-700 '}
             `}
         >
             <div className='flex flex-col pb-2 space-y-1 '>
                 <div
                     className='flex flex-col text-white duration-200 ease-out text-left'
                 >
-                    {groupIsSelected && (
-                        <p className='text-xs text-gray-400'>{post.group.name}</p>
-                    )}
                     <h1 className='font-semibold text-2xl text-white border-b-2 border-white mb-1'>{post.title}</h1>
                     <div className='flex items-center space-x-1'>
                         <p className='text-xs text-gray-400'>by {post.author.email}</p>
@@ -89,7 +82,7 @@ const PostCard = ({
             </div>
             <p className='text-white'>{post.body}</p>
         </div>
-        {selectedPost?.id === post.id && (<BsArrowReturnRight className='text-2xl text-black flex justify-end w-full' />)}
+        {selectedPost === post.id && (<BsArrowReturnRight className='text-2xl text-black flex justify-end w-full' />)}
     </div>
   )
 }

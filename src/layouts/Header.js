@@ -5,6 +5,26 @@ import { auth } from '../firebase'
 import { Link, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../slices/userSlice'
+import HeaderTab from './components/HeaderTab'
+
+const tabs = [
+  {
+    path: '/posts',
+    text: 'Posts'
+  },
+  {
+    path: '/materials',
+    text: 'Materials'
+  },
+  {
+    path: '/tools',
+    text: 'Tools'
+  },
+  {
+    path: '/parts',
+    text: 'Parts'
+  }
+]
 
 const Header = () => {
   const location = useLocation()
@@ -23,48 +43,16 @@ const Header = () => {
         >
           INTEGMA
         </Link>
-        <div className='flex flex-row items-center space-x-10'>
-        <Link 
-            to='/posts'
-            className={`
-              text-lg font-bold border-2 px-2 py-1 rounded-xl 
-              duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath.split('/')[1] === 'posts' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
-            `}
-          >
-            Posts
-          </Link>
-          <Link 
-            to='/materials'
-            className={`
-              text-lg font-bold border-2 px-2 py-1 rounded-xl 
-              duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath.split('/')[1] === 'materials' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
-            `}
-          >
-            Materials
-          </Link>
-          <Link 
-            to='/about'
-            className={`
-              text-lg font-bold border-2 px-2 py-1 rounded-xl 
-              duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath.split('/')[1] === 'about' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
-            `}
-          >
-            Tools
-          </Link>
-          <Link 
-            to='/contact'
-            className={`
-              text-lg font-bold border-2 px-2 py-1 rounded-xl 
-              duration-300 ease-out hover:scale-105 cursor-pointer
-              ${currentPath.split('/')[1] === 'contact' ? 'bg-blue-500 text-white scale-105 border-blue-500' : 'text-black border-black'}
-            `}
-          >
-            Parts
-          </Link>
-        </div>
+          <div className='flex flex-row items-center space-x-20'>
+            {tabs.map((tab, index) => (
+              <HeaderTab
+                key={index}
+                currentPath={currentPath}
+                path={tab.path}
+                text={tab.text}
+              />
+            ))}
+          </div>
         <div className='flex flex-row items-center space-x-2'>
           <p className='font-regular text-md text-black py-1 px-2 rounded-2xl'>{user.email}</p>
           <button

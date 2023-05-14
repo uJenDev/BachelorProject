@@ -3,9 +3,6 @@ import PostCard from '../components/PostCard'
 
 const PostFeed = ({
     posts,
-    selectedPost,
-    setSelectedPost,
-    groupIsSelected
 }) => {
 
   return (
@@ -14,9 +11,6 @@ const PostFeed = ({
             <PostCard
                 key={post.id}
                 post={post}
-                groupIsSelected={groupIsSelected}
-                selectedPost={selectedPost}
-                setSelectedPost={setSelectedPost}
             />
         ))
         :

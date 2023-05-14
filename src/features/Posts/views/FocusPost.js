@@ -6,7 +6,7 @@ import { GiAncientScrew } from 'react-icons/gi';
 import SettingsList from './SettingsList';
 import { MdTimer } from 'react-icons/md';
 import { secondsToHMS } from '../../../utility/HelperFunctions';
-import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { StlViewer } from "react-stl-viewer";
 
 const FocusPost = ({
@@ -31,6 +31,9 @@ const FocusPost = ({
 
     const focusPostScrollRef = useRef(null);
 
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
 
   return (
     <div 
@@ -45,13 +48,18 @@ const FocusPost = ({
                         <p>by {post.author.email}</p>
                     </div>
                     <div className='flex flex-col items-start space-y-2 mt-3'>
-                        <Link 
-                            to={`/materials/${post.setting?.material?.categoryRef.id}/${post.setting?.materialRef.id}`}
+                        <button 
+                            onClick={() => {
+                                queryParams.set('setting', post.setting?.id)
+                                const path = `/materials/${post.setting?.material?.categoryRef.id}/${post.setting?.materialRef.id}`;
+                                const search = queryParams.toString();
+                                navigate(`${path}?${search}`);
+                              }}
                             className='flex items-center space-x-1'
                         >
                             <HiOutlineCubeTransparent className='text-xl' />
                             <p className='font-bold text-xl max-w-fit'>{post.setting?.material ? post.setting.material.title : 'Not listed'}</p>
-                        </Link>
+                        </button>
                         <div className='flex items-center space-x-1'>
                             <BiCylinder className='text-xl' />
                             <p className='font-bold text-xl max-w-fit'>{post.setting?.part ? post.setting.part.name : 'Not listed'}</p>

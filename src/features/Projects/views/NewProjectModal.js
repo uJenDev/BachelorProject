@@ -1,7 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import NewGroupForm from '../forms/NewGroupForm';
+import NewGroupForm from '../forms/NewProjectForm';
 
 const style = {
     position: 'absolute',

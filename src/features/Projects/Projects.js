@@ -1,13 +1,13 @@
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { db } from '../../firebase';
 import { selectUser } from '../../slices/userSlice';
 import Posts from '../Posts/Posts'
-import GroupsTab from './views/GroupsTab';
+import ProjectTab from './views/ProjectTab';
 
-const Groups = () => {
+const Projects = () => {
   
     const [height, setHeight] = useState(window.innerHeight)
     useEffect(() => {
@@ -18,21 +18,21 @@ const Groups = () => {
     }, [])
 
     const user = useSelector(selectUser)
-    const [groups, setData] = useState(null);
+    const [projects, setProjects] = useState(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
       setLoading(true)
-      const getGroups = onSnapshot(
+      const getProjects = onSnapshot(
           query(
-            collection(db, 'groups'),
+            collection(db, 'projects'),
             where('members', 'array-contains-any', [
               {uid: user.uid, isAdmin: true, email: user.email, displayName: user.displayName}, 
               {uid: user.uid, isAdmin: false, email: user.email, displayName: user.displayName}
           ])
           ),
           (snapshot) => {
-            setData(snapshot.docs.map(doc => ({
+            setProjects(snapshot.docs.map(doc => ({
                   id: doc.id,
                   ...doc.data()
             })))
@@ -43,7 +43,7 @@ const Groups = () => {
           setLoading(false)
       })
       return () => {
-          getGroups()
+          getProjects()
       }
   }, [])
 
@@ -52,37 +52,37 @@ const Groups = () => {
   // const queryParams = new URLSearchParams(location.search);
   // const test = queryParams.get('test');
 
-  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
 
-  const [groupIds, setGroupIds] = useState(null);
+  const [projectIds, setGroupIds] = useState(null);
   useEffect(() => {
-    if (groups) {
-      setGroupIds(groups.map(group => group.id))
+    if (projects) {
+      setGroupIds(projects.map(project => project.id))
     }
-  }, [groups])
+  }, [projects])
 
-  const groupId = useParams().group;
+  const groupId = useParams().project;
   useEffect(() => {
-    (groupId && groups) ? setSelectedGroup(groups.find(group => group.id === groupId)) : setSelectedGroup(null)
-  }, [groupId, groups])
+    (groupId && projects) ? setSelectedProject(projects.find(project => project.id === groupId)) : setSelectedProject(null)
+  }, [groupId, projects])
 
 
   return (
     <div className='flex flex-row w-full' style={{height: height - 82}}>
-        <GroupsTab 
-            groups={groups}
-            selectedGroup={selectedGroup}
-            setSelectedGroup={setSelectedGroup}
+        <ProjectTab 
+            projects={projects}
+            selectedProject={selectedProject}
+            setSelectedProject={setSelectedProject}
         />
-        {(groupIds && !loading) && (
+        {(projectIds && !loading) && (
             <Posts 
-                selectedGroup={selectedGroup}
-                groupIds={groupIds}
-                groups={groups}
+                selectedProject={selectedProject}
+                projectIds={projectIds}
+                projects={projects}
             />
         )}
     </div>
   )
 }
 
-export default Groups
+export default Projects

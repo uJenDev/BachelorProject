@@ -1,96 +1,144 @@
-import { deleteDoc, doc, runTransaction, setDoc } from 'firebase/firestore';
-import React, { useEffect, useRef, useState } from 'react'
-import { MdWarning } from 'react-icons/md';
+import React, { useEffect, useState } from 'react';
+import {
+    Autocomplete,
+    InputAdornment,
+    TextField,
+} from '@mui/material';
 import { db } from '../../../firebase';
-import { capitalize, slugFromTitle } from '../../../utility/HelperFunctions';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import NewMaterialPropertiesList from '../views/NewMaterialPropertiesList';
 
-const NewMaterialForm = ({
-    setToggleCreateForm,
-    oldMaterial,
-    categoryId,
-}) => {
 
-    const [material, setMaterial] = useState('');
-    const [isUpdating, setIsUpdating] = useState(false);
-
-    useEffect(() => {
-        if (oldMaterial) {
-            setMaterial(oldMaterial.title);
-            setIsUpdating(true);
-        }
-    }, [oldMaterial]);
-
-    const handleSubmit = async () => {
-        if (!material) return;
-
-        console.log('Submitting material: ', categoryId)
-
-        const categoryRef = doc(db, 'category', categoryId);
-
-        const documentId = slugFromTitle(material);
-        
-
-        
-        if (isUpdating) {
-            // run a transaction to create a new material and delete the old one
-            await runTransaction(db, async (transaction) => {
-                const oldMaterialRef = doc(db, 'material', oldMaterial.id);
-                const materialRef = doc(db, 'material', documentId);
-                    
-                await transaction.delete(oldMaterialRef);
-                await transaction.set(materialRef, {
-                    title: capitalize(material),
-                    categoryRef: categoryRef,
-                    properties: oldMaterial.properties,
-                    composition: oldMaterial.composition,
-                });
-            }).then(() => {
-                console.log('Transaction successfully committed!');
-            }).catch((error) => {
-                console.log('Transaction failed: ', error);
-            });
-            
-        } else {
-            await setDoc(doc(db, 'material', documentId), {
-                title: capitalize(material),
-                categoryRef: categoryRef,
-                properties: [],
-                composition: [],
-            });
-        }
-        setToggleCreateForm(false);
-    }
-
-    const inputRef = useRef();
-
-    useEffect(() => {
-        inputRef.current.focus();
-    }, [])
-
-  return (
-    <div className='flex flex-col'>
-        <div className='flex flex-row bg-blue-200 rounded-lg px-2 mx-2 py-1'>
-            <input
-                className={`bg-transparent rounded-sm focus:outline-none w-fit text-blue-500 font-bold placeholder-blue-500 ${isUpdating ? 'text-4xl h-10' : 'text-lg h-5 ease-out duration-150 '} placeholder-opacity-50`}
-                type='text'
-                placeholder='Material name'
-                value={material}
-                ref={inputRef}
-                onChange={(e) => {setMaterial(e.target.value)}}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        handleSubmit()
-                    }
-                }}
-                onBlur={() => {setToggleCreateForm(false)}}
-            />
-        </div>
-        <div className='mt-1 flex flex-row items-center justify-center text-sm text-red-500 space-x-1'>
-            <MdWarning />
-            <p className=''>This cannot be changed</p>
-        </div>
-    </div>
-  )
+const fetchPropertyStandards = async () => {
+    const defaultProperties = await getDoc(doc(db, 'standards', 'materials'))
+    return defaultProperties.data().properties.default
 }
 
-export default NewMaterialForm
+const NewMaterialForm = ({ 
+    handleClose, 
+    user, 
+    category
+}) => {
+
+    const [title, setTitle] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [pricePerKg, setPricePerKg] = useState('');
+    const [propertyList, setPropertyList] = useState([]);
+    const [density, setDensity] = useState('');
+
+
+    const [defualtPropertyListLength, setDefualtPropertyListLength] = useState(0)
+    useEffect(() => {
+        fetchPropertyStandards().then((data) => {
+            setPropertyList(data)
+            setDefualtPropertyListLength(data.length)
+        })
+    }, [])
+
+  const titleToSlug = (title) => {
+    return title.toLowerCase().replace(/\s+/g, '-');
+  };
+
+  const handleAdd = async () => {
+    if (!canPost) return;
+    
+    const docId = titleToSlug(title);
+    const categoryRef = doc(db, 'category', selectedCategory.id);
+    const materialData = {
+        title: title,
+        createdAt: serverTimestamp(),
+        createdBy: {
+            displayName: user.displayName,
+            email: user.email,
+            uid: user.uid,
+        },
+        composition: [],
+        properties: propertyList,
+        pricePerKg: pricePerKg,
+        categoryRef: categoryRef,
+    };
+
+    await setDoc(doc(db, 'material', docId), materialData);
+    handleClose();
+  };
+
+    const [canPost, setCanPost] = useState(false);
+    useEffect(() => {
+        if (title && selectedCategory && pricePerKg) {
+            setCanPost(true)
+        } else {
+            setCanPost(false)
+        }
+    }, [title, selectedCategory, pricePerKg])
+
+
+  return (
+    <div>
+        <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
+        <Autocomplete
+            options={category}
+            size='small'
+            getOptionLabel={(option) => option.title}
+            sx={{ width: 200 }}
+            onChange={(e, value) => setSelectedCategory(value)}
+            renderInput={(params) => <TextField {...params} label="What category?" variant='standard' />}
+        />
+        <input
+            placeholder='Name of material'
+            className='w-full focus:outline-none focus:border-gray-500 mt-3 text-2xl'
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+        />
+        <div className='flex flex-col mt-5'>
+            <div className='flex items-center space-x-5'>
+                <TextField
+                    type="number"
+                    variant="standard"
+                    onFocus={(e) => e.target.select()}
+                    InputProps={{
+                        inputProps: { min: 0 },
+                        endAdornment: <InputAdornment position="end">kr</InputAdornment>,
+                    }}
+                    label="Price per Kg"
+                    className='max-w-fit'
+                    value={pricePerKg}
+                    onChange={(e) => setPricePerKg(e.target.value)}
+                />
+                <TextField
+                    type="number"
+                    variant="standard"
+                    onFocus={(e) => e.target.select()}
+                    InputProps={{
+                        inputProps: { min: 0 },
+                        endAdornment: <InputAdornment position="end">kg/m^3</InputAdornment>,
+                    }}
+                    label="Density"
+                    className='max-w-fit'
+                    value={density}
+                    onChange={(e) => setDensity(e.target.value)}
+                />
+            </div>
+            <NewMaterialPropertiesList
+                propertyList={propertyList}
+                setPropertyList={setPropertyList}
+                defualtPropertyListLength={defualtPropertyListLength}
+            />
+        </div>
+        <div className='flex justify-end'>
+            <button
+                onClick={handleAdd}
+                disabled={!canPost}
+                className={`
+                    text-lg text-blue-500 bg-blue-200 px-2 rounded-lg
+                    duration-300 ease-out
+                    ${!canPost ? 'opacity-50' : 'hover:text-white hover:bg-blue-500 hover:scale-105'}
+                `}
+            >
+                Add
+            </button>
+        </div>
+    </div>
+  );
+};
+
+export default NewMaterialForm;

@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react'
-import Groups from '../features/Groups/Groups';
 
 const Home = () => {
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import NewPostForm from '../forms/NewPostForm';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -17,13 +18,23 @@ const style = {
 };
 
 const NewPostModal = ({ 
-    open, 
-    setOpen, 
     user,
-    groups,
-    group 
+    projects,
+    project 
 }) => {
-    const handleClose = () => setOpen(false);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const open = queryParams.get('newPost') === 'true'
+
+
+    const handleClose = () => {
+      queryParams.delete('newPost')
+      navigate({
+        search: queryParams.toString(),
+      })
+    }
 
     const [width, setWidth] = useState(window.innerWidth)
     const breakpoint = 1200;
@@ -53,8 +64,8 @@ const NewPostModal = ({
             <NewPostForm 
                 handleClose={handleClose}
                 user={user}
-                group={group}
-                groups={groups}
+                project={project}
+                projects={projects}
             />
         </Box>
       </Modal>

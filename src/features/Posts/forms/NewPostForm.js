@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import { db } from '../../../firebase'
 import CycleTimeSelect from '../components/CycleTimeSelect'
-import MaterialSelect from '../components/MaterialSelect'
-import OptionSelect from '../components/OptionSelect'
+import MaterialSelect from './MaterialSelect'
+import PartSelect from './PartSelect'
+import ToolSelect from './ToolSelect'
 import NewPostSettingsList from '../views/NewPostSettingsList'
 import CircularProgress from '@mui/material/CircularProgress';
-import { FormControl, InputLabel, NativeSelect, Select } from '@mui/material'
+import { Autocomplete, TextField } from '@mui/material'
 
 const fetchSettingStandards = async () => {
     const defaultSettings = await getDoc(doc(db, 'standards', 'settings'))
@@ -17,19 +18,9 @@ const fetchSettingStandards = async () => {
 const NewPostForm = ({ 
     handleClose,
     user,
-    groups,
-    group
+    projects,
+    project
 }) => {
-
-    const [privateGroups, setPrivateGroups] = useState([])
-    const [publicGroups, setPublicGroups] = useState([])
-    
-    useEffect(() => {
-        if (groups) {
-            setPrivateGroups(groups.filter(group => group.private))
-            setPublicGroups(groups.filter(group => !group.private))
-        }
-    }, [groups])
 
     const [subject, setSubject] = useState('')
     const [body, setBody] = useState('')
@@ -38,12 +29,15 @@ const NewPostForm = ({
     const [tool, setTool] = useState(null)
     const [cycleTime, setCycleTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
     const [settingsList, setSettingsList] = useState([])
-    const [groupToPost, setGroupToPost] = useState(group)
+    const [projectToPost, setProjectToPost] = useState(project || null)
+    const [defectRate, setDefectRate] = useState(0)
 
 
+    const [defaultSettingsListLength, setDefaultSettingsListLength] = useState(0)
     useEffect(() => {
         fetchSettingStandards().then((data) => {
             setSettingsList(data)
+            setDefaultSettingsListLength(data.length)
         })
     }, [])
 
@@ -71,8 +65,8 @@ const NewPostForm = ({
 
     const [canPost, setCanPost] = useState(false)
     useEffect(() => {
-        (!subject || !material || !part || !tool || cycleTimeInSeconds === 0 || !settingsValidated || !groupToPost) ? setCanPost(false) : setCanPost(true)
-    }, [subject, material, part, tool, cycleTimeInSeconds, settingsValidated, groupToPost])
+        (!subject || !material || !part || !tool || cycleTimeInSeconds === 0 || !settingsValidated || !projectToPost) ? setCanPost(false) : setCanPost(true)
+    }, [subject, material, part, tool, cycleTimeInSeconds, settingsValidated, projectToPost])
 
 
     const titleToSlug = (title) => {
@@ -84,28 +78,29 @@ const NewPostForm = ({
         if (!canPost) return;
         setLoading(true)
         const settingsData = {
-          cycleTime: cycleTimeInSeconds,
-          materialRef: doc(db, 'material', material.id),
-          partRef: doc(db, 'part', part.id),
-          toolRef: doc(db, 'tool', tool.id),
-          settings: settingsList.map((setting) => ({
-            name: setting.name,
-            slug: titleToSlug(setting.name),
-            unit: setting.unit,
-            value: setting.type === 'number' ? Number(setting.value) : setting.value,
-          })),
+            cycleTime: cycleTimeInSeconds,
+            defectRate: defectRate,
+            materialRef: doc(db, 'material', material.id),
+            partRef: doc(db, 'part', part.id),
+            toolRef: doc(db, 'tool', tool.id),
+            settings: settingsList.map((setting) => ({
+                name: setting.name,
+                slug: titleToSlug(setting.name),
+                unit: setting.unit,
+                value: setting.type === 'number' ? Number(setting.value) : setting.value,
+            })),
         };
       
         const postData = {
-          author: {
-            displayName: user.displayName,
-            email: user.email,
-            uid: user.uid,
-          },
-          body: body,
-          createdAt: serverTimestamp(),
-          group: groupToPost.id,
-          title: subject,
+            author: {
+                displayName: user.displayName,
+                email: user.email,
+                uid: user.uid,
+            },
+            body: body,
+            createdAt: serverTimestamp(),
+            project: projectToPost.id,
+            title: subject,
         };
       
         // Create both documents
@@ -124,77 +119,76 @@ const NewPostForm = ({
   return (
     <div className='overflow-y-scroll h-full px-4 scrollbar-hide'>
         <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel htmlFor="grouped-native-select">Group</InputLabel>
-            <NativeSelect 
-                native 
-                value={groupToPost?.id}
-                onChange={(e) => setGroupToPost(groups.find(group => group.id === e.target.value))}
-                id="grouped-native-select" 
-                label="Grouping"
-            >
-            {!groupToPost && <option aria-label="None" value="" />}
-            <optgroup label="Public">
-                {publicGroups.map((group) => (
-                    <option value={group.id}>
-                        {group.name}
-                    </option>
-                ))}
-            </optgroup>
-            <optgroup label="Private">
-                {privateGroups.map((group) => (
-                    <option value={group.id}>
-                        {group.name}
-                    </option>
-                ))}
-            </optgroup>
-            </NativeSelect>
-        </FormControl>
+            <Autocomplete
+                options={projects}
+                defaultValue={project}
+                groupBy={(option) => option.private ? 'Private' : 'Public'}
+                getOptionLabel={(option) => option.name}
+                sx={{ width: 300 }}
+                onChange={(e, value) => setProjectToPost(value)}
+                renderInput={(params) => <TextField {...params} label="What project?" variant='standard' />}
+                renderGroup={(params) => (
+                    <div key={params.key}>
+                        <p className='px-2 font-semibold border-b-2 border-gray-200'>{params.group}</p>
+                        <p>{params.children}</p>
+                    </div>
+                )}
+            />
         <input
             type='text'
-            placeholder='Subject'
+            placeholder='Type a subject..'
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             className='w-full p-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-2xl placeholder:text-2xl'
         />
         <textarea
             type='text'
-            placeholder='Describe your process..'
+            placeholder='Describe what you did.. (optional)'
             value={body}
             onChange={(e) => setBody(e.target.value)}
             className='w-full p-2 rounded-lg resize-none outline-none border-none h-40 focus:border-blue-500  text-md placeholder:text-md'
         />
         <p className='flex w-full h-[1px] border-b-2 border-black text-xl font-semibold' >
-            Specify your process..
+            Specifiy what you worked on..
         </p>
-        <div className='flex flex-row space-x-5'>
+        <div className='flex space-x-5'>
             <MaterialSelect 
                 material={material}
                 setMaterial={setMaterial}
             />
-            <OptionSelect
-                setOption={setPart}
-                option='part'
-                optionLabel='Part'
+            <PartSelect
+                setPart={setPart}
+                part={part}
+                project={projectToPost}
             />
-            <OptionSelect
-                setOption={setTool}
-                option='tool'   
-                optionLabel='Tool'
+            <ToolSelect
+                setTool={setTool}
+                tool={tool}
+                toolLabel='Tool'
+                noOptionsText='No tools found'
+            />
+        </div>
+        <div className='flex space-x-5'>
+            <TextField
+                type="number"
+                onFocus={(e) => e.target.select()}
+                InputProps={{ inputProps: { min: 0, max: 100 } }}
+                label="Defect Rate (%)"
+                className="w-full top-10"
+                value={defectRate}
+                onChange={(e) => setDefectRate(e.target.value)}
             />
             <CycleTimeSelect
                 cycleTime={cycleTime}
                 setCycleTime={setCycleTime}
             />
         </div>
-        <h1 className='flex w-full text-xl font-semibold mt-10' >Settings used</h1>
+        <h1 className='flex w-full text-xl font-semibold mt-10'>Settings used</h1>
         <NewPostSettingsList
-            user={user}
-            group={group}
             settingsList={settingsList}
             setSettingsList={setSettingsList}
+            defaultSettingsListLength={defaultSettingsListLength}
         />
-
         <footer
             className='absolute bottom-4 right-4 flex flex-row justify-end space-x-5 mt-2'
         >
@@ -215,10 +209,7 @@ const NewPostForm = ({
                     </>
                 }
             </button>
-            
         </footer>   
     </div>
-  )
-}
-
+  )}
 export default NewPostForm

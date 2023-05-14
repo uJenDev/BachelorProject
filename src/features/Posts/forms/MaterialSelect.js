@@ -4,9 +4,10 @@ import { db } from '../../../firebase'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-const MaterialSelect = ({ setMaterial }) => {
+const MaterialSelect = ({ material, setMaterial }) => {
 
     const [allMaterials, setAllMaterials] = useState([])
+    const [materialTitles, setMaterialTitles] = useState([])
 
     useEffect(() => {
         const getMaterials = onSnapshot(
@@ -26,25 +27,22 @@ const MaterialSelect = ({ setMaterial }) => {
         }
     }, [])
 
-    const [materialTitles, setMaterialTitles] = useState([])
     useEffect(() => {
-        if (!allMaterials[0]) return;
-        setMaterialTitles(allMaterials.map(material => ({label: material.title, option: material})))
+        if (allMaterials.length === 0) return;
+        setMaterialTitles(allMaterials.map(material => ({label: material.title, material: material})))
     }, [allMaterials])
 
 
   return (
-    materialTitles.length > 0 && (
-        <Autocomplete
-            disablePortal
-            options={materialTitles}
-            onChange={(event, newValue) => {
-                setMaterial(newValue?.option)
-            }}
-            className='w-full pt-10'
-            renderInput={(params) => <TextField {...params} label="Material" />}
-        />
-    )
+    <Autocomplete
+        options={materialTitles}
+        value={materialTitles.find(thisMaterial => thisMaterial.material.id === material?.id) || null}
+        onChange={(e, newValue) => {
+            setMaterial(newValue.material)
+        }}
+        className='w-full pt-10'
+        renderInput={(params) => <TextField {...params} label="Material" />}
+    />
   )
 }
 

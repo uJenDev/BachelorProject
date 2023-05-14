@@ -29,9 +29,9 @@ const NewCategoryForm = ({
 
   return (
     <div>
-        <div className='flex flex-row bg-gray-700 rounded-lg px-6'>
+        <div className='flex flex-row bg-transparent rounded-lg px-6'>
             <input
-                className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 text-white font-bold text-xl placeholder-white'
+                className='bg-transparent rounded-lg focus:outline-none ease-out duration-150 h-9 w-40 text-black font-regular text-xl placeholder-black placeholder-opacity-50'
                 type='text'
                 placeholder='New category'
                 value={category}
