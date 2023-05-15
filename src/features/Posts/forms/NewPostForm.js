@@ -2,13 +2,12 @@ import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'fir
 import React, { useEffect, useState } from 'react'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import { db } from '../../../firebase'
-import CycleTimeSelect from '../components/CycleTimeSelect'
 import MaterialSelect from './MaterialSelect'
 import PartSelect from './PartSelect'
-import ToolSelect from './ToolSelect'
 import NewPostSettingsList from '../views/NewPostSettingsList'
 import CircularProgress from '@mui/material/CircularProgress';
 import { Autocomplete, TextField } from '@mui/material'
+import OperationalFactorsSelect from '../components/OperationalFactorsSelect'
 
 const fetchSettingStandards = async () => {
     const defaultSettings = await getDoc(doc(db, 'standards', 'settings'))
@@ -27,11 +26,16 @@ const NewPostForm = ({
     const [material, setMaterial] = useState(null)
     const [part, setPart] = useState(null)
     const [tool, setTool] = useState(null)
-    const [cycleTime, setCycleTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
     const [settingsList, setSettingsList] = useState([])
     const [projectToPost, setProjectToPost] = useState(project || null)
-    const [defectRate, setDefectRate] = useState(0)
-    const [coolantUsage, setCoolantUsage] = useState(0)
+
+    const [operationalFactors, setOperationalFactors] = useState({
+        cycleTime: { hours: 0, minutes: 0, seconds: 0 },
+        defectRate: 0,
+        coolantUsage: 0,
+        coolant: null,
+        toolLife: 0,
+    })
 
 
     const [defaultSettingsListLength, setDefaultSettingsListLength] = useState(0)
@@ -45,8 +49,8 @@ const NewPostForm = ({
 
     const [cycleTimeInSeconds, setCycleTimeInSeconds] = useState(0);
     useEffect(() => {
-        setCycleTimeInSeconds(cycleTime.hours * 3600 + cycleTime.minutes * 60 + cycleTime.seconds)
-    }, [cycleTime])
+        setCycleTimeInSeconds(operationalFactors.cycleTime.hours * 3600 + operationalFactors.cycleTime.minutes * 60 + operationalFactors.cycleTime.seconds)
+    }, [operationalFactors.cycleTime])
 
 
     const [settingsValidated, setSettingsValidated] = useState(false)
@@ -88,11 +92,7 @@ const NewPostForm = ({
                 unit: setting.unit,
                 value: setting.type === 'number' ? Number(setting.value) : setting.value,
             })),
-            operationalFactors: {
-                cycleTime: cycleTimeInSeconds,
-                defectRate: defectRate,
-                coolantUsage: coolantUsage,
-            }
+            operationalFactors: operationalFactors
         };
       
         const postData = {
@@ -153,9 +153,9 @@ const NewPostForm = ({
             className='w-full p-2 rounded-lg resize-none outline-none border-none h-40 focus:border-blue-500  text-md placeholder:text-md'
         />
         <p className='flex w-full h-[1px] border-b-2 border-black text-xl font-semibold' >
-            Fill in the data..
+            Material and Part
         </p>
-        <div className='flex space-x-5'>
+        <div className='flex space-x-2 max-w-2xl'>
             <MaterialSelect 
                 material={material}
                 setMaterial={setMaterial}
@@ -165,38 +165,14 @@ const NewPostForm = ({
                 part={part}
                 project={projectToPost}
             />
-            <ToolSelect
-                setTool={setTool}
-                tool={tool}
-                toolLabel='Tool'
-                noOptionsText='No tools found'
-            />
         </div>
         <h1 className='flex w-full text-xl font-semibold mt-10'>Operational Factors</h1>
-        <div className='flex space-x-5'>
-            <TextField
-                type="number"
-                onFocus={(e) => e.target.select()}
-                InputProps={{ inputProps: { min: 0, max: 100 } }}
-                label="Defect Rate (%)"
-                className="w-full top-10"
-                value={defectRate}
-                onChange={(e) => setDefectRate(e.target.value)}
-            />
-            <TextField
-                type="number"
-                onFocus={(e) => e.target.select()}
-                InputProps={{ inputProps: { min: 0 } }}
-                label="Coolant Usage (L/min)"
-                className="w-full top-10"
-                value={coolantUsage}
-                onChange={(e) => setCoolantUsage(e.target.value)}
-            />
-            <CycleTimeSelect
-                cycleTime={cycleTime}
-                setCycleTime={setCycleTime}
-            />
-        </div>
+        <OperationalFactorsSelect
+            operationalFactors={operationalFactors}
+            setOperationalFactors={setOperationalFactors}
+            tool={tool}
+            setTool={setTool}
+        />
         <h1 className='flex w-full text-xl font-semibold mt-10'>Settings used</h1>
         <NewPostSettingsList
             settingsList={settingsList}

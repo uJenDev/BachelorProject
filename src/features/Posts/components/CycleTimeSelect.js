@@ -18,8 +18,7 @@ const CycleTimeSelect = ({ cycleTime, setCycleTime }) => {
 
   return (
     <div className='w-full'>
-        <h1 className='font-semibold text-center'>Cycle Time</h1>
-        <div className="flex flex-row space-x-4 mt-4">
+        <div className="flex flex-row space-x-4">
         <TextField
             type="number"
             onFocus={(e) => e.target.select()}

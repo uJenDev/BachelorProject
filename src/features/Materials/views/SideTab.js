@@ -91,16 +91,16 @@ const SideTab = ({ width, height }) => {
                         if (category.id === categories[categories.length - 1].id) {
                             isLast = true;
                         }
-                    return (
-                        <SideTabCategoryButton
-                            key={category.id}
-                            category={category}
-                            isLast={isLast}
-                            selectedMaterial={selectedMaterial}
-                            setSelectedMaterial={setSelectedMaterial}
-                            selectedCategory={selectedCategory}
-                        />
-                    )
+                        return (
+                            <SideTabCategoryButton
+                                key={category.id}
+                                category={category}
+                                isLast={isLast}
+                                selectedMaterial={selectedMaterial}
+                                setSelectedMaterial={setSelectedMaterial}
+                                selectedCategory={selectedCategory}
+                            />
+                        )
                     })}
                     {toggleCreateForm && (
                     <NewCategoryForm 

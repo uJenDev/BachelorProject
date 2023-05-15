@@ -7,8 +7,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 const ToolSelect = ({ 
     tool,
     setTool,
-    toolLabel,
-    noOptionsText
 }) => {
 
     const [allTools, setAllTools] = useState([])
@@ -42,17 +40,17 @@ const ToolSelect = ({
 
   return (
     <Autocomplete
-        noOptionsText={noOptionsText}
+        noOptionsText={'No tools found'}
         value={toolNames.find(thisTool => thisTool.tool.id === tool?.id) || null}
         options={toolNames}
         onChange={(e, newValue) => {
             setTool(newValue?.tool);
         }}
-        className='w-full pt-10'
+        className='w-full'
         renderInput={(params) => (
             <TextField
                 {...params}
-                label={toolLabel}
+                label={'Tool Type'}
             />
         )}
     />
