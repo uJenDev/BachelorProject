@@ -5,7 +5,7 @@ import { slugFromTitle } from '../../../utility/HelperFunctions';
 import AddMembers from './AddMembers';
 
 
-const NewGroupForm = ({ handleClose, user }) => {
+const NewProjectForm = ({ handleClose, user }) => {
 
     const [isPrivate, setIsPrivate] = useState(false)
     const [projectName, setProjectName] = useState('')
@@ -83,7 +83,7 @@ const NewGroupForm = ({ handleClose, user }) => {
             placeholder='Project Name'
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
-            className='w-full py-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-xl placeholder:text-xl'
+            className='w-full py-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-2xl placeholder:text-2xl'
         />
         <div className='flex flex-row space-x-2'>
             <button
@@ -113,11 +113,11 @@ const NewGroupForm = ({ handleClose, user }) => {
                 onClick={handleCreate}
                 disabled={!projectName}
                 className={`
-                    flex flex-row items-center bg-blue-200 text-blue-500 px-2 rounded-lg duration-300 ease-out 
-                    ${!projectName ? 'opacity-40' : 'hover:bg-blue-500 hover:text-white hover:scale-105'}
+                    flex flex-row items-center ${isPrivate ? 'bg-red-200 text-red-500' : 'bg-blue-200 text-blue-500'} px-2 rounded-lg duration-300 ease-out absolute bottom-4 right-4 text-2xl
+                    ${!projectName ? 'opacity-40' : `${isPrivate ? 'hover:bg-red-500' : 'hover:bg-blue-500'} hover:text-white hover:scale-105`}
                 `}
             >
-                <h1 className='text-md font-semibold'>Create</h1>
+                <h1 className='text-md font-semibold'>{isPrivate ? 'Create Private' : 'Create'}</h1>
             </button>
             
         </footer>   
@@ -125,4 +125,4 @@ const NewGroupForm = ({ handleClose, user }) => {
   )
 }
 
-export default NewGroupForm
+export default NewProjectForm

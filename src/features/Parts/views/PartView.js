@@ -3,6 +3,7 @@ import { getDownloadURL, listAll, ref } from 'firebase/storage'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { db, storage } from '../../../firebase'
+import SettingsList from './SettingsList'
 import PartViewHeader from '../components/PartViewHeader'
 
 const PartView = ({
@@ -90,16 +91,20 @@ const PartView = ({
 
   useEffect(() => {
     console.log('part: ', part)
+    console.log('settings: ', settings)
     console.log('files: ', files)
-  }, [part, files])
+  }, [part, files, settings])
 
   if (loading) return null
   return (
-    <div className='flex w-full'>
+    <div className='flex flex-col w-full bg-gray-200 ml-4'>
       <PartViewHeader
         part={part}
+        files={files}
       />
-
+      <SettingsList
+        settings={settings}
+      />
     </div>
   )
 }

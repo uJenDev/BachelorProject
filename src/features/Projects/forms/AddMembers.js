@@ -27,7 +27,7 @@ export default function AddMembers({ users }) {
           </li>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Add Members" variant="standard" />
+          <TextField {...params} label="Add people to the project" variant="standard" />
         )}
         sx={{ width: 300 }}
       />

@@ -2,12 +2,13 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { db } from '../../../firebase';
 import { selectUser } from '../../../slices/userSlice';
 import ManageProjectCard from '../components/ManageProjectCard';
 import NewProjectModal from '../views/NewProjectModal';
 
-const ManageGroups = () => {
+const MangageProjects = () => {
 
     const user = useSelector(selectUser)
     const [projects, setProjects] = useState(null);
@@ -50,11 +51,21 @@ const ManageGroups = () => {
         }
     }, [])
 
-    useEffect(() => {
-        console.log('projects: ', projects)
-    }, [projects])
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
 
-    const [open, setOpen] = useState(false);
+    const [width, setWidth] = useState(window.innerWidth)
+    const [height, setHeight] = useState(window.innerHeight)
+    useEffect(() => {
+        const handleWindowResize = () => {
+          setHeight(window.innerHeight)
+          setWidth(window.innerWidth)
+        }
+        window.addEventListener('resize', handleWindowResize)
+        
+        return () => window.removeEventListener('resize', handleWindowResize)
+    }, [])
 
   return (
     <>
@@ -62,7 +73,12 @@ const ManageGroups = () => {
             <div className='flex justify-between'>
                 <h1 className='text-2xl font-semibold'>Manage projects</h1>
                 <button 
-                    onClick={() => setOpen(true)}
+                    onClick={() => {
+                        queryParams.set('newProject', 'true')
+                        navigate({
+                            search: queryParams.toString(),
+                          })
+                    }}
                     className='flex flex-row items-center bg-gray-300 px-1 pr-2 rounded-lg duration-300 ease-out hover:bg-blue-500 hover:text-white hover:scale-105'
                 >
                     <MdAdd />
@@ -84,12 +100,12 @@ const ManageGroups = () => {
             ))}
         </div>
         <NewProjectModal
-            open={open}
-            setOpen={setOpen}
             user={user}
+            height={height}
+            width={width}
         />
     </>
   )
 }
 
-export default ManageGroups
+export default MangageProjects

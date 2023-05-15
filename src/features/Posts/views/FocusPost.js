@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import CommentFeed from './CommentFeed';
-import { HiOutlineCubeTransparent } from 'react-icons/hi';
-import { BiCylinder } from 'react-icons/bi';
-import { GiAncientScrew } from 'react-icons/gi';
 import SettingsList from './SettingsList';
-import { MdDeleteOutline, MdTimer } from 'react-icons/md';
-import { secondsToHMS } from '../../../utility/HelperFunctions';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StlViewer } from "react-stl-viewer";
 import { getDownloadURL, listAll, ref } from 'firebase/storage';

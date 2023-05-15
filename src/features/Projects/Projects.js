@@ -8,10 +8,14 @@ import Posts from '../Posts/Posts'
 import ProjectTab from './views/ProjectTab';
 
 const Projects = () => {
-  
+
+    const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(window.innerHeight)
     useEffect(() => {
-        const handleWindowResize = () => setHeight(window.innerHeight)
+        const handleWindowResize = () => {
+          setHeight(window.innerHeight)
+          setWidth(window.innerWidth)
+        }
         window.addEventListener('resize', handleWindowResize)
         
         return () => window.removeEventListener('resize', handleWindowResize)

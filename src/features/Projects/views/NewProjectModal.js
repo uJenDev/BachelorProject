@@ -1,7 +1,8 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import NewGroupForm from '../forms/NewProjectForm';
+import NewProjectForm from '../forms/NewProjectForm';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -13,22 +14,33 @@ const style = {
     background: '#fff',
     border: '2px solid #fff',
     boxShadow: 24,
-    borderRadius: '10px',
     p: 4,
 };
 
-const NewGroupModal = ({open, setOpen, user}) => {
-    const handleClose = () => setOpen(false);
+const NewProjectModal = ({user, width, heigth}) => {
+
+  const navigate = useNavigate()
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search);
+
   return (
     <div>
       <Modal
-        open={open}
+        open={queryParams.get('newProject') === 'true'}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-            <NewGroupForm 
-                handleClose={handleClose}
+        <Box 
+          sx={[
+            style,
+            width < 1000 ? {width: '100%', height: '100%'} : {width: '75%', height: '90%', borderRadius: '10px',},
+          ]}
+        >
+            <NewProjectForm 
+                handleClose={() => {
+                    queryParams.delete('newProject')
+                    navigate({search: queryParams.toString()})
+                }}
                 user={user}
             />
         </Box>
@@ -37,4 +49,4 @@ const NewGroupModal = ({open, setOpen, user}) => {
   )
 }
 
-export default NewGroupModal
+export default NewProjectModal

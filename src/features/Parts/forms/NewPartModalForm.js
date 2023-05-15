@@ -9,7 +9,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import NewPartFiles from '../components/NewPartFiles';
 import NewPartDimensions from '../components/NewPartDimensions';
-import { slugFromTitle } from '../../../utility/HelperFunctions';
+import { calculateCostPerUnit, slugFromTitle } from '../../../utility/HelperFunctions';
 
 const NewPartModalForm = ({
   handleClose,
@@ -82,6 +82,8 @@ const NewPartModalForm = ({
       return fileUrls;
     };
 
+    const pricePerUnit = Number(calculateCostPerUnit(dimensions, material).toFixed(2))
+
     images && await uploadFiles('images', images);
     models3D && await uploadFiles('models3D', models3D);
     pdfs && await uploadFiles('pdfs', pdfs);
@@ -97,6 +99,7 @@ const NewPartModalForm = ({
       projectRef: projectRef,
       dimensions: dimensions,
       materialRef: doc(db, 'material', material.id),
+      pricePerUnit: pricePerUnit,
     };
 
     await setDoc(doc(db, 'part', docId), partData);

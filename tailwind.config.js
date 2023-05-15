@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'primary': '#ffffff',
+        'settingText': 'orange-700',
+        'settingBackground': 'orange-200'
       },
     },
   },
