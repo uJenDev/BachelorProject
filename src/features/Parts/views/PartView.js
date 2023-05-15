@@ -1,20 +1,52 @@
 import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore'
+import { getDownloadURL, listAll, ref } from 'firebase/storage'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { db } from '../../../firebase'
+import { db, storage } from '../../../firebase'
 import PartViewHeader from '../components/PartViewHeader'
 
 const PartView = ({
   parts
 }) => {
+
+  const fetchFiles = async (partId) => {
+    const fileTypes = ['images', 'models3D', 'pdfs'];
+    const fetchedFiles = {};
+
+    for (const fileType of fileTypes) {
+      const folderRef = ref(storage, `parts/${partId}/${fileType}`);
+      try {
+        const filesList = await listAll(folderRef);
+        const fileUrls = await Promise.all(
+          filesList.items.map(file => getDownloadURL(file))
+        );
+        fetchedFiles[fileType] = fileUrls;
+      } catch (error) {
+        console.log(`Error fetching ${fileType}: `, error);
+      }
+    }
+
+    return fetchedFiles;
+  };
   
   const partId = useParams().part
   const part = parts.find(part => part.id === partId)
   const partRef = partId ? doc(db, 'part', partId) : null
 
+  const [files, setFiles] = useState(null);
+  useEffect(() => {
+    if (!partId) return;
+    fetchFiles(partId)
+      .then((files) => {
+        setFiles(files);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [partId])
+
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
       if (!partId) return;
@@ -57,8 +89,9 @@ const PartView = ({
   }, [partId])
 
   useEffect(() => {
-    console.log(settings)
-  }, [settings])
+    console.log('part: ', part)
+    console.log('files: ', files)
+  }, [part, files])
 
   if (loading) return null
   return (
@@ -66,6 +99,7 @@ const PartView = ({
       <PartViewHeader
         part={part}
       />
+
     </div>
   )
 }

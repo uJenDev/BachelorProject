@@ -2,6 +2,7 @@ import { Box, Modal } from '@mui/material'
 import { collection, onSnapshot } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import scrollbarHide from 'tailwind-scrollbar-hide';
 import { db } from '../../../firebase';
 import NewPartModalForm from '../forms/NewPartModalForm';
 
@@ -21,6 +22,8 @@ const style = {
 
 const NewPartModal = ({
     user,
+    width,
+    height,
 }) => {
 
 
@@ -55,10 +58,6 @@ const NewPartModal = ({
         }
     }, [])
 
-    useEffect(() => {
-        console.log('projects: ', projects)
-    }, [projects])
-
 
   return (
     <Modal
@@ -67,7 +66,17 @@ const NewPartModal = ({
         aria-describedby="modal-modal-description"
         onClose={handleClose}
       >
-        <Box sx={style}>
+        <Box sx={[
+                style,
+                { 
+                    width: width > 1000 ? '80%' : width,
+                    height: width > 1000 ? '80%' : height,
+                    borderRadius: width > 1000 ? '10px' : '0px',
+                    overflowY: 'scroll'
+                }
+            ]}
+            className='scrollbar-hide'
+        >
             <NewPartModalForm 
                 handleClose={handleClose}
                 user={user}

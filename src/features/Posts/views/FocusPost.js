@@ -4,15 +4,51 @@ import { HiOutlineCubeTransparent } from 'react-icons/hi';
 import { BiCylinder } from 'react-icons/bi';
 import { GiAncientScrew } from 'react-icons/gi';
 import SettingsList from './SettingsList';
-import { MdTimer } from 'react-icons/md';
+import { MdDeleteOutline, MdTimer } from 'react-icons/md';
 import { secondsToHMS } from '../../../utility/HelperFunctions';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StlViewer } from "react-stl-viewer";
+import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import { storage } from '../../../firebase';
+import PostSettingDetailsList from '../components/PostSettingDetailsList';
 
 const FocusPost = ({
     post,
     user
 }) => {
+
+    const fetchFiles = async (partId) => {
+        const fileTypes = ['images', 'models3D', 'pdfs'];
+        const fetchedFiles = {};
+  
+        for (const fileType of fileTypes) {
+          const folderRef = ref(storage, `parts/${partId}/${fileType}`);
+          try {
+            const filesList = await listAll(folderRef);
+            const fileUrls = await Promise.all(
+              filesList.items.map(file => getDownloadURL(file))
+            );
+            fetchedFiles[fileType] = fileUrls;
+          } catch (error) {
+            console.log(`Error fetching ${fileType}: `, error);
+          }
+        }
+  
+        return fetchedFiles;
+    };
+
+    const [files, setFiles] = useState(null);
+    useEffect(() => {
+        if (!post.setting?.part) return;
+        fetchFiles(post.setting.partRef.id)
+            .then((files) => {
+                setFiles(files);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [post.setting?.part])
+
 
     // get window width
     const [width, setWidth] = useState(window.innerWidth)
@@ -35,6 +71,7 @@ const FocusPost = ({
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
 
+
   return (
     <div 
         className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black scrollbar-hide`}
@@ -47,45 +84,25 @@ const FocusPost = ({
                         <h1 className='text-4xl font-bold'>{post.title}</h1>
                         <p>by {post.author.email}</p>
                     </div>
-                    <div className='flex flex-col items-start space-y-2 mt-3'>
-                        <button 
-                            onClick={() => {
-                                queryParams.set('setting', post.setting?.id)
-                                const path = `/materials/${post.setting?.material?.categoryRef.id}/${post.setting?.materialRef.id}`;
-                                const search = queryParams.toString();
-                                navigate(`${path}?${search}`);
-                              }}
-                            className='flex items-center space-x-1'
-                        >
-                            <HiOutlineCubeTransparent className='text-xl' />
-                            <p className='font-bold text-xl max-w-fit'>{post.setting?.material ? post.setting.material.title : 'Not listed'}</p>
-                        </button>
-                        <div className='flex items-center space-x-1'>
-                            <BiCylinder className='text-xl' />
-                            <p className='font-bold text-xl max-w-fit'>{post.setting?.part ? post.setting.part.name : 'Not listed'}</p>
-                        </div>
-                        <div className='flex items-center space-x-1'>
-                            <GiAncientScrew className='text-xl' />
-                            <p className='font-bold text-xl max-w-fit'>{post.setting?.tool ? post.setting.tool.name : 'Not listed'}</p>
-                        </div>
-                        <div className='flex items-center space-x-1'>
-                            <MdTimer className='text-xl' />
-                            <p className='font-bold text-xl max-w-fit'>{post.setting?.cycleTime ? secondsToHMS(post.setting?.cycleTime) : 'Not listed'}</p>
-                        </div>
-                    </div>
+                    <PostSettingDetailsList
+                        post={post}
+                        textSize='text-xl'
+                    />
                 </div>
-                <StlViewer
-                    style={{
-                        top: 0,
-                        left: 0,
-                        width: '400px',
-                        height: '200px',
-                    }}
-                    className='bg-blue-500 rounded-xl shadow-lg'
-                    orbitControls
-                    shadows
-                    url={"https://storage.googleapis.com/ucloud-v3/ccab50f18fb14c91ccca300a.stl"}
-                />
+                {post.setting?.part && files?.models3D?.length > 0 && (
+                    <StlViewer
+                        style={{
+                            top: 0,
+                            left: 0,
+                            width: '400px',
+                            height: '200px',
+                        }}
+                        className='bg-blue-500 rounded-xl shadow-lg'
+                        orbitControls
+                        shadows
+                        url={files?.models3D[0]}
+                    />
+                )}
             </div>
             <div className='mt-5'>
                 <p className='text-lg'>{post.body}</p>

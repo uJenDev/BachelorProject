@@ -136,20 +136,20 @@ const NewPostForm = ({
             />
         <input
             type='text'
-            placeholder='Type a subject..'
+            placeholder='Subject'
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             className='w-full p-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-2xl placeholder:text-2xl'
         />
         <textarea
             type='text'
-            placeholder='Describe what you did.. (optional)'
+            placeholder='Describe your process.. (optional)'
             value={body}
             onChange={(e) => setBody(e.target.value)}
             className='w-full p-2 rounded-lg resize-none outline-none border-none h-40 focus:border-blue-500  text-md placeholder:text-md'
         />
         <p className='flex w-full h-[1px] border-b-2 border-black text-xl font-semibold' >
-            Specifiy what you worked on..
+            Fill in the data..
         </p>
         <div className='flex space-x-5'>
             <MaterialSelect 

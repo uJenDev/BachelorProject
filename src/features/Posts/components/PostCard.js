@@ -1,11 +1,7 @@
 import React from 'react'
-import { BiCylinder } from 'react-icons/bi'
-import { GiAncientScrew } from 'react-icons/gi'
-import { HiOutlineCubeTransparent } from 'react-icons/hi'
-import { MdTimer } from 'react-icons/md'
-import { secondsToHMS } from '../../../utility/HelperFunctions'
 import { BsArrowReturnRight } from 'react-icons/bs'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import PostSettingDetailsList from './PostSettingDetailsList'
 
 const PostCard = ({ 
     post,
@@ -31,12 +27,15 @@ const PostCard = ({
         }
       }
 
-      const postId = useParams().post;
-      const projectId = useParams().project;
-      const navigate = useNavigate();
+        const postId = useParams().post;
+        const projectId = useParams().project;
+        const navigate = useNavigate();
+        const location = useLocation();
+        const queryParams = new URLSearchParams(location.search);
 
         const handlePostClick = () => {
-            navigate(`/posts/${projectId}/${post.id}`)
+
+            navigate(`/posts/${projectId}/${post.id}?${queryParams.toString()}`)
         }
 
         const selectedPost = postId;
@@ -61,24 +60,10 @@ const PostCard = ({
                         <p className='text-xs text-gray-400'>{timeSince()}</p>
                     </div>
                 </div>
-                <div className='flex flex-col items-start space-y-2 mt-3 text-white text-sm'>
-                    <div className='flex items-center space-x-1'>
-                        <HiOutlineCubeTransparent className='' />
-                        <p className='font-bold  max-w-fit'>{post.setting?.material ? post.setting.material.title : 'Not listed'}</p>
-                    </div>
-                    <div className='flex items-center space-x-1'>
-                        <BiCylinder className='' />
-                        <p className='font-bold  max-w-fit'>{post.setting?.part ? post.setting.part.name : 'Not listed'}</p>
-                    </div>
-                    <div className='flex items-center space-x-1'>
-                        <GiAncientScrew className='' />
-                        <p className='font-bold  max-w-fit'>{post.setting?.tool ? post.setting.tool.name : 'Not listed'}</p>
-                    </div>
-                    <div className='flex items-center space-x-1'>
-                        <MdTimer className='' />
-                        <p className='font-bold max-w-fit'>{post.setting?.cycleTime ? secondsToHMS(post.setting?.cycleTime) : 'Not listed'}</p>
-                    </div>
-                </div>
+                <PostSettingDetailsList
+                    post={post}
+                    textColor='text-white'
+                />
             </div>
             <p className='text-white'>{post.body}</p>
         </div>

@@ -1,6 +1,6 @@
 import { collection, getDoc, onSnapshot, query } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase';
+import React, { useEffect, useState } from 'react'
 import PartView from './views/PartView'
 import SideTab from './views/SideTab'
 
@@ -18,10 +18,12 @@ const Parts = () => {
         const partsWithDetails = await Promise.all(
           snapshot.docs.map(async (doc) => {
             const partData = doc.data();
+            const partId = doc.id;
             const projectRef = partData.projectRef;
+            
             return {
-              ...doc.data(),
-              id: doc.id,
+              ...partData,
+              id: partId,
               project: await (await getDoc(projectRef)).data(),
             };
           })
@@ -41,18 +43,24 @@ const Parts = () => {
   }, []);
 
   const [height, setHeight] = useState(window.innerHeight)
-    useEffect(() => {
-        const handleWindowResize = () => setHeight(window.innerHeight)
-        window.addEventListener('resize', handleWindowResize)
-        
-        return () => window.removeEventListener('resize', handleWindowResize)
-    }, [])
+  const [width, setWidth] = useState(window.innerWidth)
+  useEffect(() => {
+      const handleWindowResize = () => {
+        setHeight(window.innerHeight)
+        setWidth(window.innerWidth)
+      }
+      window.addEventListener('resize', handleWindowResize)
+      
+      return () => window.removeEventListener('resize', handleWindowResize)
+  }, [])
 
 
   return (
     <div div className='flex w-full' style={{height: height - 82}}>
       <SideTab 
         parts={parts}
+        width={width}
+        height={height}
       />
       <PartView 
         parts={parts}

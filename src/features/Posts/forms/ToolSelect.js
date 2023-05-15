@@ -46,7 +46,7 @@ const ToolSelect = ({
         value={toolNames.find(thisTool => thisTool.tool.id === tool?.id) || null}
         options={toolNames}
         onChange={(e, newValue) => {
-            setTool(newValue.tool);
+            setTool(newValue?.tool);
         }}
         className='w-full pt-10'
         renderInput={(params) => (

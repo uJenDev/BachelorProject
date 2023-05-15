@@ -38,7 +38,7 @@ const MaterialSelect = ({ material, setMaterial }) => {
         options={materialTitles}
         value={materialTitles.find(thisMaterial => thisMaterial.material.id === material?.id) || null}
         onChange={(e, newValue) => {
-            setMaterial(newValue.material)
+            setMaterial(newValue?.material)
         }}
         className='w-full pt-10'
         renderInput={(params) => <TextField {...params} label="Material" />}

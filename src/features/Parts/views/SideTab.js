@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,7 +7,9 @@ import PartCard from '../components/PartCard';
 import NewPartModal from './NewPartModal';
 
 const SideTab = ({
-  parts
+  parts,
+  width,
+  height,
 }) => {
 
   const user = useSelector(selectUser);
@@ -32,9 +34,6 @@ const SideTab = ({
     title,
     data: data.sort((a, b) => a.name.localeCompare(b.name)),
   }));
-
-  useEffect(() => {
-  }, [sortedParts]);
 
   
   const newPart = queryParams.get('newPart');
@@ -77,6 +76,8 @@ const SideTab = ({
       </div>
       <NewPartModal
         user={user}
+        width={width}
+        height={height}
       />
     </>
   );

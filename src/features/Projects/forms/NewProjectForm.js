@@ -10,14 +10,14 @@ const NewGroupForm = ({ handleClose, user }) => {
     const [isPrivate, setIsPrivate] = useState(false)
     const [projectName, setProjectName] = useState('')
 
-    const [names, setNames] = useState(['None']);
+    const [users, setUsers] = useState(['None']);
 
     useEffect(() => {
 
-      const getNames = onSnapshot(
+      const getUsers = onSnapshot(
           collection(db, 'users'),
           (snapshot) => {
-            const otherNames = snapshot.docs.map((doc) => {
+            const allUsers = snapshot.docs.map((doc) => {
                 const docData = doc.data()
               if (doc.id !== user.uid) {
                 return ({
@@ -30,19 +30,19 @@ const NewGroupForm = ({ handleClose, user }) => {
                 return null
               }
             })
-            setNames(otherNames.filter((name) => name !== null))
+            setUsers(allUsers.filter((name) => name !== null))
         },
         (error) => {
             console.log(error)
         })
         return () => {
-            getNames()
+            getUsers()
         }
     }, [user])
 
     useEffect(() => {
-        console.log('Names: ', names)
-    }, [names])
+        console.log('Names: ', users)
+    }, [users])
 
 
     const handleCreate = async () => {
@@ -64,7 +64,7 @@ const NewGroupForm = ({ handleClose, user }) => {
                 email: user.email,
                 isAdmin: true,
             },
-            ...names,
+            ...users,
           ],
           private: isPrivate,
           slug: projectSlug,
@@ -77,12 +77,13 @@ const NewGroupForm = ({ handleClose, user }) => {
 
   return (
     <div>
+        <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
         <input
             type='text'
             placeholder='Project Name'
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
-            className='w-full p-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-xl placeholder:text-xl'
+            className='w-full py-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-xl placeholder:text-xl'
         />
         <div className='flex flex-row space-x-2'>
             <button
@@ -104,16 +105,10 @@ const NewGroupForm = ({ handleClose, user }) => {
                 <h1 className='text-md font-semibold'>Private</h1>
             </button>
         </div>
-        {isPrivate && <AddMembers names={names} />}
+        {isPrivate && <AddMembers users={users} />}
         <footer
             className='flex flex-row justify-end space-x-5 mt-2'
         >
-            <button
-                onClick={handleClose}
-                className='flex flex-row items-center bg-red-200 text-red-500 px-2 rounded-lg duration-300 ease-out hover:bg-red-500 hover:text-white hover:scale-105'
-            >
-                <h1 className='text-md font-semibold'>Cancel</h1>
-            </button>
             <button
                 onClick={handleCreate}
                 disabled={!projectName}

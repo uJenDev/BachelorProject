@@ -58,12 +58,21 @@ const SideTabCategoryButton = ({
         {(selectedCategory?.id === category.id) 
         ? 
         (
-            <SideTabMaterialButton
-                category={category}
-                selectedMaterial={selectedMaterial}
-                setSelectedMaterial={setSelectedMaterial}
-                materials={materials}
-            />
+            materials.length > 0 ?
+            (
+                <SideTabMaterialButton
+                    category={category}
+                    selectedMaterial={selectedMaterial}
+                    setSelectedMaterial={setSelectedMaterial}
+                    materials={materials}
+                />
+            )
+            :
+            (
+                <div className='ml-5'>
+                    <p className='flex px-2 text-sm bg-blue-200 text-blue-500 max-w-fit rounded-md font-bold'>No materials found</p>
+                </div>
+            )
         )
         :
         (

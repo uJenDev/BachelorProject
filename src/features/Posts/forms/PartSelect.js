@@ -60,7 +60,7 @@ const PartSelect = ({
             noOptionsText={'No parts found'}
             options={partNames}
             onChange={(e, newValue) => {
-                setPart(newValue.part)
+                setPart(newValue?.part)
             }}
             className='w-full pt-10'
             renderInput={(params) => (

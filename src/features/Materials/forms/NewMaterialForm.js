@@ -24,7 +24,6 @@ const NewMaterialForm = ({
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [pricePerKg, setPricePerKg] = useState('');
     const [propertyList, setPropertyList] = useState([]);
-    const [density, setDensity] = useState('');
 
 
     const [defualtPropertyListLength, setDefualtPropertyListLength] = useState(0)
@@ -84,10 +83,11 @@ const NewMaterialForm = ({
             renderInput={(params) => <TextField {...params} label="What category?" variant='standard' />}
         />
         <input
-            placeholder='Name of material'
-            className='w-full focus:outline-none focus:border-gray-500 mt-3 text-2xl'
+            type='text'
+            placeholder='Name of Material'
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className='w-full rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-2xl placeholder:text-2xl'
         />
         <div className='flex flex-col mt-5'>
             <div className='flex items-center space-x-5'>
@@ -103,19 +103,6 @@ const NewMaterialForm = ({
                     className='max-w-fit'
                     value={pricePerKg}
                     onChange={(e) => setPricePerKg(e.target.value)}
-                />
-                <TextField
-                    type="number"
-                    variant="standard"
-                    onFocus={(e) => e.target.select()}
-                    InputProps={{
-                        inputProps: { min: 0 },
-                        endAdornment: <InputAdornment position="end">kg/m^3</InputAdornment>,
-                    }}
-                    label="Density"
-                    className='max-w-fit'
-                    value={density}
-                    onChange={(e) => setDensity(e.target.value)}
                 />
             </div>
             <NewMaterialPropertiesList

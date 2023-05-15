@@ -2,10 +2,12 @@ import React from 'react'
 import { MdExitToApp } from 'react-icons/md'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../slices/userSlice'
 import HeaderTab from './components/HeaderTab'
+import { Avatar } from '@mui/material'
+import { stringAvatar } from '../utility/MaterialUIFunctions'
 
 const tabs = [
   {
@@ -28,6 +30,7 @@ const tabs = [
 
 const Header = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const currentPath = location.pathname
 
   const user = useSelector(selectUser)
@@ -54,9 +57,13 @@ const Header = () => {
             ))}
           </div>
         <div className='flex flex-row items-center space-x-2'>
+          <Avatar
+            {...stringAvatar(user.displayName)} 
+          />
           <p className='font-regular text-md text-black py-1 px-2 rounded-2xl'>{user.email}</p>
           <button
             onClick={() => {
+              navigate('/')
               signOut(auth)
             }}
           >

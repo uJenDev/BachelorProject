@@ -87,6 +87,8 @@ const Posts = ({
       if (postId) {
         const post = posts.find((post) => post.id === postId);
         setSelectedPost(post);
+      } else {
+        setSelectedPost(null);
       }
     }, [postId, posts]);
 

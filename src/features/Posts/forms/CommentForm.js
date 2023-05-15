@@ -39,6 +39,7 @@ const CommentForm = ({ user, postId }) => {
   const commentRef = useRef(null);
 
   const handleSubmit = async () => {
+    
     const comment = commentRef.current.innerHTML;
     commentRef.current.innerHTML = '';
 
@@ -89,6 +90,8 @@ const CommentForm = ({ user, postId }) => {
           ref={commentRef}
           className="w-full p-2 mb-2 mt-1 border-2 border-gray-200 rounded-md outline-none resize-none focus:text-blue-500 focus:border-blue-500 focus:placeholder:text-blue-500 focus:placeholder:text-opacity-50"
           contentEditable
+          autoCapitalize='sentences'
+          spellCheck='true'
           placeholder="Add a comment..."
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -96,7 +99,7 @@ const CommentForm = ({ user, postId }) => {
               handleSubmit();
             }
           }}
-        ></div>
+        />
       </div>
     </>
   );
