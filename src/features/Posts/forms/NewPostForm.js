@@ -31,6 +31,7 @@ const NewPostForm = ({
     const [settingsList, setSettingsList] = useState([])
     const [projectToPost, setProjectToPost] = useState(project || null)
     const [defectRate, setDefectRate] = useState(0)
+    const [coolantUsage, setCoolantUsage] = useState(0)
 
 
     const [defaultSettingsListLength, setDefaultSettingsListLength] = useState(0)
@@ -78,8 +79,6 @@ const NewPostForm = ({
         if (!canPost) return;
         setLoading(true)
         const settingsData = {
-            cycleTime: cycleTimeInSeconds,
-            defectRate: defectRate,
             materialRef: doc(db, 'material', material.id),
             partRef: doc(db, 'part', part.id),
             toolRef: doc(db, 'tool', tool.id),
@@ -89,6 +88,11 @@ const NewPostForm = ({
                 unit: setting.unit,
                 value: setting.type === 'number' ? Number(setting.value) : setting.value,
             })),
+            operationalFactors: {
+                cycleTime: cycleTimeInSeconds,
+                defectRate: defectRate,
+                coolantUsage: coolantUsage,
+            }
         };
       
         const postData = {
@@ -168,6 +172,7 @@ const NewPostForm = ({
                 noOptionsText='No tools found'
             />
         </div>
+        <h1 className='flex w-full text-xl font-semibold mt-10'>Operational Factors</h1>
         <div className='flex space-x-5'>
             <TextField
                 type="number"
@@ -177,6 +182,15 @@ const NewPostForm = ({
                 className="w-full top-10"
                 value={defectRate}
                 onChange={(e) => setDefectRate(e.target.value)}
+            />
+            <TextField
+                type="number"
+                onFocus={(e) => e.target.select()}
+                InputProps={{ inputProps: { min: 0 } }}
+                label="Coolant Usage (L/min)"
+                className="w-full top-10"
+                value={coolantUsage}
+                onChange={(e) => setCoolantUsage(e.target.value)}
             />
             <CycleTimeSelect
                 cycleTime={cycleTime}

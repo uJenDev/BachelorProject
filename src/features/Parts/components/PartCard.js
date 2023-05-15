@@ -19,7 +19,7 @@ const PartCard = ({
     <button
         onClick={onClick}
         className={`
-            flex items-centern px-2 py-1 text-lg font-semibold text-blue-500 bg-blue-200 max-w-fit rounded-lg
+            flex items-centern px-2 ml-1 text-lg font-semibold text-blue-500 bg-blue-200 max-w-fit rounded-lg
             hover:scale-105 hover:shadow-md duration-300 ease-out
             ${part.id === partId && 'scale-105 shadow-md translate-x-3 text-white bg-blue-500'}
         `}

@@ -19,7 +19,7 @@ const ToolCard = ({
     <button
         onClick={onClick}
         className={`
-            flex items-centern px-2 py-1 text-lg font-semibold text-blue-500 bg-blue-200 max-w-fit rounded-lg
+            flex items-centern px-2 font-semibold text-blue-500 bg-blue-200 max-w-fit rounded-md
             hover:scale-105 hover:shadow-md duration-300 ease-out
             ${tool.id === toolId && 'scale-105 shadow-md translate-x-3 text-white bg-blue-500'}
         `}

@@ -40,7 +40,7 @@ const SideTab = ({
 
   return (
     <>
-      <div className='flex flex-col h-full bg-gray-200 pl-5 pr-5 min-w-fit'>
+      <div className='flex flex-col h-full bg-gray-200 pl-3 pr-5 min-w-fit'>
         <div className='flex items-center'>
           <h1 className='px-2 text-4xl font-semibold'>Parts</h1>
           <button
@@ -60,14 +60,14 @@ const SideTab = ({
             <p className=''>New Part</p>
           </button>
         </div>  
-        <div className='flex flex-col space-y-2 mt-3'>
-          {sortedParts?.map((groupOrPart) => (
+        <div className='flex flex-col space-y-2 ml-1'>
+          {sortedParts?.map((projectOrPart) => (
             <div 
-                key={groupOrPart.title} 
-                className='flex flex-col space-y-2'
+                key={projectOrPart.title} 
+                className='flex flex-col space-y-1'
             >
-                <p className='px-2 text-lg font-semibold mt-5'>{groupOrPart.title}</p>
-                {groupOrPart.data.map((part) => (
+                <p className='px-2 text-lg font-regular mt-2'>{projectOrPart.title}</p>
+                {projectOrPart.data.map((part) => (
                   <PartCard key={part.id} part={part} />
                 ))}
             </div>
