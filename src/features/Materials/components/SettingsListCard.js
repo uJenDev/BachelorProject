@@ -24,7 +24,10 @@ const SettingsListCard = ({
     >
         <div className='text-orange-700'>
             {setting.settings.map((setting) => (
-                <div className='grid grid-cols-2 gap-4 border-b border-orange-300'>
+                <div 
+                    key={setting.name}
+                    className='grid grid-cols-2 gap-4 border-b border-orange-300'
+                >
                     <p className='font-semibold'>{setting.name}</p>
                     <p className='font-semibold'>{setting.value} {setting.unit}</p>
                 </div>

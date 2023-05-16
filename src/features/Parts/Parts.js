@@ -20,11 +20,10 @@ const Parts = () => {
             const partData = doc.data();
             const partId = doc.id;
             const projectRef = partData.projectRef;
-            
             return {
               ...partData,
               id: partId,
-              project: await (await getDoc(projectRef)).data(),
+              project: await (await getDoc(projectRef)).data()
             };
           })
         );
@@ -63,7 +62,7 @@ const Parts = () => {
         height={height}
       />
       <PartView 
-        parts={parts}
+        parts={parts.filter(part => part.project !== null)}
       />
     </div>
   )

@@ -11,7 +11,12 @@ export const listenToAuthChanges = (dispatch, setLoading) => {
           const userRef = doc(db, 'users', user.uid);
           const userSnapshot = await getDoc(userRef);
           const userData = userSnapshot.data();
-          if (!userData) setDoc(userRef, {lastSeen: serverTimestamp()});
+          if (!userData) setDoc(userRef, {
+            lastSeen: serverTimestamp(),
+            email: user.email,
+            displayName: user.displayName,
+            photoUrl: user.photoURL,
+          });
           const lastSeen = userData?.lastSeen?.toMillis();
 
           dispatch(login({

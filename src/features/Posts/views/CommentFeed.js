@@ -1,5 +1,5 @@
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import React, { useEffect, useRef, useState } from 'react';
+import { collection, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { db } from '../../../firebase';
 import CommentCard from '../components/CommentCard';
 import CommentForm from '../forms/CommentForm';
@@ -22,11 +22,19 @@ const CommentFeed = ({
                 collection(db, 'posts', post.id, 'comments'),
                 orderBy('createdAt', 'asc')
             ),
-          (snapshot) => {
-            setComments(snapshot.docs.map(doc => ({
-                  id: doc.id,
-                  ...doc.data()
-              })))
+            async (snapshot) => {
+                const commentsWithDetails = await Promise.all(
+                    snapshot.docs.map(async (doc) => {
+                        const commentData = doc.data();
+                        const createdBy = commentData.createdBy;
+                        return {
+                            id: doc.id,
+                            ...commentData,
+                            createdBy: await (await getDoc(createdBy)).data(),
+                        }
+                    }
+                ))
+                setComments(commentsWithDetails)
       },
       (error) => {
           console.log(error)
@@ -53,13 +61,13 @@ const CommentFeed = ({
             <div className='flex flex-col mb-2 mx-1 mr-3'>
                 {comments[0] ? comments.map((comment, index) => {
 
-                    const isSameAuthor = index > 0 && comment.author.uid === comments[index - 1].author.uid;
+                    const isSameAuthor = index > 0 && comment.createdBy.id === comments[index - 1].createdBy.id;
                     return (
                         <CommentCard
                             key={comment.id}
                             comment={comment}
                             user={user}
-                            postAuthor={post.author}
+                            postAuthor={post.createdBy}
                             isSameAuthor={isSameAuthor}
                         />
                     )

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import CommentFeed from './CommentFeed';
 import SettingsList from './SettingsList';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { StlViewer } from "react-stl-viewer";
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { storage } from '../../../firebase';
@@ -9,8 +8,12 @@ import PostSettingDetailsList from '../components/PostSettingDetailsList';
 
 const FocusPost = ({
     post,
-    user
+    user,
+    breakpoint,
+    width,
+    height,
 }) => {
+
 
     const fetchFiles = async (partId) => {
         const fileTypes = ['images', 'models3D', 'pdfs'];
@@ -34,7 +37,7 @@ const FocusPost = ({
 
     const [files, setFiles] = useState(null);
     useEffect(() => {
-        if (!post.setting?.part) return;
+        if (!post?.setting?.part) return;
         fetchFiles(post.setting.partRef.id)
             .then((files) => {
                 setFiles(files);
@@ -42,31 +45,17 @@ const FocusPost = ({
             .catch((error) => {
                 console.log(error);
             });
-    }, [post.setting?.part])
-
-
-    // get window width
-    const [width, setWidth] = useState(window.innerWidth)
-    const [height, setHeight] = useState(window.innerHeight)
-    const breakpoint = 1600;
-
-    useEffect(() => {
-        const handleWindowResize = () => {
-            setWidth(window.innerWidth)
-            setHeight(window.innerHeight)
-        }
-        window.addEventListener('resize', handleWindowResize)
-        
-        return () => window.removeEventListener('resize', handleWindowResize)
-    }, [])
+    }, [post?.setting?.part])
 
     const focusPostScrollRef = useRef(null);
 
-    const navigate = useNavigate();
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    if (!post) return (
+        <div 
+            className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black scrollbar-hide`}
+        >
 
-
+        </div>
+    );
   return (
     <div 
         className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black scrollbar-hide`}
@@ -77,7 +66,7 @@ const FocusPost = ({
                 <div className={`flex justify-between flex-col`}>
                     <div>
                         <h1 className='text-4xl font-bold'>{post.title}</h1>
-                        <p>by {post.author.email}</p>
+                        <p>by {post.createdBy.email}</p>
                     </div>
                     <PostSettingDetailsList
                         post={post}

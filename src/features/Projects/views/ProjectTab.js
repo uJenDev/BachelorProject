@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { MdChevronLeft, MdChevronRight, MdExpandMore } from 'react-icons/md'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ProjectCard from '../components/ProjectCard'

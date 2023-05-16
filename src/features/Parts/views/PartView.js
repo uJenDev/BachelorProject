@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { db, storage } from '../../../firebase'
 import SettingsList from './SettingsList'
 import PartViewHeader from '../components/PartViewHeader'
+import { MdInfo } from 'react-icons/md'
 
 const PartView = ({
   parts
@@ -89,24 +90,37 @@ const PartView = ({
       }
   }, [partId])
 
-  useEffect(() => {
-    console.log('part: ', part)
-    console.log('settings: ', settings)
-    console.log('files: ', files)
-  }, [part, files, settings])
-
-  if (loading) return null
-  return (
-    <div className='flex flex-col w-full bg-gray-200 ml-4'>
-      <PartViewHeader
-        part={part}
-        files={files}
-      />
-      <SettingsList
-        settings={settings}
-      />
-    </div>
-  )
+  if (loading && part) {
+    return null
+  } else if (!part) {
+    return (
+      <div className='flex w-full justify-center items-center'>
+        <div className='flex flex-col text-blue-500 bg-blue-200 rounded-lg opacity-70 animate-pulse py-2 px-4'>
+          <div className='flex items-center space-x-2 mb-2'>
+            <MdInfo className='text-xl' />
+            <p className='text-2xl '>
+              No part selected
+            </p>
+          </div>
+          <p className='text-lg'>
+            Please select a part from the list on the left
+          </p>
+        </div>
+      </div>
+  );
+  } else {
+    return (
+      <div className='flex flex-col w-full bg-gray-200 ml-4'>
+        <PartViewHeader
+          part={part}
+          files={files}
+        />
+        <SettingsList
+          settings={settings}
+        />
+      </div>
+    )
+  }
 }
 
 export default PartView

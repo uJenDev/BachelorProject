@@ -105,6 +105,7 @@ const SideTab = ({ width, height }) => {
                     {toggleCreateForm && (
                     <NewCategoryForm 
                         setToggleCreateForm={setToggleCreateForm}
+                        user={user}
                     />
                 )}
                 </div>

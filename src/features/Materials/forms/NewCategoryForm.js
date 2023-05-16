@@ -6,6 +6,7 @@ import { capitalize, slugFromTitle } from '../../../utility/HelperFunctions';
 
 const NewCategoryForm = ({
     setToggleCreateForm,
+    user,
 }) => {
 
     const [category, setCategory] = useState('');
@@ -17,6 +18,7 @@ const NewCategoryForm = ({
 
         await setDoc(doc(db, 'category', documentId), {
             title: capitalize(category),
+            createdBy: doc(db, 'users', user.uid),
         });
         setToggleCreateForm(false);
     }

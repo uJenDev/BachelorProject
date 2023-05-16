@@ -1,4 +1,7 @@
 function stringToColor(string) {
+    if (!string) {
+      return '#808080';
+    }
     let hash = 0;
     let i;
   
@@ -26,7 +29,7 @@ function stringAvatar(name) {
         width: 34,
         fontSize: 14,
       },
-      children: `${name.split(' ')[0][0]}${name.split(' ')[1] ? name.split(' ')[1][0] : ''}`,
+      children: name ? `${name.split(' ')[0][0]}${name.split(' ')[1] ? name.split(' ')[1][0] : ''}` : '',
     };
   }
 

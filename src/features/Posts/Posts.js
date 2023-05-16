@@ -34,6 +34,7 @@ const Posts = ({
             snapshot.docs.map(async (doc) => {
               const postData = doc.data();
               const settingRef = postData.settingRef;
+              const createdBy = postData.createdBy;
               const settingSnapshot = settingRef ? await getDoc(settingRef) : null;
 
               // fetch material, tool and part data from refs in settingSnapshot
@@ -57,12 +58,14 @@ const Posts = ({
               return {
                 id: doc.id,
                 ...postData,
+                createdBy: await (await getDoc(createdBy)).data(),
                 setting: setting ? setting : null,
               };
             })
           );
     
           setPosts(postsWithDetails);
+          console.log(postsWithDetails)
           setLoading(false);
         },
         (error) => {
@@ -91,6 +94,21 @@ const Posts = ({
         setSelectedPost(null);
       }
     }, [postId, posts]);
+
+    // get window width
+    const [width, setWidth] = useState(window.innerWidth)
+    const [height, setHeight] = useState(window.innerHeight)
+    const breakpoint = 1600;
+
+    useEffect(() => {
+        const handleWindowResize = () => {
+            setWidth(window.innerWidth)
+            setHeight(window.innerHeight)
+        }
+        window.addEventListener('resize', handleWindowResize)
+        
+        return () => window.removeEventListener('resize', handleWindowResize)
+    }, [])
 
     if (loading) return (
       <div 
@@ -130,13 +148,13 @@ const Posts = ({
               />
             </div>
           )}
-
-          {selectedPost && (
-              <FocusPost
-                  post={selectedPost}
-                  user={user}
-              />
-          )}
+            <FocusPost
+                post={selectedPost}
+                user={user}
+                width={width}
+                height={height}
+                breakpoint={breakpoint}
+            />
       </div>
       <NewPostModal
           user={user}

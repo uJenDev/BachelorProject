@@ -2,7 +2,7 @@ import React from 'react'
 import { MdExitToApp } from 'react-icons/md'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../slices/userSlice'
 import HeaderTab from './components/HeaderTab'
@@ -15,21 +15,21 @@ const tabs = [
     text: 'Posts'
   },
   {
-    path: '/tools',
-    text: 'Tools'
-  },
-  {
     path: '/parts',
     text: 'Parts'
+  },
+  {
+    path: '/projects',
+    text: 'Projects'
+  },
+  {
+    path: '/tools',
+    text: 'Tools'
   },
   {
     path: '/materials',
     text: 'Materials'
   },
-  {
-    path: '/projects',
-    text: 'Projects'
-  }
 ]
 
 const Header = () => {

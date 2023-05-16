@@ -55,7 +55,7 @@ const PostCard = ({
                 >
                     <h1 className='font-semibold text-2xl text-white border-b-2 border-white mb-1'>{post.title}</h1>
                     <div className='flex items-center space-x-1'>
-                        <p className='text-xs text-gray-400'>by {post.author.email}</p>
+                        <p className='text-xs text-gray-400'>by {post.createdBy.email}</p>
                         <p className='text-xs text-gray-400'>•</p>
                         <p className='text-xs text-gray-400'>{timeSince()}</p>
                     </div>

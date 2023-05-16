@@ -1,4 +1,7 @@
-import { addDoc, serverTimestamp, collection, onSnapshot } from 'firebase/firestore';
+import { CircularProgress } from '@mui/material';
+import { green } from '@mui/material/colors';
+import { Box, Button, } from '@mui/material'
+import { addDoc, serverTimestamp, collection, onSnapshot, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { db } from '../../../firebase';
 import { slugFromTitle } from '../../../utility/HelperFunctions';
@@ -13,7 +16,6 @@ const NewProjectForm = ({ handleClose, user }) => {
     const [users, setUsers] = useState(['None']);
 
     useEffect(() => {
-
       const getUsers = onSnapshot(
           collection(db, 'users'),
           (snapshot) => {
@@ -40,39 +42,55 @@ const NewProjectForm = ({ handleClose, user }) => {
         }
     }, [user])
 
-    useEffect(() => {
-        console.log('Names: ', users)
-    }, [users])
+    const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const buttonSx = {
+        ...(success && {
+          bgcolor: green[500],
+          '&:hover': {
+            bgcolor: green[700],
+          },
+        }),
+      };
 
-
+    const [canSubmit, setCanSubmit] = useState(false)
     const handleCreate = async () => {
         if (!projectName) return;
+        setLoading(true)
         const projectSlug = slugFromTitle(projectName);
       
         await addDoc(collection(db, 'projects'), {
           createdAt: serverTimestamp(),
           name: projectName,
-          createdBy: {
-            displayName: user.displayName,
-            uid: user.uid,
-            email: user.email,
-          },
+          createdBy: doc(db, 'users', user.uid),
           members: [
             {
-                displayName: user.displayName,
-                uid: user.uid,
-                email: user.email,
-                isAdmin: true,
+                user: doc(db, 'users', user.uid),
+                isAdmin: false,
             },
-            ...users,
+            ...users.map((user) => ({
+                user: doc(db, 'users', user.uid),
+                isAdmin: user.isAdmin,
+            }))
           ],
           private: isPrivate,
           slug: projectSlug,
         });
-      
-        handleClose();
+        
+        setSuccess(true)    
+        setLoading(false)
+        setTimeout(() => {
+            handleClose();
+        }, 1000)
     };
 
+    useEffect(() => {
+        if (projectName) {
+            setCanSubmit(true)
+        } else {
+            setCanSubmit(false)
+        }
+    }, [projectName])
 
 
   return (
@@ -107,18 +125,34 @@ const NewProjectForm = ({ handleClose, user }) => {
         </div>
         {isPrivate && <AddMembers users={users} />}
         <footer
-            className='flex flex-row justify-end space-x-5 mt-2'
+            className='absolute bottom-4 right-4 flex flex-row justify-end space-x-5 mt-2'
         >
-            <button
-                onClick={handleCreate}
-                disabled={!projectName}
-                className={`
-                    flex flex-row items-center ${isPrivate ? 'bg-red-200 text-red-500' : 'bg-blue-200 text-blue-500'} px-2 rounded-lg duration-300 ease-out absolute bottom-4 right-4 text-2xl
-                    ${!projectName ? 'opacity-40' : `${isPrivate ? 'hover:bg-red-500' : 'hover:bg-blue-500'} hover:text-white hover:scale-105`}
-                `}
-            >
-                <h1 className='text-md font-semibold'>{isPrivate ? 'Create Private' : 'Create'}</h1>
-            </button>
+            <Box sx={{ m: 1, position: 'relative' }}>
+                <Button
+                    variant="contained"
+                    disabled={!canSubmit}
+                    onClick={handleCreate}
+                    sx={[
+                        buttonSx,
+                    ]}
+                    size='large'
+                >
+                Create Project
+                </Button>
+                {loading && (
+                <CircularProgress
+                    size={24}
+                    sx={{
+                        color: green[500],
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        marginTop: '-12px',
+                        marginLeft: '-12px',
+                    }}
+                />
+                )}
+            </Box>
             
         </footer>   
     </div>

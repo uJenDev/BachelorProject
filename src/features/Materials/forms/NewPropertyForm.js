@@ -37,7 +37,6 @@ const NewPropertyForm = ({
 
         const newProperty = {
             name: name,
-            // make sure value is a number
             value: Number(value),
             unit: unit,
         }

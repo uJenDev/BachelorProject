@@ -46,11 +46,7 @@ const NewMaterialForm = ({
     const materialData = {
         title: title,
         createdAt: serverTimestamp(),
-        createdBy: {
-            displayName: user.displayName,
-            email: user.email,
-            uid: user.uid,
-        },
+        createdBy: doc(db, 'users', user.uid),
         composition: [],
         properties: propertyList,
         pricePerKg: pricePerKg,

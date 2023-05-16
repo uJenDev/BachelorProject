@@ -57,7 +57,7 @@ const SideTab = ({
             `}
           >
             <MdAdd className='text-lg'/>
-            <p className=''>New Part</p>
+            <p className=''>New</p>
           </button>
         </div>  
         <div className='flex flex-col space-y-2 ml-1'>

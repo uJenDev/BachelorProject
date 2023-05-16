@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import {
-    Autocomplete,
-    TextField,
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { db } from '../../../firebase';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { green } from '@mui/material/colors';
+import { Box, Button, CircularProgress } from '@mui/material';
 
 const NewToolModalForm = ({ 
     handleClose, 
@@ -20,7 +18,20 @@ const NewToolModalForm = ({
     return title.toLowerCase().replace(/\s+/g, '-');
   };
 
-  const handleAdd = async () => {
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+    const buttonSx = {
+        ...(success && {
+          bgcolor: green[500],
+          '&:hover': {
+            bgcolor: green[700],
+          },
+        }),
+      };
+
+    
+  const [canSubmit, setCanSubmit] = useState(false)
+  const handleCreate = async () => {
     const docId = titleToSlug(name);
     // const projectRef = doc(db, 'projects', selectedProject.id);
     const toolData = {
@@ -35,27 +46,25 @@ const NewToolModalForm = ({
     };
 
     await setDoc(doc(db, 'tool', docId), toolData);
-    handleClose();
+    
+    setLoading(false);
+    setSuccess(true);
+    setTimeout(() => {
+      handleClose();
+    }, 1000);
   };
+
+  useEffect(() => {
+    if (name) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  }, [name]);
 
   return (
     <div>
         <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
-        {/* <Autocomplete
-            options={projects}
-            size='small'
-            groupBy={(option) => option.private ? 'Private' : 'Public'}
-            getOptionLabel={(option) => option.name}
-            sx={{ width: 200 }}
-            onChange={(e, value) => setSelectedProject(value)}
-            renderInput={(params) => <TextField {...params} label="What project?" variant='standard' />}
-            renderGroup={(params) => (
-                <div key={params.key}>
-                    <p className='px-2 font-semibold border-b-2 border-gray-200'>{params.group}</p>
-                    <p>{params.children}</p>
-                </div>
-            )}
-        /> */}
         <input
             placeholder='Name of tool'
             className='w-full focus:outline-none focus:border-gray-500 mt-3 text-2xl'
@@ -63,17 +72,32 @@ const NewToolModalForm = ({
             onChange={(e) => setName(e.target.value)}
         />
         <div className='flex justify-end'>
-            <button
-                onClick={handleAdd}
-                disabled={!name || !selectedProject}
-                className={`
-                    text-lg text-blue-500 bg-blue-200 px-2 rounded-lg
-                    duration-300 ease-out
-                    ${!name || !selectedProject ? 'opacity-50' : 'hover:text-white hover:bg-blue-500 hover:scale-105'}
-                `}
-            >
-                Add
-            </button>
+        <Box sx={{ m: 1, position: 'relative' }}>
+                <Button
+                    variant="contained"
+                    disabled={!canSubmit}
+                    onClick={handleCreate}
+                    sx={[
+                        buttonSx,
+                    ]}
+                    size='large'
+                >
+                Create Tool
+                </Button>
+                {loading && (
+                <CircularProgress
+                    size={24}
+                    sx={{
+                        color: green[500],
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        marginTop: '-12px',
+                        marginLeft: '-12px',
+                    }}
+                />
+                )}
+            </Box>
         </div>
     </div>
   );

@@ -33,7 +33,7 @@ const NewPostSettingsList = ({ settingsList, setSettingsList, defaultSettingsLis
           isDefault={index < defaultSettingsListLength}
         />
       ))}
-      <h1 className="text-md font-semibold mt-4">Custom Settings</h1>
+      <h1 className="text-md font-semibold mt-4">Other Settings</h1>
       <NewPostSettingsListCard
         setting={newSetting}
         onChange={(updatedSetting) => setNewSetting(updatedSetting)}

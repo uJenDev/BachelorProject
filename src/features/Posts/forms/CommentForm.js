@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { db } from '../../../firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp } from 'firebase/firestore';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
@@ -46,11 +46,7 @@ const CommentForm = ({ user, postId }) => {
     if (comment.trim() === '') return;
 
     const commentData = {
-      author: {
-        email: user.email,
-        uid: user.uid,
-        displayName: user.displayName,
-      },
+      createdBy: doc(db, 'users', user.uid),
       body: comment,
       createdAt: serverTimestamp(),
     };

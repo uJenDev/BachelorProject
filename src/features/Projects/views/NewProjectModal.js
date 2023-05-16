@@ -33,7 +33,7 @@ const NewProjectModal = ({user, width, heigth}) => {
         <Box 
           sx={[
             style,
-            width < 1000 ? {width: '100%', height: '100%'} : {width: '75%', height: '90%', borderRadius: '10px',},
+            width < 600 ? {width: '100%', height: '100%'} : {width: '50%', height: '30%', borderRadius: '10px',},
           ]}
         >
             <NewProjectForm 

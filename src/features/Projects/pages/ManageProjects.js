@@ -1,4 +1,4 @@
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -19,8 +19,8 @@ const MangageProjects = () => {
             query(
                 collection(db, 'projects'),
                 where('members', 'array-contains-any', [
-                    {uid: user.uid, isAdmin: true, email: user.email, displayName: user.displayName}, 
-                    {uid: user.uid, isAdmin: false, email: user.email, displayName: user.displayName}
+                    {isAdmin: true, user: doc(db, 'users', user.uid)}, 
+                    {isAdmin: false, user: doc(db, 'users', user.uid)}
                 ])
             ),
             async (snapshot) => {
@@ -37,7 +37,8 @@ const MangageProjects = () => {
                         return {
                             id: doc.id,
                             ...projectData,
-                            createdAt: createdAt
+                            createdAt: createdAt,
+                            createdBy: await (await getDoc(doc.data().createdBy)).data()
                         };
                     }
                 ));
@@ -85,19 +86,25 @@ const MangageProjects = () => {
                     <h1 className='text-md font-semibold'>Create Project</h1>
                 </button>
             </div>
-            <div className='grid grid-cols-5 w-full border-b-2 border-black border-opacity-60 mt-5'>
+            <div className='grid grid-cols-6 w-full border-b-2 border-black border-opacity-60 mt-5'>
                 <h1 className='font-semibold text-md'>Name</h1>
                 <p>Created By</p>
                 <p>Status</p>
+                <p>Members</p>
                 <p>Created At</p>
             </div>
-            {projects?.map(project => (
-                <ManageProjectCard
-                    key={project.id}
-                    project={project}
-                    user={user}
-                />
-            ))}
+            {projects?.length > 0 ? 
+                projects.map(project => (
+                    <ManageProjectCard
+                        key={project.id}
+                        project={project}
+                        user={user}
+                    />
+            ))
+            :
+            (
+                <div className='flex flex-col items-center justify-center w-full h-full mt-3'><h1>No projects found</h1></div>
+            )}
         </div>
         <NewProjectModal
             user={user}

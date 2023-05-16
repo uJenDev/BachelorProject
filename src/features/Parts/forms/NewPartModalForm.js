@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
   TextField,
 } from '@mui/material';
 import { db, storage } from '../../../firebase';
@@ -10,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import NewPartFiles from '../components/NewPartFiles';
 import NewPartDimensions from '../components/NewPartDimensions';
 import { calculateCostPerUnit, slugFromTitle } from '../../../utility/HelperFunctions';
+import { green } from '@mui/material/colors';
 
 const NewPartModalForm = ({
   handleClose,
@@ -64,8 +68,21 @@ const NewPartModalForm = ({
     };
   }, []);
 
+  const [handleCreateLoading, setHandleCreateLoading] = useState(false);
+  const [success, setSuccess] = useState(false)
+    const buttonSx = {
+        ...(success && {
+          bgcolor: green[500],
+          '&:hover': {
+            bgcolor: green[700],
+          },
+        }),
+      };
 
-  const handleAdd = async () => {
+    
+  const [canSubmit, setCanSubmit] = useState(false)
+
+  const handleCreate = async () => {
     if (!canSubmit) return;
     const docId = slugFromTitle(name)
     const projectRef = doc(db, 'projects', selectedProject.id);
@@ -91,11 +108,7 @@ const NewPartModalForm = ({
     const partData = {
       name: name,
       createdAt: serverTimestamp(),
-      createdBy: {
-        displayName: user.displayName,
-        email: user.email,
-        uid: user.uid,
-      },
+      createdBy: doc(db, 'users', user.uid),
       projectRef: projectRef,
       dimensions: dimensions,
       materialRef: doc(db, 'material', material.id),
@@ -103,14 +116,18 @@ const NewPartModalForm = ({
     };
 
     await setDoc(doc(db, 'part', docId), partData);
-    handleClose();
+    
+    setSuccess(true);
+    setHandleCreateLoading(false);
+    setTimeout(() => {
+      handleClose();
+    }, 1000);
   };
 
   const handleFileChange = (e, setField) => {
     setField(e.target.files);
   };
 
-  const [canSubmit, setCanSubmit] = useState(false);
   useEffect(() => {
     if (name && selectedProject && dimensions.length && dimensions.width && dimensions.height && material) {
       setCanSubmit(true);
@@ -173,18 +190,33 @@ const NewPartModalForm = ({
         pdfs={pdfs}
         setPdfs={setPdfs}
       />
-      <div className='flex justify-end'>
-        <button
-          onClick={handleAdd}
-          disabled={!name || !selectedProject}
-          className={`
-                    text-lg text-blue-500 bg-blue-200 px-2 rounded-lg
-                    duration-300 ease-out absolute bottom-2 right-2
-                    ${!canSubmit ? 'opacity-50' : 'hover:text-white hover:bg-blue-500 hover:scale-105'}
-                `}
+        <div className='flex justify-end absolute bottom-4 right-4'>
+          <Box sx={{ m: 1, position: 'relative' }}>
+            <Button
+              variant="contained"
+              disabled={!canSubmit}
+              onClick={handleCreate}
+              sx={[
+                  buttonSx,
+              ]}
+              size='large'
             >
-                Add
-            </button>
+            Create Part
+            </Button>
+            {handleCreateLoading && (
+            <CircularProgress
+              size={24}
+              sx={{
+                color: green[500],
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: '-12px',
+                marginLeft: '-12px',
+              }}
+            />
+            )}
+          </Box>
         </div>
     </div>
   );

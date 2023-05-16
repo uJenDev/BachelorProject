@@ -62,7 +62,7 @@ const PartSelect = ({
             onChange={(e, newValue) => {
                 setPart(newValue?.part)
             }}
-            className='w-full pt-10'
+            className='w-full'
             renderInput={(params) => (
                 <TextField
                     {...params}

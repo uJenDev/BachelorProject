@@ -18,7 +18,9 @@ const PostSettingDetailsList = ({
         </div>
         <div className='flex items-center space-x-1'>
             <BiCylinder className='' />
-            <p className='font-bold  max-w-fit'>{post.setting?.part ? post.setting.part.name : 'Not listed'}</p>
+            <p className='font-bold  max-w-fit'>{post.setting?.part ? `${post.setting.part.name}` : 'Not listed'}</p>
+            <p>&times;</p>
+            <p className='font-semibold  max-w-fit'>{post.setting?.quantity ? `${post.setting.quantity}` : 'Not listed'}</p>
         </div>
         <div className='flex items-center space-x-1'>
             <GiAncientScrew className='' />
@@ -26,11 +28,11 @@ const PostSettingDetailsList = ({
         </div>
         <div className='flex items-center space-x-1'>
             <MdTimer className='' />
-            <p className='font-bold  max-w-fit'>{post.setting?.cycleTime ? secondsToHMS(post.setting?.cycleTime) : 'Not listed'}</p>
+            <p className='font-bold  max-w-fit'>{post.setting?.operationalFactors?.cycleTime ? secondsToHMS(post.setting.operationalFactors.cycleTime) : 'Not listed'}</p>
         </div>
         <div className='flex items-center space-x-1'>
             <MdDeleteOutline className='' />
-            <p className='font-bold  max-w-fit'>{post.setting?.defectRate ? `${post.setting.defectRate}%` : 'Not listed'}</p>
+            <p className='font-bold  max-w-fit'>{post.setting?.operationalFactors?.defectRate ? `${post.setting.operationalFactors.defectRate}%` : 'Not listed'}</p>
         </div>
     </div>
   )

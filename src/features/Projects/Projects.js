@@ -1,4 +1,4 @@
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -31,8 +31,8 @@ const Projects = () => {
           query(
             collection(db, 'projects'),
             where('members', 'array-contains-any', [
-              {uid: user.uid, isAdmin: true, email: user.email, displayName: user.displayName}, 
-              {uid: user.uid, isAdmin: false, email: user.email, displayName: user.displayName}
+              {isAdmin: true, user: doc(db, 'users', user.uid)}, 
+              {isAdmin: false, user: doc(db, 'users', user.uid)}
           ])
           ),
           (snapshot) => {

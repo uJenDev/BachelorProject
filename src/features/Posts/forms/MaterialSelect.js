@@ -40,7 +40,7 @@ const MaterialSelect = ({ material, setMaterial }) => {
         onChange={(e, newValue) => {
             setMaterial(newValue?.material)
         }}
-        className='w-full pt-10'
+        className='w-full'
         renderInput={(params) => <TextField {...params} label="Material" />}
     />
   )
