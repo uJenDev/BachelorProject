@@ -16,6 +16,7 @@ import ManageProjects from './features/Projects/pages/ManageProjects';
 import Groups from './features/Projects/Projects';
 import Parts from './features/Parts/Parts';
 import Tools from './features/Tools/Tools';
+import Coolants from './features/Coolants/Coolants';
 
 const AppRoutes = () => {
     const dispatch = useDispatch()
@@ -50,6 +51,9 @@ const AppRoutes = () => {
 
                     <Route path='/tools' element={<Tools />} />
                     <Route path='/tools/:tool' element={<Tools />} />
+
+                    <Route path='/coolants' element={<Coolants />} />
+                    <Route path='/coolants/:coolant' element={<Coolants />} />
 
                     <Route path='/projects' element={<ManageProjects />} />
                     <Route path='*' element={<NoPage />} />

@@ -150,6 +150,10 @@ const NewPostForm = ({
         }, 1000)
     };
 
+    useEffect(() => {
+        setSubject(`${projectToPost ? projectToPost.name : 'New Post'} - ${part ? part.name : 'Select a part'} - ${material ? material.title : 'Select a material'}`)
+    }, [part, projectToPost, material])
+
   return (
     <div className='overflow-y-scroll h-full px-4 scrollbar-hide'>
         <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
@@ -171,6 +175,7 @@ const NewPostForm = ({
         <input
             type='text'
             placeholder='Subject'
+            readOnly={true}
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             className='w-full p-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-2xl placeholder:text-2xl'
@@ -185,7 +190,7 @@ const NewPostForm = ({
         <p className='flex w-full h-[1px] border-b-2 border-black text-xl font-semibold' >
             Part Specifications
         </p>
-        <div className='flex space-x-2 max-w-2xl pt-10'>
+        <div className='flex space-x-2 pt-10'>
             <MaterialSelect 
                 material={material}
                 setMaterial={setMaterial}
@@ -193,7 +198,7 @@ const NewPostForm = ({
             <PartSelect
                 setPart={setPart}
                 part={part}
-                project={projectToPost}
+                project={projectToPost} 
             />
             <TextField
                 type="number"

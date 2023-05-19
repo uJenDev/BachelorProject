@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { BiGitCompare } from 'react-icons/bi'
 import { BsArrowReturnRight } from 'react-icons/bs'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import PostSettingDetailsList from './PostSettingDetailsList'
@@ -33,27 +34,57 @@ const PostCard = ({
         const location = useLocation();
         const queryParams = new URLSearchParams(location.search);
 
-        const handlePostClick = () => {
-
-            navigate(`/posts/${projectId}/${post.id}?${queryParams.toString()}`)
+        const handlePostClick = (e) => {
+            if (e.shiftKey) {
+                e.preventDefault();
+                queryParams.set('compareTo', post.id);
+                navigate(`${location.pathname}?${queryParams.toString()}`)
+            } else {
+              queryParams.delete('compareTo');
+              navigate(`/posts/${projectId}/${post.id}?${queryParams.toString()}`)
+            }
+            
         }
 
         const selectedPost = postId;
+        const comparedPost = queryParams.get('compareTo');
 
   return (
-    <div className={`${selectedPost === post?.id ? 'pb-10' : null}`}>
+    <div className={`
+      ${selectedPost === post?.id ? 'pb-10' : null}
+      ${comparedPost === post?.id ? '' : null}
+      `}
+    >
         <div 
             onClick={handlePostClick}
             className={`
                 py-2 px-3 rounded-xl shadow-md duration-300 ease-out cursor-pointer
-                ${selectedPost === post.id ? 'bg-black' : 'bg-gray-700 '}
+                ${selectedPost === post.id ? 'bg-blue-600' : 'bg-black opacity-90 hover:opacity-100'}
+                ${comparedPost === post.id ? ' ' : null}
             `}
         >
             <div className='flex flex-col pb-2 space-y-1 '>
                 <div
                     className='flex flex-col text-white duration-200 ease-out text-left'
                 >
-                    <h1 className='font-semibold text-2xl text-white border-b-2 border-white mb-1'>{post.title}</h1>
+                    <div className='flex items-center space-x-1'>
+                      <h1 className='font-semibold text-2xl text-white mb-1'>{post.title}</h1>
+                      {postId && (postId !== post.id) && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            queryParams.set('compareTo', post.id);
+                            navigate(`${location.pathname}?${queryParams.toString()}`)
+                          }}
+                          className={`
+                            text-xs text-blue-500 hover:text-white rounded-md duration-200 ease-out
+                            ${comparedPost === post.id ? 'bg-green-500 text-white' : 'hover:bg-blue-500'}
+                          `}
+                        >
+                          <BiGitCompare className='inline-block text-xl m-2' />
+                        </button>
+                      )}
+                    </div>
                     <div className='flex items-center space-x-1'>
                         <p className='text-xs text-gray-400'>by {post.createdBy.email}</p>
                         <p className='text-xs text-gray-400'>•</p>
@@ -65,9 +96,8 @@ const PostCard = ({
                     textColor='text-white'
                 />
             </div>
-            <p className='text-white'>{post.body}</p>
         </div>
-        {selectedPost === post.id && (<BsArrowReturnRight className='text-2xl text-black flex justify-end w-full' />)}
+        {selectedPost === post.id && (<BsArrowReturnRight className='text-2xl text-blue-600 flex justify-end w-full' />)}
     </div>
   )
 }

@@ -12,7 +12,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import NewPartFiles from '../components/NewPartFiles';
 import NewPartDimensions from '../components/NewPartDimensions';
-import { calculateCostPerUnit, slugFromTitle } from '../../../utility/HelperFunctions';
+import { slugFromTitle } from '../../../utility/HelperFunctions';
 import { green } from '@mui/material/colors';
 
 const NewPartModalForm = ({
@@ -26,47 +26,11 @@ const NewPartModalForm = ({
   const [images, setImages] = useState(null);
   const [models3D, setModels3D] = useState(null);
   const [pdfs, setPdfs] = useState(null);
-  const [material, setMaterial] = useState(null);
   const [dimensions, setDimensions] = useState({
     length: '',
     width: '',
     height: '',
   });
-
-  const [loading, setLoading] = useState(false);
-  const [materials, setMaterials] = useState([]);
-  useEffect(() => {
-    setLoading(true);
-    const getMaterials = onSnapshot(
-      query(
-        collection(db, 'material'),
-      ),
-      async (snapshot) => {
-        const materialsWithDetails = await Promise.all(
-          snapshot.docs.map(async (doc) => {
-            const materialData = doc.data();
-            const categoryRef = materialData.categoryRef;
-  
-            return {
-              id: doc.id,
-              ...materialData,
-              category: await (await getDoc(categoryRef)).data(),
-            };
-          })
-        );
-  
-        setMaterials(materialsWithDetails);
-        setLoading(false);
-      },
-      (error) => {
-        console.log(error);
-        setLoading(false);
-      }
-    );
-    return () => {
-      getMaterials();
-    };
-  }, []);
 
   const [handleCreateLoading, setHandleCreateLoading] = useState(false);
   const [success, setSuccess] = useState(false)
@@ -99,8 +63,6 @@ const NewPartModalForm = ({
       return fileUrls;
     };
 
-    const pricePerUnit = Number(calculateCostPerUnit(dimensions, material).toFixed(2))
-
     images && await uploadFiles('images', images);
     models3D && await uploadFiles('models3D', models3D);
     pdfs && await uploadFiles('pdfs', pdfs);
@@ -111,8 +73,6 @@ const NewPartModalForm = ({
       createdBy: doc(db, 'users', user.uid),
       projectRef: projectRef,
       dimensions: dimensions,
-      materialRef: doc(db, 'material', material.id),
-      pricePerUnit: pricePerUnit,
     };
 
     await setDoc(doc(db, 'part', docId), partData);
@@ -129,12 +89,12 @@ const NewPartModalForm = ({
   };
 
   useEffect(() => {
-    if (name && selectedProject && dimensions.length && dimensions.width && dimensions.height && material) {
+    if (name && selectedProject && dimensions.length && dimensions.width && dimensions.height) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
     }
-  }, [name, selectedProject, dimensions, material]);
+  }, [name, selectedProject, dimensions]);
 
   return (
     <div className=''>
@@ -161,7 +121,7 @@ const NewPartModalForm = ({
           value={name}
           onChange={(e) => setName(e.target.value)}
       />
-      <Autocomplete
+      {/* <Autocomplete
           options={materials}
           size='small'
           value={material}
@@ -176,7 +136,7 @@ const NewPartModalForm = ({
                   <p>{params.children}</p>
               </div>
           )}
-        />
+        /> */}
       <NewPartDimensions 
         dimensions={dimensions}
         setDimensions={setDimensions}

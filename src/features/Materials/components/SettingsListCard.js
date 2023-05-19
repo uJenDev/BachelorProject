@@ -33,12 +33,12 @@ const SettingsListCard = ({
                 </div>
             ))}
         </div>
-        {setting.post && (
+        {/* {setting.post && (
             <div className='flex items-center space-x-1'>
                 <p className='text-xs'>by</p>
-                <p className='text-xs'>{setting.post?.author.email}</p>
+                <p className='text-xs'>{setting.post?.createdBy.email}</p>
             </div>
-        )}
+        )} */}
         {!setting.post && (
             <div className='flex items-center space-x-2 text-red-500 mt-2'>
                 <MdWarning className=''/>

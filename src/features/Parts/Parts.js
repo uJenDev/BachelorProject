@@ -55,15 +55,19 @@ const Parts = () => {
 
 
   return (
-    <div div className='flex w-full' style={{height: height - 82}}>
-      <SideTab 
-        parts={parts}
-        width={width}
-        height={height}
-      />
-      <PartView 
-        parts={parts.filter(part => part.project !== null)}
-      />
+    <div className='w-full flex justify-center items-center' style={{height: height - 82}}>
+      <div className='h-full flex'>
+        <SideTab 
+          parts={parts}
+          width={width}
+          height={height}
+          // width={width > 950 ? 'w-[300px]' : 'w-[300px]'}
+        />
+        <PartView 
+          parts={parts.filter(part => part.project !== null)}
+          width={width > 950 ? 'w-[600px]' : 'w-[400px]'}
+        />
+      </div>
     </div>
   )
 }

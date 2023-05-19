@@ -16,7 +16,7 @@ const NewPartDimensions = ({
             inputProps={{ min: 0 }}
             variant="standard"
             value={dimensions?.height}
-            onChange={(e) => setDimensions({ ...dimensions, height: e.target.value })}
+            onChange={(e) => setDimensions({ ...dimensions, height: Number(e.target.value) })}
             fullWidth
           />
         </Grid>
@@ -27,7 +27,7 @@ const NewPartDimensions = ({
             inputProps={{ min: 0 }}
             variant="standard"
             value={dimensions?.width}
-            onChange={(e) => setDimensions({ ...dimensions, width: e.target.value })}
+            onChange={(e) => setDimensions({ ...dimensions, width: Number(e.target.value) })}
             fullWidth
           />
         </Grid>
@@ -38,7 +38,7 @@ const NewPartDimensions = ({
             inputProps={{ min: 0 }}
             variant="standard"
             value={dimensions?.length}
-            onChange={(e) => setDimensions({ ...dimensions, length: e.target.value })}
+            onChange={(e) => setDimensions({ ...dimensions, length: Number(e.target.value) })}
             fullWidth
           />
         </Grid>

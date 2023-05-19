@@ -2,7 +2,7 @@ import React from 'react'
 import { BiCylinder } from 'react-icons/bi'
 import { GiAncientScrew } from 'react-icons/gi'
 import { HiOutlineCubeTransparent } from 'react-icons/hi'
-import { MdDeleteOutline, MdTimer } from 'react-icons/md'
+import { MdDeleteOutline, MdTimer, MdWaterDrop } from 'react-icons/md'
 import { secondsToHMS } from '../../../utility/HelperFunctions'
 
 const PostSettingDetailsList = ({
@@ -25,6 +25,10 @@ const PostSettingDetailsList = ({
         <div className='flex items-center space-x-1'>
             <GiAncientScrew className='' />
             <p className='font-bold  max-w-fit'>{post.setting?.tool ? post.setting.tool.name : 'Not listed'}</p>
+        </div>
+        <div className='flex items-center space-x-1'>
+            <MdWaterDrop className='' />
+            <p className='font-bold  max-w-fit'>{post.setting?.coolant ? post.setting.coolant.name : 'Not listed'}</p>
         </div>
         <div className='flex items-center space-x-1'>
             <MdTimer className='' />

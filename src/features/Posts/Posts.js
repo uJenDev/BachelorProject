@@ -52,6 +52,9 @@ const Posts = ({
                     part: settingData.partRef
                       ? await (await getDoc(settingData.partRef)).data()
                       : null,
+                    coolant: settingData.operationalFactors.coolant
+                      ? await (await getDoc(settingData.operationalFactors.coolant)).data()
+                      : null,
                   }
                 : null;
     
@@ -79,21 +82,24 @@ const Posts = ({
     }, [selectedProject, projectIds]);
 
     const [selectedPost, setSelectedPost] = useState(null);
+    const [comparedPost, setComparedPost] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const newPost = queryParams.get('newPost');
 
     const postId = useParams().post;
+    const comparedPostId = queryParams.get('compareTo');
     useEffect(() => {
       if (postId) {
         const post = posts.find((post) => post.id === postId);
+        const comparedPost = posts.find((post) => post.id === comparedPostId);
         setSelectedPost(post);
+        setComparedPost(comparedPost);
       } else {
         setSelectedPost(null);
       }
-    }, [postId, posts]);
+    }, [postId, posts, comparedPostId]);
 
     // get window width
     const [width, setWidth] = useState(window.innerWidth)
@@ -150,6 +156,7 @@ const Posts = ({
           )}
             <FocusPost
                 post={selectedPost}
+                comparedPost={comparedPost}
                 user={user}
                 width={width}
                 height={height}

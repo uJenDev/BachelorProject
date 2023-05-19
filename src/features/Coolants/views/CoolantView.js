@@ -13,25 +13,25 @@ const preservedValues = [
   'id'
 ]
 
-const ToolView = ({
+const CoolantView = ({
   width
 }) => {
   
   const navigate = useNavigate()
-  const toolId = useParams().tool
-  const [tool, setTool] = useState(null)
-  const [prevTool, setPrevTool] = useState(null)
+  const coolantId = useParams().coolant
+  const [coolant, setCoolant] = useState(null)
+  const [prevCoolant, setPrevCoolant] = useState(null)
 
   useEffect(() => {
-      if (!toolId) return
-      const getTool = onSnapshot(
-          doc(db, 'tool', toolId),
+      if (!coolantId) return
+      const getCoolant = onSnapshot(
+          doc(db, 'coolant', coolantId),
           (doc) => {
-              setTool({
+              setCoolant({
                 ...doc.data(),
                 id: doc.id,
               })
-              setPrevTool({
+              setPrevCoolant({
                 ...doc.data(),
                 id: doc.id,
               })
@@ -40,9 +40,9 @@ const ToolView = ({
           console.log(error)
       })
       return () => {
-          getTool()
+          getCoolant()
       } 
-  }, [toolId])
+  }, [coolantId])
 
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -57,11 +57,11 @@ const ToolView = ({
 
   const handleSave = async () => {
     setLoading(true)
-    const toolRef = doc(db, 'tool', toolId)
-    const toolData = {
-      ...tool,
+    const coolantRef = doc(db, 'coolant', coolantId)
+    const coolantData = {
+      ...coolant,
     }
-    await updateDoc(toolRef, toolData)
+    await updateDoc(coolantRef, coolantData)
     setLoading(false)
     setSuccess(true)
     setTimeout(() => {
@@ -71,42 +71,43 @@ const ToolView = ({
 
   const handleDelete = async () => {
     setLoading(true)
-    const toolRef = doc(db, 'tool', toolId)
-    await deleteDoc(toolRef)
+    const coolantRef = doc(db, 'coolant', coolantId)
+    await deleteDoc(coolantRef)
     setLoading(false)
-    navigate('/tools')
+    navigate('/coolants')
   }
+
 
   const [hasChanges, setHasChanges] = useState(false)
   useEffect(() => {
-    if (!tool || !prevTool) return
-    const toolKeys = Object.keys(tool).filter((key) => !preservedValues.includes(key))
-    const prevToolKeys = Object.keys(prevTool).filter((key) => !preservedValues.includes(key))
-    if (toolKeys.length !== prevToolKeys.length) {
+    if (!coolant || !prevCoolant) return
+    const coolantKeys = Object.keys(coolant).filter((key) => !preservedValues.includes(key))
+    const prevCoolantKeys = Object.keys(prevCoolant).filter((key) => !preservedValues.includes(key))
+    if (coolantKeys.length !== prevCoolantKeys.length) {
       setHasChanges(true)
       return
     }
-    for (let i = 0; i < toolKeys.length; i++) {
-      if (tool[toolKeys[i]] !== prevTool[toolKeys[i]]) {
+    for (let i = 0; i < coolantKeys.length; i++) {
+      if (coolant[coolantKeys[i]] !== prevCoolant[coolantKeys[i]]) {
         setHasChanges(true)
         return
       }
     }
     setHasChanges(false)
-  }, [tool, prevTool])
+  }, [coolant, prevCoolant])
 
-  if (!toolId) return (
+  if (!coolantId) return (
     <div className={`flex flex-col items-start mt-10 ${width}`}>
       <p className='text-xl font-regular px-1'>Detailed View</p>
       <div className='flex flex-col text-blue-500 bg-blue-200 rounded-lg opacity-70 animate-pulse py-2 px-4'>
         <div className='flex items-center space-x-2 mb-2'>
           <MdInfo className='text-xl' />
           <p className='text-2xl '>
-            No tool selected
+            No coolant selected
           </p>
         </div>
         <p className='text-lg'>
-          Please select a tool from the list on the left
+          Please select a coolant from the list on the left
         </p>
       </div>
     </div>
@@ -115,16 +116,16 @@ const ToolView = ({
     <div className={`mt-10 ${width}`}>
       <p className='text-xl font-regular px-1'>Detailed View</p>
       <div className='flex flex-col space-y-4 mt-5'>
-        {tool && Object.keys(tool).filter((key) => !preservedValues.includes(key)).map((key) => {
+        {coolant && Object.keys(coolant).filter((key) => !preservedValues.includes(key)).map((key) => {
           return (
             <TextField
               key={key}
               type={key === 'name' ? 'text' : 'number'}
               label={key}
-              value={tool[key]}
+              value={coolant[key]}
               onChange={(e) => {
-                setTool({
-                  ...tool,
+                setCoolant({
+                  ...coolant,
                   [key]: e.target.value,
                 })
               }}
@@ -177,4 +178,4 @@ const ToolView = ({
   )
 }
 
-export default ToolView
+export default CoolantView

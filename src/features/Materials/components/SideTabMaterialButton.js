@@ -8,7 +8,7 @@ const SideTabMaterialButton = ({ materials, category }) => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex flex-col space-y-2 px-3'>
+    <div className='flex flex-col space-y-2 px-1'>
       {materials.map((material) => (
         <button
           key={material.id}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import MaterialView from './views/MaterialView'
+import CoolantView from './views/CoolantView'
 import SideTab from './views/SideTab'
 
 const Coolants = () => {
@@ -20,12 +20,11 @@ const Coolants = () => {
 
   return (
     <div className='w-full flex justify-center items-center' style={{height: height - 82}}>
-      <div className='h-full flex '>
+      <div className='h-full flex'>
         <SideTab 
-          width={width}
-          height={height}
+          width={width > 950 ? 'w-[300px]' : 'w-[300px]'}
         />
-        <MaterialView 
+        <CoolantView 
           width={width > 950 ? 'w-[600px]' : 'w-[400px]'}
         />
       </div>

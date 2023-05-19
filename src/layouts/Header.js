@@ -8,6 +8,7 @@ import { selectUser } from '../slices/userSlice'
 import HeaderTab from './components/HeaderTab'
 import { Avatar } from '@mui/material'
 import { stringAvatar } from '../utility/MaterialUIFunctions'
+import DropdownMenu from './components/DropdownMenu'
 
 const tabs = [
   {
@@ -21,15 +22,7 @@ const tabs = [
   {
     path: '/projects',
     text: 'Projects'
-  },
-  {
-    path: '/tools',
-    text: 'Tools'
-  },
-  {
-    path: '/materials',
-    text: 'Materials'
-  },
+  }
 ]
 
 const Header = () => {
@@ -58,6 +51,9 @@ const Header = () => {
                 text={tab.text}
               />
             ))}
+            <DropdownMenu
+              currentPath={currentPath}
+            />
           </div>
         <div className='flex flex-row items-center space-x-2'>
           <Avatar

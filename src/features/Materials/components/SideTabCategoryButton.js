@@ -48,12 +48,12 @@ const SideTabCategoryButton = ({
     const navigate = useNavigate();
 
   return (
-    <div key={category.id} className={`bg-gray-200 py-2 ease-out duration-150 ${selectedCategory?.id === category.id ? ' my-2 text-2xl' : 'text-xl hover:scale-95'}`}>
+    <div key={category.id} className={`py-2 ease-out duration-150 ${selectedCategory?.id === category.id ? ' my-2 text-2xl' : 'text-xl hover:scale-95'}`}>
         <button 
             className='flex flex-col space-y-2 w-full'
             onClick={() => {navigate(`/materials/${category.id}`)}}
         >
-            <h1 className={`flex items-center px-3 font-regular mx-3 text-black`}>{category.title}</h1>
+            <h1 className={`flex items-center font-regular mx-3 text-black`}>{category.title}</h1>
         </button>
         {(selectedCategory?.id === category.id) 
         ? 
@@ -69,14 +69,14 @@ const SideTabCategoryButton = ({
             )
             :
             (
-                <div className='ml-5'>
+                <div className='ml-3'>
                     <p className='flex px-2 text-sm bg-blue-200 text-blue-500 max-w-fit rounded-md font-bold'>No materials found</p>
                 </div>
             )
         )
         :
         (
-            <div className='ml-5'>
+            <div className='ml-3'>
                 <p className='flex px-2 text-sm bg-blue-200 text-blue-500 max-w-fit rounded-md font-bold'>{materials.length}</p>
             </div>
         )

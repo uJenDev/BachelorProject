@@ -1,11 +1,11 @@
 import React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-const PartCard = ({
-    part,
+const CoolantCard = ({
+    coolant,
 }) => {
 
-    const partId = useParams().part
+    const coolantId = useParams().coolant
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -13,20 +13,20 @@ const PartCard = ({
 
     const onClick = () => {
         const queryParams = new URLSearchParams(location.search)
-        navigate(`/parts/${part.id}?${queryParams.toString()}`)
+        navigate(`/coolants/${coolant.id}?${queryParams.toString()}`)
     }
   return (
     <button
         onClick={onClick}
         className={`
-            flex items-centern px-2 text-lg font-semibold text-blue-500 bg-blue-200 max-w-fit rounded-lg mt-2
+            flex items-centern px-2 font-semibold text-blue-500 bg-blue-200 max-w-fit rounded-md
             hover:scale-105 hover:shadow-md duration-300 ease-out
-            ${part.id === partId && 'scale-105 shadow-md translate-x-3 text-white bg-blue-500'}
+            ${coolant.id === coolantId && 'scale-105 shadow-md translate-x-3 text-white bg-blue-500'}
         `}
     >
-        <p className=''>{part.name} </p>
+        <p className=''>{coolant.name} </p>
     </button>
   )
 }
 
-export default PartCard
+export default CoolantCard

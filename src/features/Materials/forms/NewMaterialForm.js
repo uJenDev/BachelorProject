@@ -7,6 +7,9 @@ import {
 import { db } from '../../../firebase';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import NewMaterialPropertiesList from '../views/NewMaterialPropertiesList';
+import { Button, CircularProgress, Box } from '@mui/material';
+import { green } from '@mui/material/colors';
+
 
 
 const fetchPropertyStandards = async () => {
@@ -38,8 +41,21 @@ const NewMaterialForm = ({
     return title.toLowerCase().replace(/\s+/g, '-');
   };
 
-  const handleAdd = async () => {
+
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+    const buttonSx = {
+        ...(success && {
+          bgcolor: green[500],
+          '&:hover': {
+            bgcolor: green[700],
+          },
+        }),
+      };
+
+  const handleCreate = async () => {
     if (!canPost) return;
+    setLoading(true);
     
     const docId = titleToSlug(title);
     const categoryRef = doc(db, 'category', selectedCategory.id);
@@ -54,7 +70,13 @@ const NewMaterialForm = ({
     };
 
     await setDoc(doc(db, 'material', docId), materialData);
-    handleClose();
+    
+    setLoading(false);
+    setSuccess(true);
+    setTimeout(() => {
+        handleClose();
+        }
+    , 1000);
   };
 
     const [canPost, setCanPost] = useState(false);
@@ -108,17 +130,32 @@ const NewMaterialForm = ({
             />
         </div>
         <div className='flex justify-end'>
-            <button
-                onClick={handleAdd}
-                disabled={!canPost}
-                className={`
-                    text-lg text-blue-500 bg-blue-200 px-2 rounded-lg
-                    duration-300 ease-out
-                    ${!canPost ? 'opacity-50' : 'hover:text-white hover:bg-blue-500 hover:scale-105'}
-                `}
-            >
-                Add
-            </button>
+        <Box sx={{ m: 1, position: 'relative' }}>
+                <Button
+                    variant="contained"
+                    disabled={!canPost}
+                    onClick={handleCreate}
+                    sx={[
+                        buttonSx,
+                    ]}
+                    size='large'
+                >
+                Create Material
+                </Button>
+                {loading && (
+                <CircularProgress
+                    size={24}
+                    sx={{
+                        color: green[500],
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        marginTop: '-12px',
+                        marginLeft: '-12px',
+                    }}
+                />
+                )}
+            </Box>
         </div>
     </div>
   );

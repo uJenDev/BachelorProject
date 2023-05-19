@@ -8,7 +8,7 @@ const NewPostSettingsListCard = ({ setting, onChange, onDelete, isDefault }) => 
   };
 
   return (
-    <div className='flex items-center'>
+    <div className='flex items-center w-full'>
         <div className="my-1 grid grid-cols-3 gap-4 w-full">
             <TextField
             label="Name"

@@ -4,14 +4,13 @@ import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { green } from '@mui/material/colors';
 import { Box, Button, CircularProgress, InputAdornment, TextField } from '@mui/material';
 
-const NewToolModalForm = ({ 
+const NewCoolantModalForm = ({ 
     handleClose, 
     user, 
-    projects
 }) => {
 
     const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
+    const [pricePerLiter, setPricePerLiter] = useState('');
 
 
   const titleToSlug = (title) => {
@@ -33,19 +32,15 @@ const NewToolModalForm = ({
   const [canSubmit, setCanSubmit] = useState(false)
   const handleCreate = async () => {
     const docId = titleToSlug(name);
-    const toolData = {
+    const coolantData = {
       name: name,
-      price: Number(price),
+      pricePerLiter: Number(pricePerLiter),
       createdAt: serverTimestamp(),
-      createdBy: {
-        displayName: user.displayName,
-        email: user.email,
-        uid: user.uid,
-      },
+      createdBy: doc(db, 'users', user.uid),
     //   projectRef: projectRef,
     };
 
-    await setDoc(doc(db, 'tool', docId), toolData);
+    await setDoc(doc(db, 'coolant', docId), coolantData);
     
     setLoading(false);
     setSuccess(true);
@@ -55,18 +50,18 @@ const NewToolModalForm = ({
   };
 
   useEffect(() => {
-    if (name && price) {
+    if (name && pricePerLiter) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
     }
-  }, [name, price]);
+  }, [name, pricePerLiter]);
 
   return (
     <div>
         <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
         <input
-            placeholder='Name of tool'
+            placeholder='Name of coolant'
             className='w-full focus:outline-none focus:border-gray-500 mt-3 text-2xl'
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -79,13 +74,13 @@ const NewToolModalForm = ({
                 inputProps: { min: 0 },
                 endAdornment: <InputAdornment position="end">kr</InputAdornment>,
             }}
-            label="Price"
+            label="Price Per Liter"
             className='max-w-fit'
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={pricePerLiter}
+            onChange={(e) => setPricePerLiter(e.target.value)}
         />
         <div className='flex justify-end'>
-        <Box sx={{ m: 1, position: 'relative' }}>
+            <Box sx={{ m: 1, position: 'relative' }}>
                 <Button
                     variant="contained"
                     disabled={!canSubmit}
@@ -95,7 +90,7 @@ const NewToolModalForm = ({
                     ]}
                     size='large'
                 >
-                Create Tool
+                Create Coolant
                 </Button>
                 {loading && (
                 <CircularProgress
@@ -116,4 +111,4 @@ const NewToolModalForm = ({
   );
 };
 
-export default NewToolModalForm;
+export default NewCoolantModalForm;

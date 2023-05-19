@@ -64,27 +64,29 @@ const SideTab = ({ width, height }) => {
     if (loading) return null
     return (
         <>
-            <div className='flex flex-col min-w-fit h-full'>
-                <div className='pb-2 rounded-br-xl bg-gray-200 h-full'>
-                    <div className='flex items-center pl-5 pr-5'>
-                        <p className='font-semibold text-4xl pr-2'>Materials</p>
-                        <button
-                            onClick={() => {
-                                queryParams.set('newMaterial', 'true');
-                                navigate({
-                                    search: queryParams.toString(),
-                                })
-                            }}
-                            className={`
-                                pl-1 pr-2 py-1 flex items-center text-sm text-blue-500 bg-blue-200 rounded-lg 
+            <div className={`flex flex-col ${width > 950 ? 'w-[300px]' : 'w-[300px]'} pt-10`}>
+                <div className='pb-2 rounded-br-xl'>
+                    <div className='flex flex-col'>
+                        <p className='text-4xl font-semibold px-1'>Materials</p>
+                        <div className='flex items-center'>
+                            {categories?.length > 0 && <p className='text-sm text-gray-500 px-2'>{categories.length} categories</p>}
+                            <button
+                                onClick={() => {
+                                    queryParams.set('newMaterial', 'true');
+                                    navigate({ search: queryParams.toString() });
+                                }}
+                                className={`
+                                pl-1 pr-2 py-1 flex items-center text-sm text-blue-500  rounded-lg 
                                 duration-300 ease-out hover:bg-blue-500 hover:text-white hover:scale-105
-                                ${newMaterial === 'true' && 'bg-blue-500 text-white scale-105'}
-                            `}
-                        >
+                                ${newMaterial === 'true' ? 'bg-blue-500 text-white' : null}
+                                `}
+                            >
                             <MdAdd className='text-lg'/>
                             <p className=''>New</p>
-                        </button>
+                            </button>
+                        </div>  
                     </div>
+                    <div className='border-l-2 ml-2'>
                     {categories?.map((category) => {
                         // check if is last category
                         var isLast = false;
@@ -102,6 +104,7 @@ const SideTab = ({ width, height }) => {
                             />
                         )
                     })}
+                    </div>
                     {toggleCreateForm && (
                     <NewCategoryForm 
                         setToggleCreateForm={setToggleCreateForm}
@@ -109,20 +112,18 @@ const SideTab = ({ width, height }) => {
                     />
                 )}
                 </div>
-                {true && (
-                    <button 
-                        className={`
-                            flex flex-row items-center w-fit mx-3 px-2 text-black font-semibold ease-out duration-150 
-                            hover:scale-105 rounded-lg h-20
-                            ${toggleCreateForm ? 'opacity-0' : null}
-                        `}
-                        onClick={() => {setToggleCreateForm(true)}}
-                        disabled={toggleCreateForm}
-                    >
-                        <h1 className={`text-lg `}>New category</h1>
-                        <MdAddCircle className='text-lg' />
-                    </button>
-                )}
+                <button 
+                    className={`
+                        flex flex-row items-center w-fit mx-3 px-2 text-black font-semibold ease-out duration-150 
+                        hover:scale-105 rounded-lg h-20
+                        ${toggleCreateForm ? 'opacity-0' : null}
+                    `}
+                    onClick={() => {setToggleCreateForm(true)}}
+                    disabled={toggleCreateForm}
+                >
+                    <h1 className={`text-lg `}>New category</h1>
+                    <MdAddCircle className='text-lg' />
+                </button>
             </div>
             <NewMaterialModal 
                 user={user}

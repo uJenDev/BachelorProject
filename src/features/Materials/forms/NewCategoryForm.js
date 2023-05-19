@@ -47,7 +47,7 @@ const NewCategoryForm = ({
                 onBlur={() => {setToggleCreateForm(false)}}
             />
         </div>
-        <div className='mt-1 flex flex-row items-center justify-center text-sm text-red-500 space-x-1'>
+        <div className='mt-1 flex flex-row items-center text-sm text-red-500 space-x-1'>
             <MdWarning />
             <p className=''>This cannot be changed</p>
         </div>
