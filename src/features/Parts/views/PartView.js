@@ -10,7 +10,9 @@ import { Box, Button, CircularProgress, TextField } from '@mui/material';
 const preservedValues = [
   'createdAt',
   'createdBy',
-  'id'
+  'id',
+  'name',
+  'slug'
 ]
 
 const PartView = ({

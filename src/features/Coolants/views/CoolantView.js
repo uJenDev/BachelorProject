@@ -5,12 +5,15 @@ import { MdInfo } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../../../firebase';
 import { green } from '@mui/material/colors';
+import { slugFromTitle } from '../../../utility/HelperFunctions';
 
 
 const preservedValues = [
   'createdAt',
   'createdBy',
-  'id'
+  'id',
+  'slug',
+  'name'
 ]
 
 const CoolantView = ({
@@ -60,6 +63,7 @@ const CoolantView = ({
     const coolantRef = doc(db, 'coolant', coolantId)
     const coolantData = {
       ...coolant,
+      slug: slugFromTitle(coolant.name),
     }
     await updateDoc(coolantRef, coolantData)
     setLoading(false)

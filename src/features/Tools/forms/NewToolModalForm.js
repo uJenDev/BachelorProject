@@ -36,6 +36,7 @@ const NewToolModalForm = ({
     const toolData = {
       name: name,
       price: Number(price),
+      slug: titleToSlug(name),
       createdAt: serverTimestamp(),
       createdBy: {
         displayName: user.displayName,

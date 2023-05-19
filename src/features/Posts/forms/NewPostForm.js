@@ -190,7 +190,7 @@ const NewPostForm = ({
         <p className='flex w-full h-[1px] border-b-2 border-black text-xl font-semibold' >
             Part Specifications
         </p>
-        <div className='flex space-x-2 pt-10'>
+        <div className='flex space-x-2 pt-10 max-w-2xl'>
             <MaterialSelect 
                 material={material}
                 setMaterial={setMaterial}

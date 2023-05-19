@@ -7,7 +7,7 @@ import {
   TextField,
 } from '@mui/material';
 import { db, storage } from '../../../firebase';
-import { collection, doc, getDoc, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import NewPartFiles from '../components/NewPartFiles';
@@ -69,6 +69,7 @@ const NewPartModalForm = ({
 
     const partData = {
       name: name,
+      slug: slugFromTitle(name),
       createdAt: serverTimestamp(),
       createdBy: doc(db, 'users', user.uid),
       projectRef: projectRef,

@@ -10,7 +10,9 @@ import { green } from '@mui/material/colors';
 const preservedValues = [
   'createdAt',
   'createdBy',
-  'id'
+  'id',
+  'name',
+  'slug'
 ]
 
 const ToolView = ({

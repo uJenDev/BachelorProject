@@ -11,6 +11,8 @@ const preservedValues = [
   'createdAt',
   'createdBy',
   'id',
+  'title',
+  'slug'
 ]
 
 const CoolantView = ({

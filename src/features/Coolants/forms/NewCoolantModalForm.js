@@ -34,6 +34,7 @@ const NewCoolantModalForm = ({
     const docId = titleToSlug(name);
     const coolantData = {
       name: name,
+      slug: titleToSlug(name),
       pricePerLiter: Number(pricePerLiter),
       createdAt: serverTimestamp(),
       createdBy: doc(db, 'users', user.uid),
