@@ -72,7 +72,7 @@ const Projects = () => {
 
 
   return (
-    <div className='flex flex-row w-full' style={{height: height - 82}}>
+    <div className='flex flex-row w-full' style={{height: height - 102}}>
         <ProjectTab 
             projects={projects}
             selectedProject={selectedProject}

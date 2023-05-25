@@ -29,11 +29,22 @@ const NewProjectModal = ({user, width, heigth}) => {
         open={queryParams.get('newProject') === 'true'}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        onClose={() => {
+            queryParams.delete('newProject')
+            navigate({search: queryParams.toString()})
+        }}
       >
         <Box 
           sx={[
             style,
-            width < 600 ? {width: '100%', height: '100%'} : {width: '50%', height: '30%', borderRadius: '10px',},
+            width > 1000 ? {
+              width: 'fit', 
+              height: 'fit',
+              borderRadius: '10px'
+            } : {
+              width: '100%', 
+              height: '100%'
+            },
           ]}
         >
             <NewProjectForm 

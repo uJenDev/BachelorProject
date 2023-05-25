@@ -3,6 +3,8 @@ import { BiGitCompare } from 'react-icons/bi'
 import { BsArrowReturnRight } from 'react-icons/bs'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import PostSettingDetailsList from './PostSettingDetailsList'
+import { Avatar } from '@mui/material'
+import { stringAvatar } from '../../../utility/MaterialUIFunctions'
 
 const PostCard = ({ 
     post,
@@ -67,8 +69,22 @@ const PostCard = ({
                 <div
                     className='flex flex-col text-white duration-200 ease-out text-left'
                 >
-                    <div className='flex items-center space-x-1'>
-                      <h1 className='font-semibold text-2xl text-white mb-1'>{post.title}</h1>
+                    <div className='flex items-center space-x-1 mt-2 mb-2'>
+                      <Avatar
+                        className='mr-1'
+                        {...stringAvatar(post.createdBy.displayName)} 
+                      />
+                      <div className='flex flex-col'>
+                        <p className='text-sm font-semibold'>{post.createdBy.displayName}</p>
+                        <div className='flex items-center space-x-1'>
+                          <p className='text-xs text-gray-400'>{post.createdBy.email}</p>
+                          <p className='text-xs text-gray-400'>•</p>
+                          <p className='text-xs text-gray-400'>{timeSince()}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='flex items-center space-x-1 justify-between'>
+                      <p className='text-sm font-semibold'>{post.title}</p>
                       {postId && (postId !== post.id) && (
                         <button
                           onClick={(e) => {
@@ -77,18 +93,13 @@ const PostCard = ({
                             navigate(`${location.pathname}?${queryParams.toString()}`)
                           }}
                           className={`
-                            text-xs text-blue-500 hover:text-white rounded-md duration-200 ease-out
-                            ${comparedPost === post.id ? 'bg-green-500 text-white' : 'hover:bg-blue-500'}
+                            text-xs text-white hover:text-white rounded-md duration-200 ease-out
+                            ${comparedPost === post.id ? 'bg-purple-500 text-white' : 'hover:bg-blue-500'}
                           `}
                         >
                           <BiGitCompare className='inline-block text-xl m-2' />
                         </button>
                       )}
-                    </div>
-                    <div className='flex items-center space-x-1'>
-                        <p className='text-xs text-gray-400'>by {post.createdBy.email}</p>
-                        <p className='text-xs text-gray-400'>•</p>
-                        <p className='text-xs text-gray-400'>{timeSince()}</p>
                     </div>
                 </div>
                 <PostSettingDetailsList

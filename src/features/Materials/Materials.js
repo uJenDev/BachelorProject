@@ -19,7 +19,7 @@ const Coolants = () => {
     
 
   return (
-    <div className='w-full flex justify-center items-center' style={{height: height - 82}}>
+    <div className='w-full flex justify-center items-center' style={{height: height - 102}}>
       <div className='h-full flex '>
         <SideTab 
           width={width}

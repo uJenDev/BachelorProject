@@ -1,5 +1,6 @@
 import { Button } from '@mui/material'
 import React from 'react'
+import { green } from '@mui/material/colors'
 
 const NewPartFiles = ({
     images,
@@ -19,8 +20,14 @@ const NewPartFiles = ({
                 variant="contained" 
                 component="label"
                 className='w-full'
+                sx={{
+                    background: images?.length > 0 && green[600],
+                    '&:hover': {
+                        background: images?.length > 0 && green[800],
+                    }
+                }}
             >
-                {images?.length > 0 && <p className='text-sm mr-1 font-bold'>{images?.length} image -</p>}
+                {images?.length > 0 && <p className=' mr-1 font-bold'>{images?.length} images -</p>}
                 {images?.length > 0 ? 'Change' : 'Add images'}
                 <input
                     hidden
@@ -36,8 +43,14 @@ const NewPartFiles = ({
                 variant="contained" 
                 component="label"
                 className='w-full'
+                sx={{
+                    background: models3D?.length > 0 && green[600],
+                    '&:hover': {
+                        background: images?.length > 0 && green[800],
+                    }
+                }}
             >
-                {models3D?.length > 0 && <p className='text-sm mr-1 font-bold'>Model Selected</p>}
+                {models3D?.length > 0 && <p className=' mr-1 font-bold'>Model Selected</p>}
                 {models3D?.length > 0 ? '' : 'Add a 3d-model'}
                 <input
                     hidden
@@ -52,8 +65,14 @@ const NewPartFiles = ({
                 variant="contained" 
                 component="label"
                 className='w-full'
+                sx={{
+                    background: pdfs?.length > 0 && green[600],
+                    '&:hover': {
+                        background: images?.length > 0 && green[800],
+                    }
+                }}
             >
-                {pdfs?.length > 0 && <p className='text-sm mr-1 font-bold'>{pdfs?.length} pdf -</p>}
+                {pdfs?.length > 0 && <p className=' mr-1 font-bold'>{pdfs?.length} pdf -</p>}
                 {pdfs?.length > 0 ? 'Change' : 'Add pdfs'}
                 <input
                     hidden

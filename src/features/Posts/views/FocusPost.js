@@ -6,35 +6,8 @@ import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { storage } from '../../../firebase';
 import PostSettingTable from '../components/PostSettingTable';
 import PostSettingDetailsList from '../components/PostSettingDetailsList';
-
-
-const costAnalysisCalculation = (post) => {
-    if (!post) return;
-
-    const materialCostPerPart = post?.setting?.part?.pricePerUnit;
-            
-    const defectRate = post?.setting?.operationalFactors?.defectRate;
-    const defectCostPerPart = materialCostPerPart * (1/(1 - defectRate) - 1)
-
-    const toolLife = post?.setting?.operationalFactors?.toolLife;
-    const toolPrice = post?.setting?.tool?.price;
-    const toolsCostPerPart = toolPrice / toolLife
-
-    const cycleTime = post?.setting?.operationalFactors?.cycleTime;
-    const coolantUsagePerPart = post?.setting?.operationalFactors?.coolantUsage / 60 * cycleTime;
-    const coolantPrice = post?.setting?.coolant?.pricePerLiter;
-    const coolantCostPerPart = coolantPrice * coolantUsagePerPart
-
-    const totalCostPerPart = defectCostPerPart + toolsCostPerPart + coolantCostPerPart
-
-    return {
-        materialCostPerPart,
-        defectCostPerPart,
-        toolsCostPerPart,
-        coolantCostPerPart,
-        totalCostPerPart,
-    }
-}
+import { MdArrowLeft } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const FocusPost = ({
@@ -45,69 +18,6 @@ const FocusPost = ({
     width,
     height,
 }) => {
-
-    const [postCostAnalysis, setPostCostAnalysis] = useState({
-        materialCostPerPart: 0,
-        defectCostPerPart: 0,
-        toolsCostPerPart: 0,
-        coolantCostPerPart: 0,
-        totalCostPerPart: 0,
-    });
-
-    const [comparedPostCostAnalysis, setComparedPostCostAnalysis] = useState({
-        materialCostPerPart: 0,
-        defectCostPerPart: 0,
-        toolsCostPerPart: 0,
-        coolantCostPerPart: 0,
-        totalCostPerPart: 0,
-    });
-    
-    // Cost analysis calculations
-    useEffect(() => {
-        if (post) {
-            const {
-                materialCostPerPart,
-                defectCostPerPart,
-                toolsCostPerPart,
-                coolantCostPerPart,
-                totalCostPerPart,
-            } = costAnalysisCalculation(post);
-
-            setPostCostAnalysis({
-                defectCostPerPart: Number(defectCostPerPart).toFixed(2),
-                toolsCostPerPart: Number(toolsCostPerPart).toFixed(2),
-                coolantCostPerPart: Number(coolantCostPerPart).toFixed(2),
-                totalCostPerPart: Number(totalCostPerPart).toFixed(2),
-
-                defectCostPerPartContributingFactor: Number(defectCostPerPart / totalCostPerPart * 100).toFixed(2),
-                toolsCostPerPartContributingFactor: Number(toolsCostPerPart / totalCostPerPart * 100).toFixed(2),
-                coolantCostPerPartContributingFactor: Number(coolantCostPerPart / totalCostPerPart * 100).toFixed(2),
-            });
-        }
-
-        if (comparedPost) {
-            const {
-                materialCostPerPart,
-                defectCostPerPart,
-                toolsCostPerPart,
-                coolantCostPerPart,
-                totalCostPerPart,
-            } = costAnalysisCalculation(comparedPost);
-
-            setComparedPostCostAnalysis({
-                defectCostPerPart: Number(defectCostPerPart).toFixed(2),
-                toolsCostPerPart: Number(toolsCostPerPart).toFixed(2),
-                coolantCostPerPart: Number(coolantCostPerPart).toFixed(2),
-                totalCostPerPart: Number(totalCostPerPart).toFixed(2),
-
-                defectCostPerPartContributingFactor: Number(defectCostPerPart / totalCostPerPart * 100).toFixed(2),
-                toolsCostPerPartContributingFactor: Number(toolsCostPerPart / totalCostPerPart * 100).toFixed(2),
-                coolantCostPerPartContributingFactor: Number(coolantCostPerPart / totalCostPerPart * 100).toFixed(2),
-            });
-        } else {
-            setComparedPostCostAnalysis(null)
-        }
-    }, [post, comparedPost])
 
     // Function for fetching files from storage
     const fetchFiles = async (partId) => {
@@ -143,11 +53,33 @@ const FocusPost = ({
             });
     }, [post?.setting?.part])
 
+    const navigate = useNavigate();
+    const locaton = useLocation();
+    const queryParams = new URLSearchParams(locaton.search);
 
     if (!post) return (
         <div 
-            className={`flex overflow-y-scroll flex-col w-full border-l-2 border-black scrollbar-hide`}
+            className={`flex overflow-y-scroll flex-col w-full h-full items-center justify-center border-l-2 border-black scrollbar-hide`}
         >
+            <div className='flex flex-col'>
+                <div className='flex items-center'>
+                    <MdArrowLeft className='text-4xl mr-5 '/>
+                    <p className='text-2xl font-semibold'>
+                        Select a post to view details
+                    </p>
+                </div>
+                <button
+                    className='ml-5 text-blue-500'
+                    onClick={() => {
+                        queryParams.set('newPost', true);
+                        navigate({
+                            search: queryParams.toString(),
+                        })
+                    }}
+                >
+                    or create a new post
+                </button>
+            </div>
         </div>
     );
   return (
@@ -166,12 +98,14 @@ const FocusPost = ({
                         textSize='text-xl'
                     />
                     <p className='text-xl font-semibold my-5'>{post.body}</p>
-                    <PostSettingTable
-                        post={post}
-                        postCostAnalysis={postCostAnalysis}
-                        comparedPost={comparedPost}
-                        comparedPostCostAnalysis={comparedPostCostAnalysis}
+                    <SettingsList
+                        settings={post.setting?.settings}
+                        comparedSettings={comparedPost?.setting?.settings}
                     />
+                    {/* <PostSettingTable
+                        post={post}
+                        comparedPost={comparedPost}
+                    /> */}
                 </div>
                 {post.setting?.part && files?.models3D?.length > 0 && (
                     <StlViewer
@@ -188,11 +122,6 @@ const FocusPost = ({
                     />
                 )}
             </div>
-            <SettingsList
-                settings={post.setting?.settings}
-                width={width}
-                breakpoint={breakpoint}
-            />
         </div>
 
         <CommentFeed

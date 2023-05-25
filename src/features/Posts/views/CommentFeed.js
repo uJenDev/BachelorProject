@@ -56,7 +56,7 @@ const CommentFeed = ({
         </div>
         <div
             className={`flex flex-col-reverse overflow-y-auto w-full scrollbar-hide`}
-            style={{height: comments?.length < 5 ? 200 : 400}}
+            style={{height: comments?.length > 0 ? 400 : 200}}
         >
             <div className='flex flex-col mb-2 mx-1 mr-3'>
                 {comments[0] ? comments.map((comment, index) => {

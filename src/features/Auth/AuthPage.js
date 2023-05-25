@@ -30,14 +30,27 @@ const AuthPage = () => {
   }, [userAuthAttempt.email])
 
   const onSubmit = () => {
-    if (!userAuthAttempt.continued && userAuthAttempt.emailValidated) {
+    if (
+      !userAuthAttempt.continued && 
+      userAuthAttempt.emailValidated
+      ) {
       checkForUser(auth, userAuthAttempt, setUserAuthAttempt)
       console.log(userAuthAttempt)
     }
-    else if (userAuthAttempt.continued && userAuthAttempt.exists && userAuthAttempt.passwordValidated && userAuthAttempt.emailValidated) {
+    else if (
+      userAuthAttempt.continued && 
+      userAuthAttempt.exists && 
+      userAuthAttempt.passwordValidated && 
+      userAuthAttempt.emailValidated
+      ) {
       signInWithEmailAndPassword(auth, userAuthAttempt.email, userAuthAttempt.password)
     }
-    else if (userAuthAttempt.continued && !userAuthAttempt.exists && userAuthAttempt.passwordValidated && userAuthAttempt.emailValidated) {
+    else if (
+      userAuthAttempt.continued && 
+      !userAuthAttempt.exists && 
+      userAuthAttempt.passwordValidated && 
+      userAuthAttempt.emailValidated
+      ) {
       console.log('register')
     }
   }

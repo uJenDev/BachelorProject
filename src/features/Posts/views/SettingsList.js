@@ -20,7 +20,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const SettingsList = ({ settings }) => {
   return (
-    <TableContainer>
+    <TableContainer sx={{width: 600}}>
       <div className='mb-2 flex items-center justify-center'>
         <MdSettingsInputComponent className='mr-2 text-2xl' />
         <h1 className='text-2xl font-semibold'>CNC Settings</h1>

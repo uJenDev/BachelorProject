@@ -35,13 +35,16 @@ const Header = () => {
   return (
     <div>
       <header className='flex items-center justify-between px-5 border-b-2 border-black'>
-        <p 
-          className={`
-            font-bold text-4xl my-5 text-black cursor-pointer
-          `}
-        >
-          INTEGMA
-        </p>
+        <div className='flex flex-col items-start my-5'>
+          <p 
+            className={`
+              font-bold text-4xl text-black cursor-pointer
+            `}
+          >
+            INTEGMA
+          </p>
+          <p className='font-regular text-sm text-gray-400'>Bachelor Project</p>
+        </div>
           <div className='flex flex-row items-center space-x-20'>
             {tabs.map((tab, index) => (
               <HeaderTab

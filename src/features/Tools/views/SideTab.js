@@ -73,6 +73,7 @@ const SideTab = ({
         open={showNewToolModal}
         handleClose={() => setShowNewToolModal(false)}
         user={user}
+        width={width}
       />
     </>
   );

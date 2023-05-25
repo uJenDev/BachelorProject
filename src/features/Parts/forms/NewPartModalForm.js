@@ -122,22 +122,6 @@ const NewPartModalForm = ({
           value={name}
           onChange={(e) => setName(e.target.value)}
       />
-      {/* <Autocomplete
-          options={materials}
-          size='small'
-          value={material}
-          groupBy={(material) => material.category.title}
-          getOptionLabel={(material) => material.title}
-          sx={{ width: 200 }}
-          onChange={(e, value) => setMaterial(value)}
-          renderInput={(params) => <TextField {...params} label="What material?" variant='standard' />}
-          renderGroup={(params) => (
-              <div key={params.key}>
-                  <p className='px-2 font-semibold border-b-2 border-gray-200'>{params.group}</p>
-                  <p>{params.children}</p>
-              </div>
-          )}
-        /> */}
       <NewPartDimensions 
         dimensions={dimensions}
         setDimensions={setDimensions}
@@ -151,8 +135,8 @@ const NewPartModalForm = ({
         pdfs={pdfs}
         setPdfs={setPdfs}
       />
-        <div className='flex justify-end absolute bottom-4 right-4'>
-          <Box sx={{ m: 1, position: 'relative' }}>
+        <div className='flex justify-end '>
+          <Box sx={{ marginTop: 2 }}>
             <Button
               variant="contained"
               disabled={!canSubmit}

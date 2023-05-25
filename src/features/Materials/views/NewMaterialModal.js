@@ -70,12 +70,15 @@ const NewMaterialModal = ({
         <Box 
             sx={[
                 style,
-                { 
-                    width: width > 1000 ? '80%' : width,
-                    height: width > 1000 ? 'fit-content' : height,
-                    borderRadius: width > 1000 ? '10px' : '0px',
-                }
-            ]}
+                width > 1000 ? {
+                  width: '80%', 
+                  height: 'fit',
+                  borderRadius: '10px'
+                } : {
+                  width: '100%', 
+                  height: '100%'
+                },
+              ]}
         >
             <NewMaterialForm 
                 handleClose={handleClose}

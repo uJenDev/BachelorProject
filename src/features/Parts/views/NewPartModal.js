@@ -1,8 +1,7 @@
 import { Box, Modal } from '@mui/material'
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import scrollbarHide from 'tailwind-scrollbar-hide';
 import { db } from '../../../firebase';
 import NewPartModalForm from '../forms/NewPartModalForm';
 
@@ -25,8 +24,6 @@ const NewPartModal = ({
     width,
     height,
 }) => {
-
-
     const [projects, setProjects] = useState([]);
 
     const navigate = useNavigate();
@@ -43,48 +40,53 @@ const NewPartModal = ({
 
     useEffect(() => {
         const getProjects = onSnapshot(
-            collection(db, 'projects'),
+            query(
+                collection(db, 'projects'),
+                where('members', 'array-contains-any', [{user: doc(db, 'users', user?.uid), isAdmin: true}, {user: doc(db, 'users', user?.uid), isAdmin: false}])
+            ),
             (snapshot) => {
                 setProjects(snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 })))
-        },
-        (error) => {
-            console.log(error)
-        })
+            },
+            (error) => {
+                console.log(error)
+            })
         return () => {
             getProjects()
         }
-    }, [])
+    }, [user]) // Add 'user' to the dependency array
 
-
-  return (
-    <Modal
-        open={open}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        onClose={handleClose}
-      >
-        <Box sx={[
-                style,
-                { 
-                    width: width > 1000 ? '80%' : width,
-                    height: width > 1000 ? '80%' : height,
-                    borderRadius: width > 1000 ? '10px' : '0px',
-                    overflowY: 'scroll'
-                }
-            ]}
-            className='scrollbar-hide'
+    return (
+        <Modal
+            open={open}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            onClose={handleClose}
         >
-            <NewPartModalForm 
-                handleClose={handleClose}
-                user={user}
-                projects={projects}
-            />
-        </Box>
-    </Modal>
-  )
+            <Box
+                sx={[
+                    style,
+                    {
+                        width: width > 1000 ? 'fit' : width,
+                        maxWidth: width > 1000 ? '80%' : '100%',
+                        height: width > 1000 ? 'fit' : height,
+                        maxHeight: width > 1000 ? '80%' : '100%',
+                        borderRadius: width > 1000 ? '10px' : '0px',
+                        overflowY: 'scroll'
+                    }
+                ]}
+                className='scrollbar-hide'
+            >
+                <NewPartModalForm
+                    handleClose={handleClose}
+                    user={user}
+                    projects={projects}
+                />
+            </Box>
+        </Modal>
+    )
 }
 
-export default NewPartModal
+export default NewPartModal;

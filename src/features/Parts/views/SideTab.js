@@ -87,10 +87,13 @@ const SideTab = ({
                   >
                     {projectOrPart.title}
                   </p>
-                  {selectedGroup === projectOrPart.title &&
+                  {selectedGroup === projectOrPart.title ?
                     projectOrPart.data.map((part) => (
                       <PartCard key={part.id} part={part} />
-                    ))}
+                    ))
+                  : (
+                    <p className='text-blue-500 bg-blue-200 rounded-md w-fit font-bold text-sm px-2 ml-1'>{projectOrPart?.data.length}</p>
+                  )}
               </div>
             ))}
         </div>

@@ -86,7 +86,7 @@ const NewToolModalForm = ({
             onChange={(e) => setPrice(e.target.value)}
         />
         <div className='flex justify-end'>
-        <Box sx={{ m: 1, position: 'relative' }}>
+        <Box sx={{ marginTop: 2 }}>
                 <Button
                     variant="contained"
                     disabled={!canSubmit}

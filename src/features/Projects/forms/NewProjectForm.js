@@ -125,9 +125,9 @@ const NewProjectForm = ({ handleClose, user }) => {
         </div>
         {isPrivate && <AddMembers users={users} />}
         <footer
-            className='absolute bottom-4 right-4 flex flex-row justify-end space-x-5 mt-2'
+            className='flex justify-end'
         >
-            <Box sx={{ m: 1, position: 'relative' }}>
+            <Box sx={{ marginTop: 2 }}>
                 <Button
                     variant="contained"
                     disabled={!canSubmit}

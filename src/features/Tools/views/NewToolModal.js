@@ -22,6 +22,7 @@ const NewToolModal = ({
     open,
     handleClose,
     user,
+    width,
 }) => {
 
 
@@ -56,7 +57,11 @@ const NewToolModal = ({
         aria-describedby="modal-modal-description"
         onClose={handleClose}
       >
-        <Box sx={style}>
+        <Box 
+            sx={[
+                style,
+            ]}
+          >
             <NewToolModalForm 
                 handleClose={handleClose}
                 user={user}
