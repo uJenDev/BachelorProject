@@ -5,6 +5,7 @@ import PasswordForm from '../forms/PasswordForm'
 const Login = ({
   userAuthAttempt,
   setUserAuthAttempt,
+  onSubmit,
 }) => {
 
   const [password, setPassword] = useState('')
@@ -23,6 +24,7 @@ const Login = ({
         password={password}
         setPassword={setPassword}
         placeholder='Password'
+        onSubmit={onSubmit}
       />
     </div>
   )

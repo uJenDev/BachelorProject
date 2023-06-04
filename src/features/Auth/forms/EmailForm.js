@@ -1,6 +1,6 @@
 import React from 'react'
 
-const EmailForm = ({ email, setUserAuthAttempt }) => {
+const EmailForm = ({ email, setUserAuthAttempt, onSubmit }) => {
   return (
     <div className='pb-3'>
       <input
@@ -13,6 +13,7 @@ const EmailForm = ({ email, setUserAuthAttempt }) => {
         type="text" 
         placeholder="Email"
         value={email}
+        onKeyDown={(e) => {if (e.key === 'Enter') {onSubmit()}}}
         onChange={(e) => {setUserAuthAttempt((prev) => 
           ({...prev, email: e.target.value})
           )}

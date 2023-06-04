@@ -150,10 +150,6 @@ const NewPostForm = ({
         }, 1000)
     };
 
-    useEffect(() => {
-        setSubject(`${projectToPost ? projectToPost.name : 'New Post'} - ${part ? part.name : 'Select a part'} - ${material ? material.title : 'Select a material'}`)
-    }, [part, projectToPost, material])
-
   return (
     <div className='overflow-y-scroll h-full px-4 scrollbar-hide'>
         <button className='absolute top-0 left-2 text-2xl' onClick={handleClose}>&times;</button>
@@ -175,7 +171,6 @@ const NewPostForm = ({
         <input
             type='text'
             placeholder='Subject'
-            readOnly={true}
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             className='w-full p-2 rounded-lg outline-none border-none focus:border-blue-500 placeholder:font-bold font-bold text-2xl placeholder:text-2xl'

@@ -10,6 +10,8 @@ import { checkForUser } from './utility/authFunctions'
 import Login from './views/Login'
 import Register from './views/Register'
 
+
+
 const AuthPage = () => {
 
   const [userAuthAttempt, setUserAuthAttempt] = useState({
@@ -62,6 +64,7 @@ const AuthPage = () => {
         <EmailForm
           email={userAuthAttempt.email}
           setUserAuthAttempt={setUserAuthAttempt}
+          onSubmit={onSubmit}
         />
         {
         (userAuthAttempt.continued && userAuthAttempt.exists) 
@@ -69,6 +72,7 @@ const AuthPage = () => {
           <Login 
             userAuthAttempt={userAuthAttempt}
             setUserAuthAttempt={setUserAuthAttempt}
+            onSubmit={onSubmit}
           />
         :
         (userAuthAttempt.continued && !userAuthAttempt.exists)
@@ -85,6 +89,7 @@ const AuthPage = () => {
           onSubmit={onSubmit}
         />
         <h1 className='flex font-regular text-3xl text-gray-700 justify-center pb-5'>or</h1>
+        
         <GoogleButton />
       </div>
     </div>

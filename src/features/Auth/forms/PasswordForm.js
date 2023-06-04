@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PasswordForm = ({ password, setPassword, placeholder }) => {
+const PasswordForm = ({ password, setPassword, placeholder, onSubmit }) => {
   return (
     <div className='pb-3'>
       <input
@@ -13,7 +13,7 @@ const PasswordForm = ({ password, setPassword, placeholder }) => {
         type="password"
         placeholder={placeholder}
         value={password}
-
+        onKeyDown={(e) => {if (e.key === 'Enter') {onSubmit()}}}
         onChange={(e) => {setPassword(e.target.value)}}
       />
     </div>

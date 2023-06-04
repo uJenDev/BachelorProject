@@ -11,7 +11,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div></div>
+    <div className='flex items-center justify-center'>
+      Welcome to Integma. Please select a tab to continue!
+    </div>
     // <div 
     //   className='flex flex-col w-full'
     //   style={{height: height - 82}}

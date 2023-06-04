@@ -8,9 +8,6 @@ import { MdQuestionAnswer } from 'react-icons/md';
 const CommentFeed = ({ 
     post,
     user,
-    breakpoint,
-    width,
-    height,
 }) => {
 
     const [comments, setComments] = useState([]);
